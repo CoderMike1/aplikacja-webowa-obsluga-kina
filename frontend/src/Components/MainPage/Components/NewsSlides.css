@@ -1,0 +1,12 @@
+.news_slides{
+    position:relative;
+    max-width: 99vw;
+    overflow: hidden;
+
+}
+.news__inner{
+    display:flex;
+    transition: transform 0.5s ease-in-out;
+
+
+}

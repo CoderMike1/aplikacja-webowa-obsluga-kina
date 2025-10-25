@@ -16,6 +16,7 @@
     background: linear-gradient(90deg, var(--nav-bg-start), var(--nav-bg-end));
     color: var(--nav-text);
     box-shadow: var(--shadow);
+    font-family: 'Inter', sans-serif;, serif;
 }
 
 .navbar__inner{
@@ -110,12 +111,9 @@
     display:flex;
     gap:1rem;
 }
-.navbar__login button{
 
-}
 .navbar__login button{
     -webkit-tap-highlight-color: transparent;
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 600;
     letter-spacing: .2px;
     display:inline-flex; align-items:center; justify-content:center;
@@ -124,7 +122,7 @@
     padding:.7rem 1.1rem;
     border-radius: .7rem;
     border: 1px solid transparent;
-    background: #6b7280;                 /* neutral */
+    background: #6b7280;
     color: #ffffff;
 
     box-shadow: 0 4px 10px rgba(0,0,0,.12);

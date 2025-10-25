@@ -2,12 +2,13 @@
 
 //glowna strona
 
+import NewsSlides from "./Components/NewsSlides.jsx";
+
 const MainPage = () =>{
 
     return (
-        <div>
-            mam main page
-
+        <div className="main_page">
+            <NewsSlides />
         </div>
     )
 }
