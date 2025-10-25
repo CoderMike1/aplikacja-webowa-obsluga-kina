@@ -6,6 +6,6 @@ html,body, #root{
 
 .app-container{
     display:grid;
-    grid-template-rows:10vh 160vh 20vh;
+    grid-template-rows:1fr 1fr 1fr;
 
 }

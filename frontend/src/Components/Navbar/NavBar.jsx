@@ -5,23 +5,26 @@ const NavBar = () =>{
     return (
 
         <nav className="navbar">
-            <div className="navbar__left">
-                <div className="navbar__left-img">
-                    <img src={logo} alt="logo"/>
+            <div className="navbar__inner">
+                <div className="navbar__left">
+                    <a className="navbar__left-img" href="/"><img src={logo} alt=""/></a>
+                    <a className="navbar__brand" href="/">LAST KINO</a>
                 </div>
-                <div className="navbar__left-text">
-                    <h4>LAST KINO</h4>
+
+                <div className="navbar__middle">
+                    <ul className="navbar__menu">
+                        <li><a className="is-active" href="#">Repertuar</a></li>
+                        <li><a href="#">Nowości</a></li>
+                        <li><a href="#">Promocje</a></li>
+                    </ul>
                 </div>
-            </div>
-            <div className="navbar__middle">
-                <ul className="navbar__menu">
-                    <li>Repertuar</li>
-                    <li>Nowości</li>
-                    <li>Promocje</li>
-                </ul>
-            </div>
-            <div className="navbar__right">
-                right
+
+                <div className="navbar__right">
+                    <div className="navbar__login">
+                        <button>Zaloguj się</button>
+                        <button>Stwórz konto</button>
+                    </div>
+                </div>
             </div>
         </nav>
     )
