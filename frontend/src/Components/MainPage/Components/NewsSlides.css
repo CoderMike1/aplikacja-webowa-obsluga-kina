@@ -1,12 +1,7 @@
-.news_slides{
-    position:relative;
-    max-width: 99vw;
-    overflow: hidden;
-
+.news_slider{
+    margin-top:10px;
 }
 .news__inner{
-    display:flex;
-    transition: transform 0.5s ease-in-out;
-
-
+    width:150vh;
+    margin: 0 auto;
 }
