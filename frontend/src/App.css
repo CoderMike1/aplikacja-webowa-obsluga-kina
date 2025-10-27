@@ -1,11 +1,18 @@
-html,body, #root{
-    height: 100%;
-    margin:0;
-    background: rgba(100, 149, 237, 0.13);
+html, body {
+    margin: 0;
+    min-height: 100%;
 }
 
-.app-container{
-    display:grid;
-    grid-template-rows:1fr 6fr 1fr;
+body {
+    background: rgba(100,149,237,0.13);
+}
 
+
+#root {
+    min-height: 100%;
+}
+.app-container{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
 }

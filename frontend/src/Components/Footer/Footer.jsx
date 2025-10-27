@@ -1,7 +1,8 @@
+import './Footer.css'
 const Footer = () =>{
 
     return (
-        <footer>
+        <footer className="footer__container">
             uwaga footer
         </footer>
     )
