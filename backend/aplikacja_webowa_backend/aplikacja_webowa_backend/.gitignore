@@ -1,0 +1,54 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django logs and locale artifacts
+*.log
+*.pot
+
+# Database (SQLite)
+*.sqlite3
+*.sqlite3-journal
+
+# Virtual environments (use project-level venv)
+.venv/
+venv/
+env/
+ENV/
+
+# Environment files and direnv
+.env
+.env.*
+.envrc
+
+# Collected static files (keep app static/ in VCS)
+staticfiles/
+static_root/
+
+# User uploaded media
+media/
+uploads/
+
+# Packaging/build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Test/coverage caches
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# Type checker / linters caches
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+
+# IDE/editor
+.idea/
+.vscode/
