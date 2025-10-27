@@ -151,3 +151,8 @@
         gap:20px;
     }
 }
+@media(max-width:1230px){
+    .navbar{
+        width: 100vw;
+    }
+}

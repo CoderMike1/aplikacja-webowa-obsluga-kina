@@ -5,3 +5,9 @@
     width:150vh;
     margin: 0 auto;
 }
+
+@media (max-width: 1230px){
+    .news__inner{
+        width:100vw;
+    }
+}

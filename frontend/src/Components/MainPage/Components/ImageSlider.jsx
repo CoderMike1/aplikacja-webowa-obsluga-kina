@@ -4,29 +4,56 @@ import './ImageSlider.css'
 const ImageSlider = ({slides}) =>{
 
     const [currentIndex,setCurrentIndex] = useState(0)
+    const [isFading, setIsFading] = useState(false)
+    const FADE_MS = 300
 
     const previous_slide = ()=>{
-        if (currentIndex - 1<0){
-            setCurrentIndex(slides.length-1)
-        }
-        else{
-            setCurrentIndex(currentIndex-1)
-        }
+        setIsFading(true)
+        setTimeout(()=>{
+            setCurrentIndex(prev => (prev - 1 + slides.length) % slides.length)
+            setIsFading(false)
+        }, FADE_MS / 2)
     }
+
     const next_slide = ()=>{
-        setCurrentIndex((currentIndex+1)%slides.length)
+        setIsFading(true)
+        setTimeout(()=>{
+            setCurrentIndex(prev => (prev + 1) % slides.length)
+            setIsFading(false)
+        }, FADE_MS / 2)
     }
-    console.log(currentIndex)
+    const specific_slide = (index) =>{
+        setIsFading(true)
+        setTimeout(()=>{
+            setCurrentIndex(index)
+            setIsFading(false)
+        }, FADE_MS / 2)
+    }
     return (
         <div className="slider">
-            <div className="slide__arrow" onClick={()=>previous_slide()}>❮</div>
+            <div className="slide__arrow__left" onClick={previous_slide}>❮</div>
             <div className="slide__item">
-                <img src={slides[currentIndex].url} alt={slides[currentIndex].title}/>
+                <img
+                    className={isFading ? "fade is-fading" : "fade"}
+                    src={slides[currentIndex].url}
+                    alt={slides[currentIndex].title}
+                    loading="lazy"
+                />
             </div>
-            <div className="slide__arrow_right" onClick={()=>next_slide()}>❯</div>
+            <div className="slide__arrow__right" onClick={next_slide}>❯</div>
+            <div className="slide__dots_select">
+                {slides.map((slide,slideIndex)=>
+                    <div className="slide__dot_item" key={slideIndex} onClick={()=>{specific_slide(slideIndex)}}>
+                        {
+                            currentIndex === slideIndex ? <>⚪</> :<>⚫</>
+                        }
+                    </div>
+                )}
+            </div>
         </div>
     )
 
 }
 
 export default ImageSlider
+
