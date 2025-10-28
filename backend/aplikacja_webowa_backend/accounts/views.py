@@ -30,6 +30,8 @@ class RegisterView(APIView):
                 "access": str(refresh.access_token),
             }
         }, status=status.HTTP_201_CREATED)
+    
+    
 class LoginView(APIView):
     serializer_class = serializers.LoginSerializer
     permission_classes = [permissions.AllowAny]

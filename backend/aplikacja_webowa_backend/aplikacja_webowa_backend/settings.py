@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Optional: SimpleJWT settings (tweak as needed)
+# SimpleJWT settings
 from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),

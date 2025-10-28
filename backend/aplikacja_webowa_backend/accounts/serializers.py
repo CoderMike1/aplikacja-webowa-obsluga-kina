@@ -6,17 +6,18 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
-    email = serializers.EmailField()
     password = serializers.CharField(write_only=True, min_length=8)
+    email = serializers.EmailField()
     first_name = serializers.CharField(max_length=150, required=False, allow_blank=True)
     last_name = serializers.CharField(max_length=150, required=False, allow_blank=True)
-    phone = serializers.CharField(max_length=15, required=False, allow_blank=True, allow_null=True)
+    avatar = serializers.ImageField(required=False, allow_null=True)
+    phone = serializers.CharField(max_length=15, required=False, allow_blank=True)
     date_of_birth = serializers.DateField(required=False, allow_null=True)
     bio = serializers.CharField(max_length=500, required=False, allow_blank=True)
     location_country = serializers.CharField(max_length=100, required=False, allow_blank=True)
     location_city = serializers.CharField(max_length=100, required=False, allow_blank=True)
     two_factor_enabled = serializers.BooleanField(required=False)
-    avatar = serializers.ImageField(required=False, allow_null=True)
+    
 
     def validate(self, attrs):
         User = get_user_model()
@@ -53,7 +54,7 @@ class LoginSerializer(serializers.Serializer):
         username = attrs.get('username')
         email = attrs.get('email')
         if not username and not email:
-            raise serializers.ValidationError('Provide either username or email.')
+            raise serializers.ValidationError('Provide username or email.')
         if not username and email:
             User = get_user_model()
             try:

@@ -35,13 +35,13 @@ class CustomUserManager(BaseUserManager):
     
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(max_length=255, unique=True)
-    avatar = models.ImageField(null=True, blank=True)
-    phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
-    date_of_birth = models.DateField(null=True, blank=False)
-    bio = models.TextField(max_length=500, null=False, blank=True)
-    location_country = models.CharField(max_length=100, null=False, blank=True)
-    location_city = models.CharField(max_length=100, null=False, blank=True)
+    email = models.EmailField(unique=True)
+    avatar = models.ImageField(null=True)
+    phone = models.CharField(max_length=15, blank=True)
+    date_of_birth = models.DateField(null=True)
+    bio = models.TextField(max_length=500, blank=True)
+    location_country = models.CharField(max_length=100, blank=True)
+    location_city = models.CharField(max_length=100, blank=True)
     two_factor_enabled = models.BooleanField(default=False)
 
     objects = CustomUserManager()
