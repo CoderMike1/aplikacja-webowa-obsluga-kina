@@ -4,22 +4,17 @@ from rest_framework import status, permissions
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from accounts import serializers
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 class RegisterView(APIView):
     serializer_class = serializers.RegisterSerializer
     permission_classes = [permissions.AllowAny]
-
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         user = serializer.save()
-
-        # Optionally issue JWT tokens on registration
         refresh = RefreshToken.for_user(user)
         return Response({
             "message": "User registered successfully",
@@ -35,7 +30,6 @@ class RegisterView(APIView):
                 "access": str(refresh.access_token),
             }
         }, status=status.HTTP_201_CREATED)
-
 class LoginView(APIView):
     serializer_class = serializers.LoginSerializer
     permission_classes = [permissions.AllowAny]
@@ -55,7 +49,6 @@ class LoginView(APIView):
             update_last_login(None, user)
         except Exception:
             pass
-
         refresh = RefreshToken.for_user(user)
         return Response({
             "message": "User logged in successfully",
@@ -71,7 +64,6 @@ class LoginView(APIView):
                 "access": str(refresh.access_token),
             }
         }, status=status.HTTP_200_OK)
-
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = serializers.CustomTokenObtainPairSerializer
+
