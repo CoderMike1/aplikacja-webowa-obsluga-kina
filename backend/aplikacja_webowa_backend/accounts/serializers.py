@@ -5,7 +5,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class RegisterSerializer(serializers.Serializer):
-    """Serializer for user registration based on CustomUser."""
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, min_length=8)
@@ -24,8 +23,6 @@ class RegisterSerializer(serializers.Serializer):
         email = attrs.get('email')
         username = attrs.get('username')
         phone = attrs.get('phone')
-        
-        # Uniqueness checks to provide friendly errors before DB constraints
         if email and User.objects.filter(email=email).exists():
             raise serializers.ValidationError({'email': 'User with this email already exists.'})
         if username and User.objects.filter(username=username).exists():
@@ -38,7 +35,6 @@ class RegisterSerializer(serializers.Serializer):
     def create(self, validated_data):
         User = get_user_model()
         password = validated_data.pop('password')
-        # Create user via manager
         user = User.objects.create_user(
             email=validated_data.pop('email'),
             username=validated_data.pop('username'),
@@ -49,8 +45,6 @@ class RegisterSerializer(serializers.Serializer):
     
 
 class LoginSerializer(serializers.Serializer):
-    """Serializer for user registration."""
-    # Allow login by either username OR email
     username = serializers.CharField(max_length=150, required=False, allow_blank=True)
     email = serializers.EmailField(required=False, allow_blank=True)
     password = serializers.CharField(write_only=True, min_length=8)
@@ -60,25 +54,23 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         if not username and not email:
             raise serializers.ValidationError('Provide either username or email.')
-        # Normalize: if only email provided, try to resolve username
         if not username and email:
             User = get_user_model()
             try:
                 user = User.objects.get(email=email)
                 attrs['username'] = user.username
             except ObjectDoesNotExist:
-                # Leave as-is; authentication will fail later gracefully
                 pass
         return attrs
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """Customize JWT claims for CustomUser."""
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # Add custom claims
         token["username"] = user.username
         token["email"] = user.email
         token["is_staff"] = user.is_staff
         return token
+
+
