@@ -145,15 +145,11 @@
 
 /*responsywnosc*/
 
-@media(max-width: 843px){
+@media(max-width: 900px){
     .navbar__inner{
         display:flex;
         flex-direction: column;
         gap:20px;
     }
 }
-@media(max-width:1230px){
-    .navbar{
-        width: 100vw;
-    }
-}
+
