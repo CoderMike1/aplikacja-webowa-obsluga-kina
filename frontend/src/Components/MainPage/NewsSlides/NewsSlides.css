@@ -2,12 +2,16 @@
     margin-top:10px;
 }
 .news__inner{
-    width:150vh;
+    width:100vh;
     margin: 0 auto;
 }
-
+@media (max-width: 2142px){
+    .news__inner{
+        width:95vw;
+    }
+}
 @media (max-width: 1230px){
     .news__inner{
-        width:100vw;
+        width:95vw;
     }
 }

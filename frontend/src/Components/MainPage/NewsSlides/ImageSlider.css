@@ -54,21 +54,18 @@
     .slider{
         width: 100vw;
     }
-    .slide__item img{
-        width: 100vw;
 
-    }
 
 }
-
-@media(max-width:1270px){
+@media(max-width: 2143px){
     .slide__arrow__left{
-        right:90vw;
-        color:yellow
+        right:95%
     }
     .slide__arrow__right{
-        color:yellow;
-        left:90vw;
+        left:95%
+    }
+    .slide__item img{
+        width: 80vw;
 
     }
 }

@@ -12,6 +12,8 @@ const NavBar = () =>{
                 </div>
 
                 <div className="navbar__middle">
+
+
                     <ul className="navbar__menu">
                         <li><a className="is-active" href="#">Repertuar</a></li>
                         <li><a href="#">Nowości</a></li>

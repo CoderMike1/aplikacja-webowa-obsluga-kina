@@ -17,6 +17,7 @@
     color: var(--nav-text);
     box-shadow: var(--shadow);
     font-family: 'Inter', sans-serif;, serif;
+
 }
 
 .navbar__inner{
@@ -26,7 +27,7 @@
     gap:1rem;
     max-width:1200px;
     margin:0 auto;
-    padding: .75rem 1rem
+    padding: .75rem 1rem;
 }
 
 /* lewa strona */
@@ -118,7 +119,7 @@
     letter-spacing: .2px;
     display:inline-flex; align-items:center; justify-content:center;
     gap:.5rem;
-
+    font-size:20px;
     padding:.7rem 1.1rem;
     border-radius: .7rem;
     border: 1px solid transparent;
