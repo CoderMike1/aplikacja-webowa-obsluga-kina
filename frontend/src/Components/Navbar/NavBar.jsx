@@ -1,6 +1,10 @@
 import './NavBar.css'
 import logo from "../../assets/logo.png"
+import {useAuthUI} from "../../context/authUIContext.jsx";
 const NavBar = () =>{
+
+    const {showLoginForm,showRegisterForm} = useAuthUI();
+
 
     return (
 
@@ -23,8 +27,8 @@ const NavBar = () =>{
 
                 <div className="navbar__right">
                     <div className="navbar__login">
-                        <button>Zaloguj się</button>
-                        <button>Stwórz konto</button>
+                        <button onClick={()=>showLoginForm()}>Zaloguj się</button>
+                        <button onClick={()=>showRegisterForm()}>Stwórz konto</button>
                     </div>
                 </div>
             </div>
