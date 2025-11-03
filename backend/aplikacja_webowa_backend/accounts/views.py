@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts import serializers
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+
 class RegisterView(APIView):
     serializer_class = serializers.RegisterSerializer
     permission_classes = [permissions.AllowAny]
@@ -69,3 +70,15 @@ class LoginView(APIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = serializers.CustomTokenObtainPairSerializer
 
+
+
+class UserInfo(APIView):
+    permission_classes = [permissions.isAuthenticated]
+    def get(self, request):
+        user = request.user
+
+        return Response({
+            "id":user.id,
+            "email":user.email,
+            "username":user.username
+        })

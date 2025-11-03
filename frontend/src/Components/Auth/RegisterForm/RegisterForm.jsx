@@ -39,39 +39,43 @@ const RegisterForm = () =>{
                 <div className="register_form__close">
                     <button onClick={()=>closeForm()} type="button">X</button>
                 </div>
-                <label>Imię</label>
+                <label htmlFor="first_name">Imię</label>
                 <input
                 type="text"
+                id="first_name"
                 value={firstName}
                 onChange={(e)=>setFirstName(e.target.value)}
                 required={true}
                 />
-                <label>Nazwisko</label>
+                <label htmlFor="last_name">Nazwisko</label>
                 <input
                 type="text"
+                id="last_name"
                 value={lastName}
                 onChange={(e)=>setLastName(e.target.value)}
                 required={true}
                 />
-                <label>Email</label>
+                <label htmlFor="email">Email</label>
                 <input
                     type="email"
+                    id="email"
                     value={email}
                     onChange={(e)=>setEmail(e.target.value)}
-
                     required={true}
 
                 />
-                <label>Hasło</label>
+                <label htmlFor="password">Hasło</label>
                 <input
                     type="password"
+                    id="password"
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
                     required={true}
                 />
-                <label>Powtórz hasło</label>
+                <label htmlFor="confirm_password">Powtórz hasło</label>
                 <input
                     type="password"
+                    id="confirm_password"
                     value={confirmPassword}
                     onChange={(e)=>setConfirmPassword(e.target.value)}
                     required={true}
