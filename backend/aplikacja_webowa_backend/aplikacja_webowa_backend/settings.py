@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'accounts',
     'movies',
     'rest_framework_simplejwt',
+    'auditorium'
 ]
 
 SIMPLE_JWT = {
