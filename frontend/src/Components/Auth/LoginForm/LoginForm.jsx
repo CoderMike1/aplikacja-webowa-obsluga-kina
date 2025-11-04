@@ -2,16 +2,36 @@ import {useState} from "react";
 import {useAuthUI} from "../../../context/authUIContext.jsx";
 
 import '../Forms.css'
+import {useAuthContext} from "../../../context/Auth.jsx";
 const LoginForm = () =>{
-    const [email,setEmail] = useState("")
-    const [password,setPassword] = useState("")
+    const [email,setEmail] = useState("michal@mail.com")
+    const [password,setPassword] = useState("123456789")
 
     const [errorMessage,setErrorMessage] = useState("")
 
     const {closeForm,showRegisterForm} = useAuthUI()
 
-    const handleLogin = (e) =>{
+    const {login} = useAuthContext()
+
+    const handleLogin = async (e) =>{
         e.preventDefault()
+        setErrorMessage("")
+        try{
+            const resp = await login(email,password)
+
+            setEmail("")
+            setPassword("")
+            closeForm()
+        }
+        catch (err){
+            if (err.response?.status === 400 || err.response?.status === 401){
+                setErrorMessage("Niepoprawny e-mail lub hasło.")
+            }
+            else{
+                setErrorMessage("Wystąpił błąd serwera, spróbuj ponownie.")
+            }
+        }
+
     }
 
 

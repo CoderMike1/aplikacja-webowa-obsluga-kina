@@ -4,17 +4,21 @@ import NavBar from "./Components/Navbar/NavBar.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
 import AuthModal from "./Components/Auth/AuthModal.jsx";
 import {AuthUIProvider} from "./context/authUIContext.jsx";
+import {AuthProvider} from "./context/Auth.jsx";
 
 function App() {
 
   return (
     <div className="app-container">
-        <AuthUIProvider>
-            <NavBar/>
-            <Outlet/>
-            <Footer/>
-            <AuthModal/>
-        </AuthUIProvider>
+        <AuthProvider>
+            <AuthUIProvider>
+                <NavBar/>
+                <Outlet/>
+                <Footer/>
+                <AuthModal/>
+            </AuthUIProvider>
+        </AuthProvider>
+
 
     </div>
   )

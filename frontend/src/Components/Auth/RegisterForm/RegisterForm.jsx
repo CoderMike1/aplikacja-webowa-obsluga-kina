@@ -1,33 +1,66 @@
 import {useState} from "react";
 import '../Forms.css'
 import {useAuthUI} from "../../../context/authUIContext.jsx";
+import {useAuthContext} from "../../../context/Auth.jsx";
 
 const RegisterForm = () =>{
 
+    const [username,setUsername] = useState("")
     const [firstName,setFirstName] = useState("");
     const [lastName,setLastName] = useState("")
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("")
 
+
     const [errorMessage,setErrorMessage] = useState("")
+
+    const {register} = useAuthContext();
 
 
     const {closeForm,showLoginForm} = useAuthUI()
 
-    const handleRegister = (e) =>{
+    const clearForm = () =>{
+        setUsername("");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("")
+    }
+
+    const handleRegister = async (e) =>{
         e.preventDefault()
 
         if (password !== confirmPassword){
             setErrorMessage("Hasła się różnią")
         }
         else{
-            console.log("jest git")
-            setErrorMessage("")
+
+            const payload = {
+                first_name:firstName,
+                last_name:lastName,
+                email:email,
+                password:password,
+                username:username
+            }
+
+            try{
+                const resp = await register(payload)
+                closeForm()
+                clearForm()
+            }
+            catch (err){
+                if (err.response && err.response.status === 400){
+                    setErrorMessage(err.response.data)
+                }
+                else{
+                    setErrorMessage("Wystąpił błąd. Spróbuj ponownie.");
+                }
+            }
         }
 
     }
-
 
     return (
 
@@ -39,6 +72,14 @@ const RegisterForm = () =>{
                 <div className="register_form__close">
                     <button onClick={()=>closeForm()} type="button">X</button>
                 </div>
+                <label htmlFor="username">Nazwa użytkownika</label>
+                <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e)=>setUsername(e.target.value)}
+                    required={true}
+                />
                 <label htmlFor="first_name">Imię</label>
                 <input
                 type="text"
