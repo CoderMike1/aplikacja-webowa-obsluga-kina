@@ -8,9 +8,6 @@ const MoviePanels = ({nowPlayingMovies,soonPlayingMovies,specialEvents}) =>{
     const v2 = useRef(null);
     const v3 = useRef(null)
 
-    console.log(nowPlayingMovies)
-    console.log(soonPlayingMovies)
-    console.log(specialEvents)
 
     const scrollByCard = (ref, dir = 1) => {
         const vp = ref.current;

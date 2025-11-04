@@ -29,13 +29,10 @@ class Movie(models.Model):
 
         if self.is_special_event:
             return "special_event"
-
-        if self.release_date <= today <= self.release_date + timedelta(days=30):
-            return "now_playing"
         elif self.release_date > today:
             return "upcoming"
         else:
-            return "classic"
+            return "now_playing"
 
     class Meta:
         ordering = ['-release_date', 'title']

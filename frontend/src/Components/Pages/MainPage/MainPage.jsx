@@ -18,9 +18,9 @@ const MainPage = () =>{
             const resp = await getMovies();
 
             const data = resp.data
-            setNowPlayingMovies(data.grane_teraz)
-            setSoonPlayingMovies(data.wkrótce)
-            setSpecialEvents(data.wydarzenia_specjalne)
+            setNowPlayingMovies(data.now_playing)
+            setSoonPlayingMovies(data.upcoming)
+            setSpecialEvents(data.special_event)
             setLoading(false)
         })()
 

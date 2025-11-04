@@ -9,9 +9,9 @@ class MovieByCategoryAPIView(APIView):
         movies = Movie.objects.all()
 
         data = {
-            "grane_teraz": MovieSerializer([m for m in movies if m.category == "grane teraz"], many=True).data,
-            "wkrótce": MovieSerializer([m for m in movies if m.category == "wkrótce"], many=True).data,
-            "wydarzenia_specjalne": MovieSerializer([m for m in movies if m.category == "wydarzenie specjalne"], many=True).data,
+            "now_playing": MovieSerializer([m for m in movies if m.category == "now_playing"], many=True).data,
+            "upcoming": MovieSerializer([m for m in movies if m.category == "upcoming"], many=True).data,
+            "special_event": MovieSerializer([m for m in movies if m.category == "special_event"], many=True).data,
         }
 
         return Response(data)

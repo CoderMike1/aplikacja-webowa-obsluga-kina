@@ -13,7 +13,7 @@ export const AuthProvider = ({children}) =>{
     const [authLoading,setAuthLoading] = useState(false)
 
     const isLoggedIn = !!accessToken && !!user;
-
+    console.log(accessToken)
     // useEffect(() => {
     //     if (accessToken) {
     //         authApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -35,7 +35,7 @@ export const AuthProvider = ({children}) =>{
 
     const refreshAccessToken = useCallback(async () => {
         try {
-            const res = await authApi.post("/token/refresh/",{},{needAuth:true});
+            const res = await authApi.post("/token/refresh/",null,{needAuth:true,withCredentials:true});
             const { access } = res.data;
             setAccessToken(access);
             return access;
@@ -66,7 +66,7 @@ export const AuthProvider = ({children}) =>{
         setAuthLoading(true);
         try {
             const res = await authApi.post("/login/", { email, password },{needAuth:true});
-            const { access } = res.data.tokens;
+            const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
             await fetchMe();
@@ -84,7 +84,7 @@ export const AuthProvider = ({children}) =>{
         setAuthLoading(true);
         try {
             const res = await authApi.post("/register/", payload,{needAuth:true});
-            const { access } = res.data.tokens;
+            const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
             await fetchMe();
@@ -104,3 +104,4 @@ export const AuthProvider = ({children}) =>{
 }
 
 export const useAuthContext = () => useContext(AuthContext)
+
