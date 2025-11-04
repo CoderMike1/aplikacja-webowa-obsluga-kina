@@ -1,0 +1,65 @@
+.showtime_range{
+    display:flex;
+    gap:8px;
+    padding:12px 0;
+    overflow:hidden;
+}
+.day-card {
+    min-width: 72px;
+    height: 88px;
+    border-radius: 10px;
+    border: 1px solid #262931;
+    background: linear-gradient(180deg, #15171f 0%, #0f3e88 100%);
+    color: #f5f5f5;
+    text-align: center;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s;
+}
+
+
+.day-card--active {
+    border-color: #ff8a3d;
+    box-shadow: 0 0 0 2px rgba(255, 138, 61, 0.4);
+    background: linear-gradient(180deg, #ff8a3d 0%, #ff5b1a 100%);
+    color: #ffffff;
+}
+
+.day-card--normal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.day-card__month {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.day-card__weekday {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.day-card__day {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.day-card--select {
+    background: transparent;
+    border: 2px solid #7b7f90;
+    color: #f3f3f3;
+}
+
+.day-card--select .day-card__select-text {
+    font-size: 14px;
+    font-weight: 600;
+}

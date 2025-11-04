@@ -1,6 +1,10 @@
 import './MovieDetailsPage.css'
+import ShowTimeDateRange from "./ShowTimeDateRange/ShowTimeDateRange.jsx";
+import {useState} from "react";
 
 const MovieDetailsPage = () =>{
+
+    const [selectedDate,setSelectedDate] = useState(null)
 
     const poster_url = "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg";
     const title = "Strażnicy Galaktyki"
@@ -49,7 +53,9 @@ const MovieDetailsPage = () =>{
                     </div>
 
                     <div className="movie_details__showtimes">
-                        godziny
+                        <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+
+
                     </div>
 
                 </div>
