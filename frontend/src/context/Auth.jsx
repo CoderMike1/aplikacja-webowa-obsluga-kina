@@ -1,5 +1,5 @@
 import {createContext, useCallback, useContext, useEffect, useState} from "react";
-import authApi from "../api/client.js";
+import {authApi} from "../api/client.js";
 
 
 const AuthContext = createContext(null)
@@ -14,13 +14,13 @@ export const AuthProvider = ({children}) =>{
 
     const isLoggedIn = !!accessToken && !!user;
 
-    useEffect(() => {
-        if (accessToken) {
-            authApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        } else {
-            delete authApi.defaults.headers.common["Authorization"];
-        }
-    }, [accessToken]);
+    // useEffect(() => {
+    //     if (accessToken) {
+    //         authApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    //     } else {
+    //         delete authApi.defaults.headers.common["Authorization"];
+    //     }
+    // }, [accessToken]);
 
     const fetchMe = useCallback(async () => {
         try {
@@ -35,7 +35,7 @@ export const AuthProvider = ({children}) =>{
 
     const refreshAccessToken = useCallback(async () => {
         try {
-            const res = await authApi.post("/token/refresh/");
+            const res = await authApi.post("/token/refresh/",{},{needAuth:true});
             const { access } = res.data;
             setAccessToken(access);
             return access;
@@ -65,7 +65,7 @@ export const AuthProvider = ({children}) =>{
     const login = async (email, password) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/login/", { email, password });
+            const res = await authApi.post("/login/", { email, password },{needAuth:true});
             const { access } = res.data.tokens;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
@@ -83,7 +83,7 @@ export const AuthProvider = ({children}) =>{
     const register = async (payload) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/register/", payload);
+            const res = await authApi.post("/register/", payload,{needAuth:true});
             const { access } = res.data.tokens;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;

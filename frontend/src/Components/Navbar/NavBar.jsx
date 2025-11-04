@@ -2,6 +2,7 @@ import './NavBar.css'
 import logo from "../../assets/logo.png"
 import {useAuthUI} from "../../context/authUIContext.jsx";
 import {useAuthContext} from "../../context/Auth.jsx";
+import {NavLink} from "react-router-dom";
 const NavBar = () =>{
 
     const {showLoginForm,showRegisterForm} = useAuthUI();
@@ -22,14 +23,47 @@ const NavBar = () =>{
 
 
                     <ul className="navbar__menu">
-                        <li><a className="is-active" href="#">Repertuar</a></li>
-                        <li><a href="#">Nowości</a></li>
-                        <li><a href="#">Promocje</a></li>
+                        {/*className="is-active"*/}
+                        <li>
+                            <NavLink
+                                to='/repertuar'
+                                className={({ isActive }) =>
+                                    isActive ? "is-active" : ""
+                                }
+                                >
+                                Repertuar
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to='/nowosci'
+                                className={({ isActive }) =>
+                                    isActive ? "is-active" : ""
+                                }
+                            >
+                                Nowości
+                            </NavLink>
+                            </li>
+                        <li>
+                            <NavLink
+                                to='/promocje'
+                                className={({ isActive }) =>
+                                    isActive ? "is-active" : ""
+                                }
+                            >
+                                Promocje
+                            </NavLink>
+                        </li>
                     </ul>
                 </div>
 
                 <div className="navbar__right">
-                    {isLoggedIn ? <p>Zalogowany</p> :
+                    {isLoggedIn ?
+                        <div className="navbar__my_account">
+                            <button>Moje konto</button>
+                        </div>
+
+                        :
                         <div className="navbar__login">
                             <button onClick={()=>showLoginForm()}>Zaloguj się</button>
                             <button onClick={()=>showRegisterForm()}>Stwórz konto</button>

@@ -9,10 +9,18 @@ const useAxiosAuth = () => {
     useEffect(() => {
         const reqIntercept = authApi.interceptors.request.use(
             (config) => {
-                if (accessToken && !config.headers["Authorization"]) {
-                    config.headers["Authorization"] = `Bearer ${accessToken}`;
+                if (config?.needAuth){
+                    if (accessToken && !config.headers["Authorization"]) {
+                        config.headers["Authorization"] = `Bearer ${accessToken}`;
+                    }
                 }
-                return config;
+                else{
+                    if (config.headers?.Authorization) {
+                        delete config.headers.Authorization;
+                    }
+                }
+                return config
+
             },
             (error) => Promise.reject(error)
         );

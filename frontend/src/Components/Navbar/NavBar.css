@@ -113,7 +113,7 @@
     gap:1rem;
 }
 
-.navbar__login button{
+.navbar__login button, .navbar__my_account button{
     -webkit-tap-highlight-color: transparent;
     font-weight: 600;
     letter-spacing: .2px;
@@ -137,7 +137,7 @@
     text-decoration:none;
     line-height:1;
 }
-.navbar__login button:hover{
+.navbar__login button:hover , .navbar__my_account button:hover{
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(0,0,0,.15);
 }
