@@ -20,8 +20,6 @@ const NavBar = () =>{
                 </div>
 
                 <div className="navbar__middle">
-
-
                     <ul className="navbar__menu">
                         {/*className="is-active"*/}
                         <li>

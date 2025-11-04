@@ -9,6 +9,7 @@ const MainPage = () =>{
     const [nowPlayingMovies,setNowPlayingMovies] = useState([])
     const [soonPlayingMovies,setSoonPlayingMovies] = useState([])
     const [specialEvents,setSpecialEvents] = useState([])
+    const [loading,setLoading] = useState(true)
 
     useEffect(() => {
 
@@ -20,6 +21,7 @@ const MainPage = () =>{
             setNowPlayingMovies(data.grane_teraz)
             setSoonPlayingMovies(data.wkrótce)
             setSpecialEvents(data.wydarzenia_specjalne)
+            setLoading(false)
         })()
 
     }, []);
@@ -28,7 +30,12 @@ const MainPage = () =>{
     return (
         <div className="main_page">
             <NewsSlides />
-            <MoviePanels soonPlayingMovies={soonPlayingMovies} nowPlayingMovies={nowPlayingMovies} specialEvents={specialEvents}/>
+            {loading ?
+            <p className="main_page_loading">Ładowanie danych...</p>
+                :
+                <MoviePanels soonPlayingMovies={soonPlayingMovies} nowPlayingMovies={nowPlayingMovies} specialEvents={specialEvents}/>
+            }
+
         </div>
     )
 }

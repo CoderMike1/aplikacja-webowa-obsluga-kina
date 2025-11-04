@@ -7,7 +7,7 @@
     --cin-bg-2: #0f3a9c;
     --cin-bg-3: #a5b7cf;
     --cin-accent-rgb: 138,144,255;
-    --font : 'Inter', sans-serif;, serif;
+    --font : 'Inter', sans-serif, serif;
     --caption-min-size:6px;
     --caption-max-size:12px;
 }

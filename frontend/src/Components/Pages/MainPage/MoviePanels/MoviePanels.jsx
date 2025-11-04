@@ -1,6 +1,7 @@
 
 import './MoviePanels.css'
 import {useRef} from "react";
+import {Link} from "react-router-dom";
 const MoviePanels = ({nowPlayingMovies,soonPlayingMovies,specialEvents}) =>{
 
     const v1 = useRef(null)
@@ -27,11 +28,16 @@ const MoviePanels = ({nowPlayingMovies,soonPlayingMovies,specialEvents}) =>{
 
             <div className="movie_panel__viewport" ref={listRef}>
                 <div className="movie_panel__list">
-                    {items.map((m) =>(
-                        <div className="movie_panel__card" key={m.title}>
-                            <img src={m.poster_path} alt="" loading="lazy"/>
-                            <div className="movie_panel__caption">{m.title}</div>
-                        </div>
+                    {items.map((movie) =>(
+                        <Link
+                            to={`/filmy/${movie.id}`}
+                            key={movie.id}
+                            className="movie_panel__card"
+                        >
+                        <img src={movie.poster_path} alt="" loading="lazy"/>
+                        <div className="movie_panel__caption">{movie.title}</div>
+
+                        </Link>
                     ))}
                 </div>
             </div>

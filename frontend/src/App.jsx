@@ -5,11 +5,13 @@ import Footer from "./Components/Footer/Footer.jsx";
 import AuthModal from "./Components/Auth/AuthModal.jsx";
 import {AuthUIProvider} from "./context/authUIContext.jsx";
 import {AuthProvider} from "./context/Auth.jsx";
+import ScrollToTop from "./Components/Layout/ScrollToTop.jsx";
 
 function App() {
 
   return (
     <div className="app-container">
+        <ScrollToTop/>
         <AuthProvider>
             <AuthUIProvider>
                 <NavBar/>
