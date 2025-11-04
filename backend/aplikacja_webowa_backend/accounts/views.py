@@ -70,6 +70,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class UserInfo(APIView):
     permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request):
         user = request.user
 
