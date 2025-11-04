@@ -4,7 +4,7 @@ import authApi from "../api/client.js";
 
 
 const useAxiosAuth = () => {
-    const { accessToken, refreshAccessToken } = useAuthContext()
+    const { accessToken,refreshAccessToken  } = useAuthContext()
 
     useEffect(() => {
         const reqIntercept = authApi.interceptors.request.use(

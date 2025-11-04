@@ -22,20 +22,31 @@ export const AuthProvider = ({children}) =>{
     //     }
     // }, [accessToken]);
 
-    const fetchMe = useCallback(async () => {
-        try {
-            const res = await authApi.get("/me/");
-            console.log(res)
-            setUser(res.data);
-        } catch (err) {
-            console.error("fetchMe error", err);
-            setUser(null);
-        }
-    }, []);
+    const fetchMe = useCallback(
+        async (tokenOverride) => {
+            const token = tokenOverride || accessToken;
+            if (!token) return;
+
+            try {
+                const res = await authApi.get("/me/", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUser(res.data);
+            } catch (err) {
+                console.error("fetchMe error", err);
+                setUser(null);
+            }
+        },
+        [accessToken]
+    );
 
     const refreshAccessToken = useCallback(async () => {
         try {
-            const res = await authApi.post("/token/refresh/",null,{needAuth:true,withCredentials:true});
+            const res = await authApi.post("/token/refresh/",null,{
+                needAuth: false
+            });
             const { access } = res.data;
             setAccessToken(access);
             return access;
@@ -52,24 +63,24 @@ export const AuthProvider = ({children}) =>{
             try {
                 const newAccess = await refreshAccessToken();
                 if (newAccess) {
-                    await fetchMe();
+                    await fetchMe(newAccess);
                 }
             } finally {
                 setLoading(false);
             }
         };
         initAuth();
-    }, [refreshAccessToken, fetchMe]);
+    }, [refreshAccessToken]);
 
 
     const login = async (email, password) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/login/", { email, password },{needAuth:true});
+            const res = await authApi.post("/login/", { email, password },{needAuth:false});
             const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-            await fetchMe();
+            await fetchMe(access);
             return res.data;
         }
         catch (err){
@@ -83,11 +94,11 @@ export const AuthProvider = ({children}) =>{
     const register = async (payload) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/register/", payload,{needAuth:true});
+            const res = await authApi.post("/register/", payload,{needAuth:false});
             const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-            await fetchMe();
+            await fetchMe(access);
         } finally {
             setAuthLoading(false);
         }
@@ -96,7 +107,7 @@ export const AuthProvider = ({children}) =>{
 
 
     return (
-        <AuthContext.Provider value={{user, accessToken,login,register,isLoggedIn}}>
+        <AuthContext.Provider value={{user, accessToken,login,register,isLoggedIn,refreshAccessToken}}>
             {children}
         </AuthContext.Provider>
     )

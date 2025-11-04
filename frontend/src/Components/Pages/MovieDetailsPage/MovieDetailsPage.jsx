@@ -1,19 +1,39 @@
 import './MovieDetailsPage.css'
 import ShowTimeDateRange from "./ShowTimeDateRange/ShowTimeDateRange.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {api} from "../../../api/client.js";
+import {useParams} from "react-router-dom";
 
 const MovieDetailsPage = () =>{
 
+    const {movieID} = useParams()
+
     const [selectedDate,setSelectedDate] = useState(null)
 
-    const poster_url = "https://image.tmdb.org/t/p/w500/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg";
-    const title = "Strażnicy Galaktyki"
-    const original_title = "Guardians of the Galaxy"
-    const release_date = "2014-08-01"
-    const description = "Złodziej Peter Quill łączy siły z grupą dziwaków, by chronić potężny artefakt przed Ronanem i zapobiec zniszczeniu galaktyki."
-    const directors = "James Gunn"
-    const duration_time = "122"
+    const [posterURL,setPosterURL] = useState("");
+    const [title,setTitle] = useState("");
+    const [originalTitle,setOriginalTitle] = useState("");
+    const [releaseDate,setReleaseDate] = useState("");
+    const [description,setDescription] = useState("");
+    const [directors,setDirectors] = useState("");
+    const [durationTime,setDurationTime] = useState("")
 
+    useEffect(() => {
+
+        (async ()=>{
+           const resp = await api.get(`/movies/${movieID}`)
+
+            const data = resp.data
+            setPosterURL(data.poster_path);
+           setTitle(data.title);
+           setOriginalTitle(data.original_title);
+           setReleaseDate(data.release_date);
+           setDescription(data.description);
+           setDirectors(data.directors);
+           setDurationTime(data.duration_minutes)
+        })()
+
+    }, []);
 
     return (
         <div className="movie_details__container">
@@ -21,7 +41,7 @@ const MovieDetailsPage = () =>{
             <div className="movie_details__inner">
                 <div className="movie_details__left">
                     <div className="movie_inner__image">
-                        <img src={poster_url} alt={title}/>
+                        <img src={posterURL} alt={title}/>
                     </div>
                 </div>
                 <div className="movie_details__right">
@@ -32,7 +52,7 @@ const MovieDetailsPage = () =>{
                         </div>
                         <div className="movie_info__item">
                             <h5>Oryginalny tytuł</h5>
-                            <p>{original_title}</p>
+                            <p>{originalTitle}</p>
                         </div>
                         <div className="movie_info__item">
                             <h5>Opis</h5>
@@ -40,11 +60,11 @@ const MovieDetailsPage = () =>{
                         </div>
                         <div className="movie_info__item">
                             <h5>Czas trwania</h5>
-                            <p>{duration_time} minuty</p>
+                            <p>{durationTime} minuty</p>
                         </div>
                         <div className="movie_info__item">
                             <h5>Data premiery</h5>
-                            <p>{release_date}</p>
+                            <p>{releaseDate}</p>
                         </div>
                         <div className="movie_info__item">
                             <h5>Reżyseria</h5>
@@ -55,7 +75,10 @@ const MovieDetailsPage = () =>{
                     <div className="movie_details__showtimes">
                         <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
 
+                        <div>
+                            tabrl
 
+                        </div>
                     </div>
 
                 </div>

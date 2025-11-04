@@ -63,7 +63,8 @@ class LoginView(APIView):
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
 
-        return Response({
+
+        resp = Response({
             "message": "User logged in successfully",
             "user": {
                 "id": user.id,
@@ -71,8 +72,19 @@ class LoginView(APIView):
                 "email": user.email,
             },
             "access": access_token
-        }, status=status.HTTP_200_OK)
+        },status=status.HTTP_200_OK)
 
+        resp.set_cookie(
+            key="refresh_token",
+            value=str(refresh),
+            httponly=True,
+            secure=False,        # w produkcji True
+            samesite="Lax",
+            domain="localhost",
+            path="/",
+        )
+
+        return resp
 
 class RefreshTokenView(APIView):
     permission_classes = [permissions.AllowAny]
