@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="cinema_postgres_lc54@dpg-d408knili9vc73c27sbg-a.frankfurt-postgres.render.com" uuid="bfc1ab5e-51ed-4006-9e06-492b77536c4e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://dpg-d408knili9vc73c27sbg-a.frankfurt-postgres.render.com:5432/cinema_postgres_lc54</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
