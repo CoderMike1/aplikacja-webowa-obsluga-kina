@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accounts',
     'movies',
+    'screenings',
     'rest_framework_simplejwt',
     'auditorium'
 ]
