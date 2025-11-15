@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from datetime import timedelta
 from django.utils import timezone
-
-# Importy aplikacyjne (serializery i modele powiązane)
 from movies.serializers import GenreSerializer, MovieSerializer
 from auditorium.serializers import AuditoriumSerializer
 from movies.models import Movie
