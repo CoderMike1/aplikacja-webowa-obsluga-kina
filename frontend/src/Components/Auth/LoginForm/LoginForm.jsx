@@ -4,8 +4,8 @@ import {useAuthUI} from "../../../context/authUIContext.jsx";
 import '../Forms.css'
 import {useAuthContext} from "../../../context/Auth.jsx";
 const LoginForm = () =>{
-    const [email,setEmail] = useState("michal@mail.com")
-    const [password,setPassword] = useState("123456789")
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("")
 
     const [errorMessage,setErrorMessage] = useState("")
 
@@ -18,7 +18,6 @@ const LoginForm = () =>{
         setErrorMessage("")
         try{
             const resp = await login(email,password)
-
             setEmail("")
             setPassword("")
             closeForm()

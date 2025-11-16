@@ -18,6 +18,8 @@ const MovieDetailsPage = () =>{
     const [directors,setDirectors] = useState("");
     const [durationTime,setDurationTime] = useState("")
 
+    const [loading,setLoading] = useState(true)
+
     useEffect(() => {
 
         (async ()=>{
@@ -31,6 +33,7 @@ const MovieDetailsPage = () =>{
            setDescription(data.description);
            setDirectors(data.directors);
            setDurationTime(data.duration_minutes)
+            setLoading(false)
         })()
 
     }, []);

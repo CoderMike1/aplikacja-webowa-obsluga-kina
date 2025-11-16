@@ -5,7 +5,6 @@ const ShowTimeDateRange = ({selectedDate,setSelectedDate}) =>{
 
     const days = useMemo(()=> getNextDays(),[])
 
-    console.log(selectedDate)
 
     return (
         <div className="showtime_range">
