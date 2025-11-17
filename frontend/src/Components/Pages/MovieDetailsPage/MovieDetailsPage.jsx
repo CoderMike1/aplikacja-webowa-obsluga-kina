@@ -7,8 +7,8 @@ import {useParams} from "react-router-dom";
 const MovieDetailsPage = () =>{
 
     const {movieID} = useParams()
-
-    const [selectedDate,setSelectedDate] = useState(null)
+    const today = new Date()
+    const [selectedDate,setSelectedDate] = useState(today.toISOString().slice(0, 10))
 
     const [posterURL,setPosterURL] = useState("");
     const [title,setTitle] = useState("");
@@ -76,12 +76,64 @@ const MovieDetailsPage = () =>{
                     </div>
 
                     <div className="movie_details__showtimes">
-                        <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-
-                        <div>
-                            tabrl
-
+                        <div className="movie_details__showtimes_panel">
+                            <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
                         </div>
+
+                        <div className="movie_showtimes_table">
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+
+                            <div className="movie_showtime_item">
+                                <span>17:30</span>
+                                <p>Dubbing PL</p>
+                                <p>Sala 8</p>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -97,3 +149,4 @@ const MovieDetailsPage = () =>{
 }
 
 export default MovieDetailsPage
+

@@ -1,11 +1,14 @@
-.showtime_range{
-    display:flex;
-    gap:8px;
-    padding:12px 0;
-    overflow:hidden;
+.showtime_range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;          /* nic nie wychodzi poza panel */
 }
 .day-card {
-    min-width: 72px;
+    min-width: 90px;
     height: 88px;
     border-radius: 10px;
     border: 1px solid #262931;
@@ -54,12 +57,51 @@
 }
 
 .day-card--select {
-    background: transparent;
-    border: 2px solid #7b7f90;
+    position:relative;
+    background: rgba(232, 0, 0, 0.28);
     color: #f3f3f3;
+    margin:0 auto;
+    padding:0
 }
-
+.day-card--select-span{
+    display:flex;
+    flex-direction:column;
+    padding: 10px;
+    gap:10px;
+}
 .day-card--select .day-card__select-text {
     font-size: 14px;
     font-weight: 600;
 }
+.showtime_range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.showtime_range__days {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.day-card-nav {
+    width: 40px;
+    height: 80px;
+    border-radius: 12px;
+    border: 2px solid rgba(15, 23, 42, 0.7);
+    background: linear-gradient(180deg, #141b3a, #1e2f6a);
+    color: #f9fafb;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+}
+
+.day-card-nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+

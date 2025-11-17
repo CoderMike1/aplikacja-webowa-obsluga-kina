@@ -79,6 +79,7 @@
     cursor:pointer;
     transition: transform .18s ease, box-shadow .18s ease;
     will-change: transform;
+    text-decoration: none;
 
 }
 .movie_panel__caption{

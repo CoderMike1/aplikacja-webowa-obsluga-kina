@@ -1,62 +1,102 @@
-import {useMemo} from "react";
-import './ShowTimeDateRange.css'
+import { useMemo, useState } from "react";
+import "./ShowTimeDateRange.css";
 
-const ShowTimeDateRange = ({selectedDate,setSelectedDate}) =>{
+const VISIBLE_DAYS = 6;
+const TOTAL_DAYS = 30;
 
-    const days = useMemo(()=> getNextDays(),[])
+const ShowTimeDateRange = ({ selectedDate, setSelectedDate }) => {
+    const days = useMemo(() => getNextDays(TOTAL_DAYS), []);
+    const [startIndex, setStartIndex] = useState(0);
 
+    const handleSelectDateFromRange = (day_date) => {
+        setSelectedDate(day_date);
+    };
+
+    const handlePrev = () => {
+        setStartIndex((prev) => Math.max(0, prev - 1));
+    };
+
+    const handleNext = () => {
+        setStartIndex((prev) =>
+            Math.min(prev + 1, days.length - VISIBLE_DAYS)
+        );
+    };
+
+    const visibleDays = days.slice(startIndex, startIndex + VISIBLE_DAYS);
 
     return (
         <div className="showtime_range">
-            {days.map((day,idx) => {
+            <button
+                type="button"
+                className="day-card-nav day-card-nav--prev"
+                onClick={handlePrev}
+                disabled={startIndex === 0}
+            >
+                ‹
+            </button>
 
-                const isToday = idx === 0;
-                const isSelected = selectedDate  === day.date;
-                return (
-                    <button
-                        key={day.date}
-                        type="button"
-                        className={
-                            "day-card" +
-                            (isSelected ? " day-card--active" : "") +
-                            (!isSelected && !isToday ? " day-card--normal" : "")
-                        }
-                        onClick={() => setSelectedDate?.(day.date)}
-                    >
-                        <span className="day-card__month">{day.month}</span>
-                        <span className="day-card__weekday">{day.weekday}</span>
-                        <span className="day-card__day">{day.dayNumber}</span>
-                    </button>
-                );
-            })}
+            <div className="showtime_range__days">
+                {visibleDays.map((day) => {
+                    const isSelected = selectedDate === day.date;
+                    return (
+                        <button
+                            key={day.date}
+                            type="button"
+                            className={
+                                "day-card" +
+                                (isSelected ? " day-card--active" : "")
+                            }
+                            onClick={() => handleSelectDateFromRange(day.date)}
+                        >
+                            <span className="day-card__month">{day.month}</span>
+                            <span className="day-card__weekday">{day.weekday}</span>
+                            <span className="day-card__day">{day.dayNumber}</span>
+                        </button>
+                    );
+                })}
+            </div>
 
             <button
                 type="button"
-                className="day-card day-card--select"
-                onClick={() => {
-                }}
+                className="day-card-nav day-card-nav--next"
+                onClick={handleNext}
+                disabled={startIndex + VISIBLE_DAYS >= days.length}
             >
-                <span className="day-card__select-text">Select</span>
-                <span className="day-card__select-text">Day</span>
+                ›
             </button>
-
-
-
         </div>
+    );
+};
 
-    )
+const WEEKDAY = [
+    "Niedziela",
+    "Poniedziałek",
+    "Wtorek",
+    "Środa",
+    "Czwartek",
+    "Piątek",
+    "Sobota",
+];
+const MONTH = [
+    "Styczeń",
+    "Luty",
+    "Marzec",
+    "Kwiecień",
+    "Maj",
+    "Czerwiec",
+    "Lipiec",
+    "Sierpień",
+    "Wrzesień",
+    "Październik",
+    "Listopad",
+    "Grudzień",
+];
 
-}
-const WEEKDAY = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
-const MONTH = ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
-
-const getNextDays = () =>{
-    const count = 6;
-
+const getNextDays = (count) => {
     const arr = [];
     const today = new Date();
 
-    for (let i =0;i<count;i++){
+    for (let i = 0; i < count; i++) {
         const d = new Date(today);
         d.setDate(today.getDate() + i);
         arr.push({
@@ -68,8 +108,6 @@ const getNextDays = () =>{
     }
 
     return arr;
+};
 
-}
-
-
-export default ShowTimeDateRange
+export default ShowTimeDateRange;

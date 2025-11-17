@@ -27,7 +27,6 @@ const CinemasProgram = () =>{
             <div className="program__filter">
                 <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
             </div>
-
             {
                 movies.length > 0 ?
                     <div className="program__movies">
