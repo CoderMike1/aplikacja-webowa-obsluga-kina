@@ -11,19 +11,46 @@ const MainPage = () =>{
     const [specialEvents,setSpecialEvents] = useState([])
     const [loading,setLoading] = useState(true)
 
-    useEffect(() => {
+    const CACHE_KEY = "moviesCache";
+    const CACHE_TTL_MS = 30 * 60 * 1000; // 30 min
 
-        (async () =>{
+    useEffect(() => {
+        const loadMovies = async () => {
+            const cached = localStorage.getItem(CACHE_KEY);
+
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                const isExpired = Date.now() - parsed.timestamp > CACHE_TTL_MS;
+
+                if (!isExpired) {
+                    setNowPlayingMovies(parsed.nowPlaying);
+                    setSoonPlayingMovies(parsed.upcoming);
+                    setSpecialEvents(parsed.special);
+                    setLoading(false);
+                    return;
+                }
+            }
 
             const resp = await getMovies();
+            const data = resp.data;
 
-            const data = resp.data
-            setNowPlayingMovies(data.now_playing)
-            setSoonPlayingMovies(data.upcoming)
-            setSpecialEvents(data.special_event)
-            setLoading(false)
-        })()
+            setNowPlayingMovies(data.now_playing);
+            setSoonPlayingMovies(data.upcoming);
+            setSpecialEvents(data.special_event);
+            setLoading(false);
 
+            localStorage.setItem(
+                CACHE_KEY,
+                JSON.stringify({
+                    timestamp: Date.now(),
+                    nowPlaying: data.now_playing,
+                    upcoming: data.upcoming,
+                    special: data.special_event,
+                })
+            );
+        };
+
+        loadMovies();
     }, []);
 
 
