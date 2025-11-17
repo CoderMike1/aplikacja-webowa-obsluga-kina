@@ -15,7 +15,6 @@
     background: rgba(40, 63, 140, 0.59);
 }
 
-/* --- GRID Z FILMAMI --- */
 .program__movies{
     display: grid;
     width: 100%;
@@ -25,7 +24,7 @@
     gap: 40px;
 }
 
-/* KARTA FILMU */
+
 .movie__item{
 
     display:flex;
@@ -95,7 +94,6 @@
     margin: 0;
 }
 
-/* --- DLA SZEROKICH EKRANÓW --- */
 @media (min-width: 1580px) {
     .program__movies{
         max-width: 1800px;
