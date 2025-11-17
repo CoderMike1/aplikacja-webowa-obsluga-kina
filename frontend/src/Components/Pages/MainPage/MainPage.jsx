@@ -12,7 +12,7 @@ const MainPage = () =>{
     const [loading,setLoading] = useState(true)
 
     const CACHE_KEY = "moviesCache";
-    const CACHE_TTL_MS = 30 * 60 * 1000; // 30 min
+    const CACHE_TTL_MS = 30 * 60 * 1000;
 
     useEffect(() => {
         const loadMovies = async () => {

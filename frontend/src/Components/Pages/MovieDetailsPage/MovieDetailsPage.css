@@ -2,6 +2,7 @@
     padding: 10px;
     display: flex;
     justify-content: center;
+    font-family:  'Inter', sans-serif, serif;
 }
 
 .movie_details__inner{
@@ -109,3 +110,44 @@
     font-size: 0.9rem;
     margin: 0;
 }
+
+@media (min-width: 1920px) {
+    .movie_details__container {
+        padding: 20px 0;
+    }
+
+    .movie_details__inner{
+        width: 60vw;
+        max-width: 1600px;
+        margin: 0 auto;
+        justify-content: space-between;
+    }
+
+    .movie_inner__image img {
+        width: 320px;
+        object-fit: cover;
+    }
+
+    .movie_details__right{
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    .movie_details__info{
+        padding: 24px;
+    }
+
+    .movie_info__item p{
+        font-size: 14px;
+    }
+
+    .movie_details__showtimes {
+        padding: 16px 20px;
+    }
+
+    .movie_showtimes_table{
+        padding: 14px;
+        gap: 10px;
+    }
+}
+

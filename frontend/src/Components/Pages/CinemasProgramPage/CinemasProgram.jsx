@@ -1,7 +1,7 @@
 import './CinemasProgram.css'
 import ShowTimeDateRange from "../MovieDetailsPage/ShowTimeDateRange/ShowTimeDateRange.jsx";
 import {useEffect, useState} from "react";
-import {getMovies} from "../../../services/movieService.js";
+import {getMovies, getScreenings} from "../../../services/movieService.js";
 import {Link} from "react-router-dom";
 
 const CinemasProgram = () =>{
@@ -9,18 +9,79 @@ const CinemasProgram = () =>{
     const [selectedDate,setSelectedDate] = useState(today.toISOString().slice(0, 10))
 
     const [movies,setMovies] = useState([])
+    const [screenings,setScreenings] = useState([])
+    const [loading,setLoading] = useState(false)
 
+    const MOVIES_CACHE_KEY = "moviesCache";
+    const SCREENINGS_CACHE_KEY = "screeningsCache"
+    const CACHE_TTL_MS = 30 * 60 * 1000;
     useEffect(() => {
+        const loadMovies = async () => {
+            const cached = localStorage.getItem(MOVIES_CACHE_KEY);
 
-        (async () =>{
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                const isExpired = Date.now() - parsed.timestamp > CACHE_TTL_MS;
+
+                if (!isExpired) {
+                    setMovies(parsed.nowPlaying);
+                    setLoading(false);
+                    return;
+                }
+            }
 
             const resp = await getMovies();
+            const data = resp.data;
+
+            setMovies(data.nowPlaying);
+            setLoading(false);
+
+            localStorage.setItem(
+                CACHE_KEY,
+                JSON.stringify({
+                    timestamp: Date.now(),
+                    nowPlaying: data.now_playing,
+                    upcoming: data.upcoming,
+                    special: data.special_event,
+                })
+            );
+        };
+
+        loadMovies();
+
+        const loadScreenings = async () =>{
+
+            const cached = localStorage.getItem(SCREENINGS_CACHE_KEY)
+
+            if (cached){
+                const parsed = JSON.parse(cached)
+
+                const isExpired = new Date() - parsed.timestamp > CACHE_TTL_MS;
+                if (!isExpired){
+                    setScreenings(parsed.screenings);
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            const resp = await getScreenings();
 
             const data = resp.data
-            setMovies(data.now_playing)
-        })()
 
+            setScreenings(data.results)
+            setLoading(false)
+
+            localStorage.setItem(SCREENINGS_CACHE_KEY,JSON.stringify({
+                timestamp:Date.now(),
+                screenings:data.results
+            }))
+
+        }
+        loadScreenings()
     }, []);
+
+
+
 
     return (
         <div className="program__container">
@@ -37,40 +98,22 @@ const CinemasProgram = () =>{
                                     <h4>{movie.title}</h4>
                                 </Link>
                                 <div className="movie__program">
-
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-                                    <div className="program__item">
-                                        <span>17:30</span>
-                                        <p>Dubbing PL</p>
-                                        <p>Sala 8</p>
-                                    </div>
-
+                                    {screenings
+                                        .filter((screening) => screening.movie.id === movie.id)
+                                        .map((screening) =>
+                                            screening.projection_types.map((projection) => (
+                                                <div
+                                                    className="program__item"
+                                                    key={`${screening.movie.id}-${projection.id}`}
+                                                >
+                                                    <span>{projection.time}</span>
+                                                    <p>{projection.language}</p>
+                                                    <p>Sala {projection.room}</p>
+                                                </div>
+                                            ))
+                                        )}
                                 </div>
+
                             </div>
                         ))}
                     </div>
