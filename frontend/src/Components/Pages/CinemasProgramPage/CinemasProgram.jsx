@@ -8,63 +8,16 @@ const CinemasProgram = () =>{
     const today = new Date()
     const [selectedDate,setSelectedDate] = useState(today.toISOString().slice(0, 10))
 
-    // const [movies,setMovies] = useState([])
     const [allScreenings,setAllScreening] = useState([])
     const [screenings,setScreenings] = useState([])
     const [loading,setLoading] = useState(false)
 
-    // const MOVIES_CACHE_KEY = "moviesCache";
+
     const SCREENINGS_CACHE_KEY = "screeningsCache"
     const CACHE_TTL_MS = 30 * 60 * 1000;
     useEffect(() => {
-        // const loadMovies = async () => {
-        //     setLoading(true)
-        //     const cached = localStorage.getItem(MOVIES_CACHE_KEY);
-        //
-        //     if (cached) {
-        //         const parsed = JSON.parse(cached);
-        //         const isExpired = Date.now() - parsed.timestamp > CACHE_TTL_MS;
-        //
-        //         if (!isExpired) {
-        //             setMovies(parsed.nowPlaying);
-        //             setLoading(false);
-        //             return;
-        //         }
-        //     }
-        //
-        //     const resp = await getMovies();
-        //     const data = resp.data;
-        //
-        //     setMovies(data.now_playing);
-        //     setLoading(false);
-        //
-        //     localStorage.setItem(
-        //         CACHE_KEY,
-        //         JSON.stringify({
-        //             timestamp: Date.now(),
-        //             nowPlaying: data.now_playing,
-        //             upcoming: data.upcoming,
-        //             special: data.special_event,
-        //         })
-        //     );
-        // };
-        //
-        // loadMovies();
 
         const loadScreenings = async () =>{
-
-            // const cached = localStorage.getItem(SCREENINGS_CACHE_KEY)
-            //
-            // if (cached){
-            //     const parsed = JSON.parse(cached)
-            //
-            //     const isExpired = new Date() - parsed.timestamp > CACHE_TTL_MS;
-            //     if (!isExpired){
-            //         setScreenings(parsed.screenings);
-            //         setLoading(false);
-            //         return;
-            //     }
-            // }
 
             const resp = await getScreenings();
 
@@ -98,7 +51,8 @@ const CinemasProgram = () =>{
                 }
                 const item = {
                     id:result.movie.id,
-                    movie_title:result.movie.title,
+                    title:result.movie.title,
+                    img:result.movie.poster_path,
                     screenings:all_screenings
                 }
                 items.push(item)
@@ -153,8 +107,8 @@ const CinemasProgram = () =>{
                                 {screenings.map(movie=>(
                                     <div className="movie__item" key={movie.id}>
                                         <Link  to={`/filmy/${movie.id}`} className="movie__info">
-                                            <img src="https://image.tmdb.org/t/p/w500/qdfARIhgpgZOBh3vfNhWS4hmSo3.jpg"/>
-                                            {/*<img src={movie.poster_path}/>*/}
+                                            {/*<img src="https://image.tmdb.org/t/p/w500/qdfARIhgpgZOBh3vfNhWS4hmSo3.jpg"/>*/}
+                                            <img src={movie.img}/>
                                             <h4>{movie.title}</h4>
                                         </Link>
                                         <div className="movie__program">
