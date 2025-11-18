@@ -8,7 +8,7 @@ const CinemasProgram = () =>{
     const today = new Date()
     const [selectedDate,setSelectedDate] = useState(today.toISOString().slice(0, 10))
 
-    const [allScreenings,setAllScreening] = useState([])
+    const [allScreenings,setAllScreenings] = useState([])
     const [screenings,setScreenings] = useState([])
     const [loading,setLoading] = useState(false)
 
@@ -18,7 +18,7 @@ const CinemasProgram = () =>{
     useEffect(() => {
 
         const loadScreenings = async () =>{
-
+            setLoading(true)
             const resp = await getScreenings();
 
             const data = resp.data
@@ -59,7 +59,7 @@ const CinemasProgram = () =>{
             }
 
 
-            setAllScreening(items);
+            setAllScreenings(items);
             setLoading(false)
 
             localStorage.setItem(SCREENINGS_CACHE_KEY,JSON.stringify({
@@ -85,11 +85,12 @@ const CinemasProgram = () =>{
     };
 
     useEffect(()=>{
+
         filterScreeningsByDate()
-    },[selectedDate])
+    },[selectedDate,allScreenings])
 
 
-    console.log(screenings)
+    console.log(selectedDate)
 
     return (
         <div className="program__container">
@@ -107,7 +108,6 @@ const CinemasProgram = () =>{
                                 {screenings.map(movie=>(
                                     <div className="movie__item" key={movie.id}>
                                         <Link  to={`/filmy/${movie.id}`} className="movie__info">
-                                            {/*<img src="https://image.tmdb.org/t/p/w500/qdfARIhgpgZOBh3vfNhWS4hmSo3.jpg"/>*/}
                                             <img src={movie.img}/>
                                             <h4>{movie.title}</h4>
                                         </Link>
