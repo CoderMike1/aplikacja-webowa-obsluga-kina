@@ -46,15 +46,7 @@ class ScreeningView(APIView):
             .order_by('movie__title', 'projection_type__name', 'start_time')
         )
 
-        grouped = defaultdict(list)
-        for s in page_screenings_qs:
-            grouped[s.movie_id].append(s)
-
-        page_screenings = []
-        for mid in page_movie_ids:
-            page_screenings.extend(grouped.get(mid, []))
-
-        serializer = ScreeningReadSerializer(page_screenings, many=True)
+        serializer = ScreeningReadSerializer(page_screenings_qs, many=True)
         return paginator.get_paginated_response(serializer.data)
     
 
