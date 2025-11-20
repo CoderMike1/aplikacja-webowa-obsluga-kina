@@ -23,6 +23,7 @@ class ScreeningPostTests(TestCase):
 			original_title='',
 			description='',
 			release_date=timezone.now().date(),
+			cinema_release_date=timezone.now().date(),
 			duration_minutes=90,
 		)
 		self.auditorium = Auditorium.objects.create(name='Main Hall')
@@ -37,6 +38,43 @@ class ScreeningPostTests(TestCase):
 			'movie_id': self.movie.pk,
 			'auditorium_id': self.auditorium.pk,
 			'start_time': start,
+		}
+		resp = self.client.post(url, payload, format='json')
+		self.assertEqual(resp.status_code, 201)
+
+	def test_reject_screening_before_cinema_release_date(self):
+		future_release = (timezone.now().date() + timedelta(days=7))
+		movie_future = Movie.objects.create(
+			title='Future Movie', original_title='', description='',
+			release_date=future_release, cinema_release_date=future_release, duration_minutes=100
+		)
+		self.client.force_authenticate(self.admin)
+		url = '/api/screenings/'
+		# start 2 days before premiere
+		start_time = (timezone.now() + timedelta(days=5)).replace(minute=20, second=0, microsecond=0)
+		payload = {
+			'movie_id': movie_future.pk,
+			'auditorium_id': self.auditorium.pk,
+			'start_time': start_time.isoformat(),
+		}
+		resp = self.client.post(url, payload, format='json')
+		self.assertEqual(resp.status_code, 400)
+		self.assertIn('start_time', resp.data)
+
+	def test_accept_screening_on_cinema_release_date(self):
+		future_release = (timezone.now().date() + timedelta(days=10))
+		movie_future = Movie.objects.create(
+			title='Future Movie 2', original_title='', description='',
+			release_date=future_release, cinema_release_date=future_release, duration_minutes=110
+		)
+		self.client.force_authenticate(self.admin)
+		url = '/api/screenings/'
+		# start exactly at 10 days (date matches cinema_release_date); ensure future time
+		start_time = (timezone.now() + timedelta(days=10)).replace(minute=30, second=0, microsecond=0)
+		payload = {
+			'movie_id': movie_future.pk,
+			'auditorium_id': self.auditorium.pk,
+			'start_time': start_time.isoformat(),
 		}
 		resp = self.client.post(url, payload, format='json')
 		self.assertEqual(resp.status_code, 201)
@@ -189,6 +227,37 @@ class ScreeningPostTests(TestCase):
 			'movie_id': long_movie.pk,
 			'auditorium_id': self.auditorium.pk,
 			'start_time': proposed_start.isoformat(),
+		}
+		resp = self.client.post(url, payload, format='json')
+		self.assertEqual(resp.status_code, 201)
+
+	def test_reject_start_time_before_published_at(self):
+		"""start_time < published_at should be rejected."""
+		self.client.force_authenticate(self.admin)
+		url = '/api/screenings/'
+		published_at = (timezone.now() + timedelta(days=3)).replace(minute=20, second=0, microsecond=0)
+		start_time = (timezone.now() + timedelta(days=2)).replace(minute=20, second=0, microsecond=0)
+		payload = {
+			'movie_id': self.movie.pk,
+			'auditorium_id': self.auditorium.pk,
+			'start_time': start_time.isoformat(),
+			'published_at': published_at.isoformat(),
+		}
+		resp = self.client.post(url, payload, format='json')
+		self.assertEqual(resp.status_code, 400)
+		self.assertIn('start_time', resp.data)
+
+	def test_accept_start_time_equal_or_after_published_at(self):
+		"""start_time >= published_at should be accepted."""
+		self.client.force_authenticate(self.admin)
+		url = '/api/screenings/'
+		published_at = (timezone.now() + timedelta(days=2)).replace(minute=20, second=0, microsecond=0)
+		start_time = (timezone.now() + timedelta(days=2, hours=2)).replace(minute=30, second=0, microsecond=0)
+		payload = {
+			'movie_id': self.movie.pk,
+			'auditorium_id': self.auditorium.pk,
+			'start_time': start_time.isoformat(),
+			'published_at': published_at.isoformat(),
 		}
 		resp = self.client.post(url, payload, format='json')
 		self.assertEqual(resp.status_code, 201)

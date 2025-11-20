@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from datetime import timedelta
 from django.utils import timezone
-from movies.serializers import GenreSerializer, MovieSerializer
+from movies.serializers import GenreSerializer, MovieReadSerializer
 from auditorium.serializers import AuditoriumSerializer
 from movies.models import Movie
 from auditorium.models import Auditorium
@@ -29,7 +29,7 @@ class ScreeningGroupedListSerializer(serializers.ListSerializer):
             mid = movie.pk
             if mid not in groups:
                 groups[mid] = {
-                    'movie': MovieSerializer(movie, context=self.context).data,
+                    'movie': MovieReadSerializer(movie, context=self.context).data,
                     'projection_types': {},
                     '_proj_order': []
                 }
@@ -64,7 +64,7 @@ class ScreeningGroupedListSerializer(serializers.ListSerializer):
 
 class ScreeningReadSerializer(serializers.ModelSerializer):
     # Odczyt pojedynczego seansu (używany też przy odpowiedzi po utworzeniu)
-    movie = MovieSerializer(read_only=True)  # powiązany film
+    movie = MovieReadSerializer(read_only=True)  # powiązany film
     auditorium = AuditoriumSerializer(read_only=True)  # powiązana sala
     genres = GenreSerializer(source='movie.genres', many=True, read_only=True)  # gatunki filmu
     projection_type = ProjectionTypeSerializer(read_only=True)  # typ projekcji
@@ -151,6 +151,22 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
         auditorium = attrs.get('auditorium', getattr(instance, 'auditorium', None))
         start_time = attrs.get('start_time', getattr(instance, 'start_time', None))
         movie = attrs.get('movie', getattr(instance, 'movie', None))
+        published_at = attrs.get('published_at', getattr(instance, 'published_at', None))
+
+        # Nie pozwól na seans przed datą premiery kina (cinema_release_date) filmu
+        if movie is not None and start_time is not None:
+            movie_premiere = movie.cinema_release_date
+            if start_time.date() < movie_premiere:
+                raise serializers.ValidationError({
+                    'start_time': 'Screening cannot start before the movie cinema_release_date.'
+                })
+
+        # start_time nie może być wcześniejszy niż published_at (logika: nie publikujemy seansu "po fakcie")
+        if published_at is not None and start_time is not None:
+            if start_time < published_at:
+                raise serializers.ValidationError({
+                    'start_time': 'Screening start_time cannot be earlier than published_at.'
+                })
         # Sprawdzenie tylko gdy mamy komplet kluczowych danych
         if auditorium is not None and start_time is not None:
             # Przy aktualizacji wyklucz bieżący rekord z zapytań
