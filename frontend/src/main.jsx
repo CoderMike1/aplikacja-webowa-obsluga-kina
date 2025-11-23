@@ -12,6 +12,8 @@ import CinemasProgram from "./Components/Pages/CinemasProgramPage/CinemasProgram
 import NewsPage from "./Components/Pages/NewsPage/NewsPage.jsx";
 import PromosPage from "./Components/Pages/PromosPage/PromosPage.jsx";
 import MovieDetailsPage from "./Components/Pages/MovieDetailsPage/MovieDetailsPage.jsx";
+import SelectSeats from "./Components/Pages/CheckoutPages/SelectSeats/SelectSeats.jsx";
+import Checkout from "./Components/Pages/CheckoutPages/Checkout.jsx";
 const router = createBrowserRouter([
     {
         path:'/',
@@ -21,7 +23,8 @@ const router = createBrowserRouter([
             {path:'/repertuar', element:<CinemasProgram/>},
             {path:'/nowosci',element:<NewsPage/>},
             {path:'/promocje', element:<PromosPage/>},
-            {path:'/filmy/:movieID', element:<MovieDetailsPage/>}
+            {path:'/filmy/:movieID', element:<MovieDetailsPage/>},
+            {path:"/checkout",element:<Checkout/>}
         ]
     }
 ])

@@ -6,12 +6,14 @@ import AuthModal from "./Components/Auth/AuthModal.jsx";
 import {AuthUIProvider} from "./context/authUIContext.jsx";
 import {AuthProvider} from "./context/Auth.jsx";
 import ScrollToTop from "./Components/Layout/ScrollToTop.jsx";
+import {CheckoutProvider} from "./context/CheckoutContext.jsx";
 
 function App() {
 
   return (
     <div className="app-container">
         <ScrollToTop/>
+        <CheckoutProvider>
         <AuthProvider>
             <AuthUIProvider>
                 <NavBar/>
@@ -20,6 +22,7 @@ function App() {
                 <AuthModal/>
             </AuthUIProvider>
         </AuthProvider>
+        </CheckoutProvider>
     </div>
   )
 }
