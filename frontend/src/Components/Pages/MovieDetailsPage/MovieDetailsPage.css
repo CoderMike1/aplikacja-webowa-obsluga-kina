@@ -110,7 +110,33 @@
     font-size: 0.9rem;
     margin: 0;
 }
+.movie_showtime_item button {
+    margin-top: 6px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
 
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8); /* niebieski jak góra strony */
+    color: #ffffff;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.movie_showtime_item button:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(15, 23, 42, 0.3);
+}
+
+.movie_showtime_item button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
 @media (min-width: 1920px) {
     .movie_details__container {
         padding: 20px 0;

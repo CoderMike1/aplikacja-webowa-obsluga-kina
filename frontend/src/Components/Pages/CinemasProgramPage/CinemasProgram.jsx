@@ -1,8 +1,9 @@
 import './CinemasProgram.css'
 import ShowTimeDateRange from "../MovieDetailsPage/ShowTimeDateRange/ShowTimeDateRange.jsx";
-import {useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import {getMovies, getScreenings} from "../../../services/movieService.js";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useCheckout} from "../../../context/CheckoutContext.jsx";
 
 const CinemasProgram = () =>{
     const today = new Date()
@@ -11,6 +12,9 @@ const CinemasProgram = () =>{
     const [allScreenings,setAllScreenings] = useState([])
     const [screenings,setScreenings] = useState([])
     const [loading,setLoading] = useState(false)
+
+    const {startCheckout} = useCheckout()
+    const navigate = useNavigate();
 
 
     const SCREENINGS_CACHE_KEY = "screeningsCache"
@@ -52,6 +56,7 @@ const CinemasProgram = () =>{
                 const item = {
                     id:result.movie.id,
                     title:result.movie.title,
+                    directors:result.movie.directors,
                     img:result.movie.poster_path,
                     screenings:all_screenings
                 }
@@ -90,7 +95,10 @@ const CinemasProgram = () =>{
     },[selectedDate,allScreenings])
 
 
-    console.log(selectedDate)
+    const handleBuyTicketButton = (movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium) =>{
+        startCheckout({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium})
+        navigate("/checkout")
+    }
 
     return (
         <div className="program__container">
@@ -121,7 +129,7 @@ const CinemasProgram = () =>{
                                                         <span>{s.hour_start_time}</span>
                                                         <p>DUBBING {s.projection_type}</p>
                                                         <p>Sala {s.auditorium_name}</p>
-                                                        <button>Kup Bilet</button>
+                                                        <button onClick={()=>handleBuyTicketButton(movie.title,movie.img,movie.directors,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
                                                     </div>
                                                     )
 

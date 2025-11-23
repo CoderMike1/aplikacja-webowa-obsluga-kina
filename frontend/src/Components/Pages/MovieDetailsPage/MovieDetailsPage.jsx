@@ -2,8 +2,9 @@ import './MovieDetailsPage.css'
 import ShowTimeDateRange from "./ShowTimeDateRange/ShowTimeDateRange.jsx";
 import {useEffect, useState} from "react";
 import {api} from "../../../api/client.js";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getScreenings} from "../../../services/movieService.js";
+import {useCheckout} from "../../../context/CheckoutContext.jsx";
 
 const MovieDetailsPage = () =>{
 
@@ -22,6 +23,9 @@ const MovieDetailsPage = () =>{
     const [loading,setLoading] = useState(true)
     const [allScreenings,setAllScreenings] = useState([])
     const [currentScreenings,setCurrentScreenings] = useState([])
+
+    const navigate = useNavigate()
+    const {startCheckout} = useCheckout()
 
     useEffect(() => {
 
@@ -90,6 +94,11 @@ const MovieDetailsPage = () =>{
         filterScreeningsByDate()
     },[selectedDate,allScreenings])
 
+    const handleBuyTicketButton = (movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium) =>{
+        startCheckout({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium})
+        navigate("/checkout")
+    }
+
 
     return (
         <div className="movie_details__container">
@@ -141,7 +150,7 @@ const MovieDetailsPage = () =>{
                                         <span>{s.hour_start_time}</span>
                                         <p>DUBBING {s.projection_type}</p>
                                         <p>Sala {s.auditorium_name}</p>
-                                        <button>Kup Bilet</button>
+                                        <button onClick={()=>handleBuyTicketButton(title,posterURL,directors,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
                                     </div>
                                 ))}
                                 <div>

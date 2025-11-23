@@ -90,17 +90,39 @@
     font-weight: 700;
     font-size: 1.1rem;
 }
-.program__item button{
-    width:60px;
-    height: 20px;
-    font-size:10px;
-    cursor:pointer;
-}
 .program__item p {
     font-size: 0.8rem;
     margin: 0;
 }
 
+.program__item button {
+    margin-top: 6px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.program__item button:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(15, 23, 42, 0.3);
+}
+
+.program__item button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
 @media (min-width: 1580px) {
     .movie__item{
         max-width: 430px;
