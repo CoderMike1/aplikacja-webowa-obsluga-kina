@@ -2,9 +2,9 @@ import './SelectSeats.css'
 import {seatMap} from "./seatMap.js";
 
 
-const SelectSeats = ({auditorium,seats,setSeats,handleNextStep}) =>{
 
-    console.log(seats)
+const SelectSeats = ({auditorium,seats,setSeats,setStep}) =>{
+
 
     return (
         <div className="checkout_auditorium__container">
@@ -66,7 +66,7 @@ const SelectSeats = ({auditorium,seats,setSeats,handleNextStep}) =>{
             <div className="checkout_s1_submit">
                 <button
                     disabled={seats.length === 0}
-                    onClick={()=>handleNextStep()}
+                    onClick={()=>setStep(2)}
                 >Przejdź dalej</button>
             </div>
 

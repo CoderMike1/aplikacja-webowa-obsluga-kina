@@ -1,0 +1,184 @@
+.checkout__success__container {
+    width: 100%;
+    min-height: calc(100vh - 140px);
+    background: #f3f6fb;
+    padding: 40px 60px 80px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.checkout__success__header {
+    margin-bottom: 10px;
+}
+
+.checkout__success__header h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.checkout__success__header p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.checkout__success__order_id {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 15px;
+}
+
+.checkout__success__order_id span {
+    font-weight: 600;
+    color: #111827;
+}
+
+.checkout__success__order_id strong {
+    font-weight: 700;
+    color: #dc2626;
+}
+
+.checkout__success__content {
+    display: flex;
+    justify-content: center;
+    width:50vw;
+}
+
+.success__card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 2px solid #264bcc;
+    padding: 20px 24px;
+    box-sizing: border-box;
+}
+
+.success__order_card {
+    width: 100%;
+    max-width: 900px;
+}
+
+.success__card h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* Info o filmie */
+.success__movie_info h4 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.success__movie_info p {
+    margin: 0;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.success__movie_info .success__date {
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.success__tickets_list {
+    margin-top: 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+
+.success__ticket_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.success__ticket_details .ticket_title {
+    display: block;
+    font-weight: 700;
+    color: #111827;
+}
+
+.success__ticket_details p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.success__ticket_details .ticket_type {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.ticket_price {
+    font-weight: 700;
+}
+
+.success__contact_block {
+    margin-top: 14px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.success__contact_block h4 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.success__contact_block p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.success__summary_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.success__service_fee span:first-child {
+    color: #4b5563;
+}
+
+.success__total {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.success__total span:first-child {
+    font-weight: 700;
+}
+
+.success__total span:last-child {
+    font-weight: 800;
+    color: #dc2626;
+}
+
+@media (max-width: 900px) {
+    .checkout__success__container {
+        padding: 24px 16px 60px;
+    }
+
+    .success__order_card {
+        max-width: 100%;
+    }
+}

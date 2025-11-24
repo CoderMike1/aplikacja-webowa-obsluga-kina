@@ -1,8 +1,9 @@
 import './Checkout.css'
 import {useCheckout} from "../../../context/CheckoutContext.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SelectSeats from "./SelectSeats/SelectSeats.jsx";
 import SelectTickets from "./SelectTickets/SelectTickets.jsx";
+import Summary from "./Summary/Summary.jsx";
 
 
 const PROGRESS_BAR = {
@@ -12,10 +13,12 @@ const PROGRESS_BAR = {
 }
 
 const Checkout = () =>{
-    const [step,setStep] = useState(1)
+    const {state:checkout_data,setSeats,setTickets,setStep} = useCheckout()
 
-    const {state:checkout_data,setSeats} = useCheckout()
 
+
+
+    const step = checkout_data.step;
     const seats = checkout_data.seats;
     const image = checkout_data.movie_image;
     const title = checkout_data.movie_title;
@@ -30,9 +33,9 @@ const Checkout = () =>{
     const auditorium = checkout_data.auditorium;
     const projection_type = checkout_data.projection_type
 
-    const handleNextStep = () =>{
-        setStep(step+1)
-    }
+
+
+
 
 
     return (
@@ -54,20 +57,23 @@ const Checkout = () =>{
                                     className={
                                         "checkout_progress_label" + (step >= 1 ? " checkout_progress_label--active" : "")
                                     }
+                                    onClick={()=>setStep(1)}
                                 >
-                                  wybór miejsca
+                                  wybór<br />miejsca
                                 </span>
                                 <span
                                     className={
                                         "checkout_progress_label" + (step >= 2 ? " checkout_progress_label--active" : "")
                                     }
+                                    onClick={()=>setStep(2)}
                                 >
-                                  wybór biletu
+                                  wybór<br />biletu
                                 </span>
                                 <span
                                     className={
                                         "checkout_progress_label" + (step >= 3 ? " checkout_progress_label--active" : "")
                                     }
+                                    onClick={()=>setStep(3)}
                                 >
                                   dane kontaktowe
                                 </span>
@@ -88,15 +94,16 @@ const Checkout = () =>{
                 </div>
                 {
                     step === 1 ?
-                        <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} handleNextStep={handleNextStep}/>
+                        <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} setStep={setStep}/>
                         :
                         step === 2?
-                            <SelectTickets/>
+                            <SelectTickets checkout_data={checkout_data} setTickets={setTickets} setStep={setStep}/>
                             :
-                            <></>
+                            <Summary/>
                 }
 
             </div>
+
         </div>
     )
 
