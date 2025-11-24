@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Auditorium, SeatType, Seat
+from .models import Auditorium, Seat
 
 
 @admin.register(Auditorium)
@@ -9,15 +9,9 @@ class AuditoriumAdmin(admin.ModelAdmin):
     ordering = ("name",)
 
 
-@admin.register(SeatType)
-class SeatTypeAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    search_fields = ("name",)
-
-
 @admin.register(Seat)
 class SeatAdmin(admin.ModelAdmin):
-    list_display = ("id", "auditorium", "row_number", "seat_number", "seat_type")
-    list_filter = ("auditorium", "seat_type")
+    list_display = ("id", "auditorium", "row_number", "seat_number")
+    list_filter = ("auditorium",)
     search_fields = ("auditorium__name",)
     ordering = ("auditorium", "row_number", "seat_number")

@@ -8,21 +8,18 @@ class Auditorium(models.Model):
         return self.name
 
 
-class SeatType(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 class Seat(models.Model):
     auditorium = models.ForeignKey(Auditorium, on_delete=models.CASCADE, related_name="seats")
-    row_number = models.IntegerField()
-    seat_number = models.IntegerField()
-    seat_type = models.ForeignKey(SeatType, on_delete=models.SET_NULL, null=True, blank=True)
+    row_number = models.PositiveIntegerField()
+    seat_number = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = ("auditorium", "row_number", "seat_number")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['auditorium', 'row_number', 'seat_number'],
+                name='uniq_seat_per_auditorium_row_number'
+            )
+        ]
 
     def __str__(self):
         return f"{self.auditorium.name} - R{self.row_number}S{self.seat_number}"

@@ -3,14 +3,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from collections import defaultdict
 
 from .models import Screening
 from .serializers import ScreeningReadSerializer, ScreeningWriteSerializer
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ScreeningFilter
-from django.utils import timezone
 from django.db import IntegrityError
 
 
