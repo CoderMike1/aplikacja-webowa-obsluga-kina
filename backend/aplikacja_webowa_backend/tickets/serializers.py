@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.utils import timezone
 from screenings.models import Screening
 from auditorium.models import Seat
-from tickets.models import Reservation, Seat
+from tickets.models import Reservation, Seat, Ticket
 from auditorium.serializers import SeatSerializer
 
 
