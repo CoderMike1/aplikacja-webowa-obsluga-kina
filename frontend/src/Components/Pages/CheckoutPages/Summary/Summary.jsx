@@ -1,12 +1,18 @@
 import './Summary.css'
 import {useCheckout} from "../../../../context/CheckoutContext.jsx";
+import {useState} from "react";
+import ProcessingPayment from "../ProcessingPayment/ProcessingPayment.jsx";
+import {useNavigate} from "react-router-dom";
 
-
+const sleep = async (ms) => new Promise(resolve => setTimeout(resolve,ms))
 
 const Summary = () =>{
-
+    const [errorMessage,setErrorMessage] = useState('');
+    const [processing,setProcessing] = useState(false)
     const {state:checkout_data,setCustomer,setPayment} = useCheckout()
-    console.log(state)
+
+    const navigate = useNavigate();
+
     const tickets = checkout_data.tickets
     const service_fee = 4;
     const total_price = tickets.reduce((acc, ticket) => acc + ticket.price, 0) + service_fee;
@@ -15,11 +21,28 @@ const Summary = () =>{
     const lastName = checkout_data.customer.last_name || '';
     const email = checkout_data.customer.email || '';
     const phoneNumber = checkout_data.customer.phone_number || '';
+    const paymentMethod = checkout_data.payment_method || null
 
+
+    const handleBuyButton = async (e) =>{
+        e.preventDefault()
+        setErrorMessage('')
+        if (firstName !== '' && lastName !== '' && email !== '' && phoneNumber !== '' && paymentMethod){
+            setProcessing(true)
+            await sleep(5000)
+            navigate('/success')
+
+        }
+        else{
+            setErrorMessage('Uzupełnij wszystkie wymagane pola i wybierz metodę płatności.');
+        }
+
+    }
 
 
     return (
         <div className="checkout__summary_container">
+            {processing && <ProcessingPayment/>}
             <div className="checkout__summary_left">
                 <div className="summary__contact_info">
                     <h3>Dane kontaktowe</h3>
@@ -39,15 +62,15 @@ const Summary = () =>{
                     <h3>Płatność</h3>
                     <div className="payment__methods">
                         <label className="payment__method">
-                            <input type="radio" name="payment" value="blik" onChange={(e)=>setPayment(e)} defaultChecked />
+                            <input type="radio" name="payment" value="blik" onChange={(e)=>setPayment(e.target.value)} />
                             <span>Blik</span>
                         </label>
                         <label className="payment__method">
-                            <input type="radio" name="payment" value="card" onChange={(e)=>setPayment(e)} />
+                            <input type="radio" name="payment" value="card" onChange={(e)=>setPayment(e.target.value)} />
                             <span>Karta płatnicza</span>
                         </label>
                         <label className="payment__method">
-                            <input type="radio" name="payment" value="bank-transfer" onChange={(e)=>setPayment(e)} />
+                            <input type="radio" name="payment" value="bank-transfer" onChange={(e)=>setPayment(e.target.value)} />
                             <span>Przelew online</span>
                         </label>
                     </div>
@@ -60,8 +83,8 @@ const Summary = () =>{
 
                     <div className="summary__tickets">
                         {
-                            tickets.map((ticket)=>(
-                                <div className="summary__row">
+                            tickets.map((ticket,i)=>(
+                                <div className="summary__row" key={i}>
                                     <div className="row_right_info">
                                         <div>
                                             <span>Bilet #{ticket.id+1}</span>
@@ -84,11 +107,15 @@ const Summary = () =>{
                         <span>Łącznie do zapłaty</span>
                         <span>{total_price} zł</span>
                     </div>
+
                 </div>
 
-                <button className="summary__pay_button">
+                <button className="summary__pay_button" onClick={handleBuyButton}>
                     Zapłać
                 </button>
+                {errorMessage && (
+                    <p className="summary__error">{errorMessage}</p>
+                )}
             </div>
         </div>
     )
