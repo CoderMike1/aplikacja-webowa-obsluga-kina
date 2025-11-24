@@ -59,6 +59,7 @@ export const CheckoutProvider = ({children}) =>{
                 email: "",
                 phone: "",
             },
+            payment_method:null,
             expiresAt: now + 15 * 60 * 1000,
         });
 
@@ -82,9 +83,12 @@ export const CheckoutProvider = ({children}) =>{
                 ? prevSeats.filter(s => s !== id) 
                 : [...prevSeats, id];
 
+            const ticketsShouldBeCleared = newSeats.length !== prevSeats.length;
+
             return {
                 ...prev,
                 seats: newSeats,
+                tickets: ticketsShouldBeCleared ? [] : prev.tickets,
             };
         });
     };
@@ -142,6 +146,9 @@ export const CheckoutProvider = ({children}) =>{
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }, [state]);
+
+
+
     const value = {
         state,
         startCheckout,
