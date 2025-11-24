@@ -10,8 +10,8 @@ class Auditorium(models.Model):
 
 class Seat(models.Model):
     auditorium = models.ForeignKey(Auditorium, on_delete=models.CASCADE, related_name="seats")
-    row_number = models.PositiveIntegerField()
-    seat_number = models.PositiveIntegerField()
+    row_number = models.IntegerField()
+    seat_number = models.IntegerField()
 
     class Meta:
         constraints = [

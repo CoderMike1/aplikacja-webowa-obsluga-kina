@@ -2,8 +2,8 @@ from rest_framework import serializers
 from django.utils import timezone
 from screenings.models import Screening
 from auditorium.models import Seat
-from tickets.models import Reservation, Seat, Ticket
-from auditorium.serializers import SeatSerializer
+from tickets.models import Reservation, Ticket
+from auditorium.serializers import SeatReadSerializer
 
 
 class ReservationWriteSerializer(serializers.Serializer):
@@ -20,7 +20,7 @@ class ReservationWriteSerializer(serializers.Serializer):
         except Screening.DoesNotExist:
             raise serializers.ValidationError("Screening not found")
 
-        seats = Seat.objects.filter(id__in=seat_ids).select_related('seat_type', 'auditorium')
+        seats = Seat.objects.filter(id__in=seat_ids).select_related('auditorium')
         if seats.count() != len(seat_ids):
             raise serializers.ValidationError("One or more seats do not exist")
 
@@ -63,7 +63,7 @@ class ReservationWriteSerializer(serializers.Serializer):
 
 
 class ReservationReadSerializer(serializers.ModelSerializer):
-    seats = SeatSerializer(many=True)
+    seats = SeatReadSerializer(many=True)
     status = serializers.SerializerMethodField()
 
     class Meta:
@@ -100,7 +100,10 @@ class PurchaseSerializer(serializers.Serializer):
         reservation = self.validated_data["reservation"]
         reservation.is_finalized = True
         reservation.save()
-        total_price = sum(seat.seat_type.price if seat.seat_type else 0 for seat in reservation.seats.all())
+
+        # total_price = sum(seat.seat_type.price if seat.seat_type else 0 for seat in reservation.seats.all())
+        # zmienilem ci logike bo juz nie ma seat_type w modelu Seat
+        total_price = 0
 
         ticket = Ticket.objects.create(
             reservation=reservation,

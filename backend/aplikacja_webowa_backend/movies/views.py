@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from .models import Movie
 from .serializers import MovieReadSerializer, MovieWriteSerializer
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, AllowAny
+from django.db import IntegrityError
 
 class MovieByCategoryAPIView(APIView):
     def get(self, request):
@@ -38,7 +39,11 @@ class MovieAPIView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        movie = serializer.save()
+        try:
+            movie = serializer.save()
+        except IntegrityError:
+            return Response({'non_field_errors': ['Movie with this title already exists.']}, status=status.HTTP_400_BAD_REQUEST)
+        
         return Response(MovieReadSerializer(movie).data, status=status.HTTP_201_CREATED)
 
 class MovieDetailAPIView(APIView):
@@ -55,7 +60,10 @@ class MovieDetailAPIView(APIView):
         serializer = MovieWriteSerializer(movie, data=request.data, partial=partial)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        movie = serializer.save()
+        try:
+            movie = serializer.save()
+        except IntegrityError:
+            return Response({'non_field_errors': ['Movie with this title already exists.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response(MovieReadSerializer(movie).data, status=status.HTTP_200_OK)
 
     def get(self, request, pk):

@@ -22,9 +22,9 @@ class RegisterAPITests(APITestCase):
 		}
 		resp = self.client.post(url, data, format='json')
 		self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-		self.assertIn('tokens', resp.data)
-		self.assertIn('access', resp.data['tokens'])
-		self.assertIn('refresh', resp.data['tokens'])
+		# New contract: access token in body, refresh in HttpOnly cookie
+		self.assertIn('access', resp.data)
+		self.assertIn('refresh_token', resp.cookies)
 
 		User = get_user_model()
 		self.assertTrue(User.objects.filter(email='jan@example.com').exists())
@@ -76,9 +76,8 @@ class LoginAPITests(APITestCase):
 		data = { 'username': 'jan', 'password': 'SuperTajneHaslo1!' }
 		resp = self.client.post(url, data, format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		self.assertIn('tokens', resp.data)
-		self.assertIn('access', resp.data['tokens'])
-		self.assertIn('refresh', resp.data['tokens'])
+		self.assertIn('access', resp.data)
+		self.assertIn('refresh_token', resp.cookies)
 
 	def test_login_with_email_only(self):
 		url = reverse('login')
@@ -104,18 +103,21 @@ class JWTEndpointsTests(APITestCase):
 		url = reverse('token_obtain_pair')
 		resp = self.client.post(url, { 'username': 'anna', 'password': 'Password123!' }, format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
+		# Custom view strips refresh from body, sets cookie
 		self.assertIn('access', resp.data)
-		self.assertIn('refresh', resp.data)
+		self.assertNotIn('refresh', resp.data)
+		self.assertIn('refresh_token', resp.cookies)
 
 	def test_token_refresh(self):
-		# first obtain a refresh token
+		# obtain initial tokens (refresh cookie set)
 		obtain_url = reverse('token_obtain_pair')
 		obtain_resp = self.client.post(obtain_url, { 'username': 'anna', 'password': 'Password123!' }, format='json')
 		self.assertEqual(obtain_resp.status_code, status.HTTP_200_OK)
-		refresh = obtain_resp.data['refresh']
-
+		self.assertIn('refresh_token', obtain_resp.cookies)
+		# simulate browser sending cookie
+		self.client.cookies['refresh_token'] = obtain_resp.cookies['refresh_token'].value
 		refresh_url = reverse('token_refresh')
-		refresh_resp = self.client.post(refresh_url, { 'refresh': refresh }, format='json')
+		refresh_resp = self.client.post(refresh_url, {}, format='json')
 		self.assertEqual(refresh_resp.status_code, status.HTTP_200_OK)
 		self.assertIn('access', refresh_resp.data)
 
