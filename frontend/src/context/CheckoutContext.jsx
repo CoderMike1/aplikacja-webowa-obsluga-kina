@@ -3,6 +3,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 const CheckoutContext = createContext(null)
 
 const INITIAL_FORM = {
+    step:1,
     movie_title:null,
     movie_image:null,
     movie_directors:null,
@@ -12,7 +13,13 @@ const INITIAL_FORM = {
     auditorium:null,
     seats:[],
     tickets:[],
-    customer:null,
+    customer: {
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+    },
+    payment_method:null,
     expiresAt:null
 }
 const STORAGE_KEY = "kino_checkout";
@@ -36,6 +43,7 @@ export const CheckoutProvider = ({children}) =>{
 
         const now = Date.now();
         setState({
+            step:1,
             movie_title,
             movie_image,
             movie_directors,
@@ -45,12 +53,23 @@ export const CheckoutProvider = ({children}) =>{
             auditorium,
             seats: [],
             tickets: [],
-            customer: null,
+            customer: {
+                first_name: "",
+                last_name: "",
+                email: "",
+                phone: "",
+            },
             expiresAt: now + 15 * 60 * 1000,
         });
 
     }
 
+    const setStep = (new_step)=>{
+        setState(prev=>({
+            ...prev,
+            step:new_step
+        }))
+    }
     const setSeats = (rowIndex, seatNumber, seat) => {
         if (seat.reserved) return;
 
@@ -70,6 +89,52 @@ export const CheckoutProvider = ({children}) =>{
         });
     };
 
+    const setTickets = (ticketType, seatNumber,idx,price) =>{
+        const newTicket = {id:idx,ticketType,seat:seatNumber,price}
+        setState(prev =>{
+            let newTickets;
+            const prevTickets = Array.isArray(prev.tickets)  ? prev.tickets : [];
+            if (ticketType === ''){
+                newTickets = prevTickets.filter(t=>t.seat !== seatNumber)
+            }
+            else{
+                const exists = prevTickets.some(t=> t.seat === seatNumber);
+
+                newTickets = exists ? prevTickets.map(t=> t.seat === seatNumber ? newTicket : t)
+                    : [...prevTickets,newTicket]
+            }
+            return {
+                ...prev,
+                tickets: newTickets,
+            };
+        })
+
+    }
+
+    const setCustomer = (updates) =>{
+        setState(prev=>{
+            const prevCustomer = prev.customer || {};
+
+            return {
+                ...prev,
+                customer:{
+                    ...prevCustomer,
+                    ...updates
+                }
+            }
+
+        })
+    }
+
+    const setPayment = (paymentOption) =>{
+        setState(prev=>(
+            {
+                ...prev,
+                payment_method:paymentOption
+            }
+        ))
+    }
+
     const resetCheckout= () =>{
         setState(INITIAL_FORM)
     }
@@ -81,7 +146,11 @@ export const CheckoutProvider = ({children}) =>{
         state,
         startCheckout,
         setSeats,
-        resetCheckout
+        resetCheckout,
+        setTickets,
+        setStep,
+        setCustomer,
+        setPayment
     }
     return (
         <CheckoutContext.Provider value={value}>
