@@ -8,6 +8,7 @@ const INITIAL_FORM = {
     movie_title:null,
     movie_image:null,
     movie_directors:null,
+    screening_id:null,
     showtime_hour:null,
     showtime_full_date:null,
     projection_type:null,
@@ -28,6 +29,8 @@ export const CheckoutProvider = ({children}) =>{
 
     const [seatMap,setSeatMap] = useState({})
 
+    const [orderConfirmation,setOrderConfirmation] = useState({})
+
     const [state, setState] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -42,7 +45,7 @@ export const CheckoutProvider = ({children}) =>{
     });
 
 
-    const startCheckout = ({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium}) =>{
+    const startCheckout = ({movie_title,movie_image,movie_directors,screening_id,showtime_hour,showtime_full_date,projection_type,auditorium}) =>{
 
         const now = Date.now();
         setState({
@@ -50,6 +53,7 @@ export const CheckoutProvider = ({children}) =>{
             movie_title,
             movie_image,
             movie_directors,
+            screening_id,
             showtime_hour,
             showtime_full_date,
             projection_type,
@@ -139,7 +143,6 @@ export const CheckoutProvider = ({children}) =>{
             }
         ))
     }
-
     const resetCheckout= () =>{
         setState(INITIAL_FORM)
     }
@@ -156,7 +159,6 @@ export const CheckoutProvider = ({children}) =>{
             }
             else{
                 const data = await resp.data
-                console.log(data)
                 setSeatMap(data)
             }
 
@@ -174,7 +176,9 @@ export const CheckoutProvider = ({children}) =>{
         setStep,
         setCustomer,
         setPayment,
-        seatMap
+        seatMap,
+        orderConfirmation,
+        setOrderConfirmation
     }
     return (
         <CheckoutContext.Provider value={value}>

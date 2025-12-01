@@ -95,8 +95,8 @@ const CinemasProgram = () =>{
     },[selectedDate,allScreenings])
 
 
-    const handleBuyTicketButton = (movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium) =>{
-        startCheckout({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium})
+    const handleBuyTicketButton = (movie_title,movie_image,movie_directors,screening_id,showtime_hour,showtime_full_date,projection_type,auditorium) =>{
+        startCheckout({movie_title,movie_image,movie_directors,screening_id,showtime_hour,showtime_full_date,projection_type,auditorium})
         navigate("/checkout")
     }
 
@@ -129,7 +129,7 @@ const CinemasProgram = () =>{
                                                         <span>{s.hour_start_time}</span>
                                                         <p>DUBBING {s.projection_type}</p>
                                                         <p>Sala {s.auditorium_name}</p>
-                                                        <button onClick={()=>handleBuyTicketButton(movie.title,movie.img,movie.directors,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
+                                                        <button onClick={()=>handleBuyTicketButton(movie.title,movie.img,movie.directors,s.id,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
                                                     </div>
                                                     )
 

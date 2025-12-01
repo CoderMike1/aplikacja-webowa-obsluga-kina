@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import ProcessingPayment from "../ProcessingPayment/ProcessingPayment.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../../../context/Auth.jsx";
+import {buyTicket} from "../../../../services/movieService.js";
 
 const sleep = async (ms) => new Promise(resolve => setTimeout(resolve,ms))
 
@@ -12,7 +13,7 @@ const Summary = () =>{
     const [processing,setProcessing] = useState(false)
     const {state:checkout_data,setCustomer,setPayment} = useCheckout()
 
-    const {user,isLoggedIn} = useAuthContext()
+    const {user,isLoggedIn,setOrderConfirmation} = useAuthContext()
 
     const navigate = useNavigate();
 
@@ -41,16 +42,46 @@ const Summary = () =>{
 
     },[isLoggedIn,user])
 
-    console.log(checkout_data)
 
     const handleBuyButton = async (e) =>{
         e.preventDefault()
         setErrorMessage('')
         if (firstName !== '' && lastName !== '' && email !== '' && phoneNumber !== '' && paymentMethod){
             setProcessing(true)
-            await sleep(5000)
-            navigate('/success')
 
+            const payload = {
+                screening_id:checkout_data.screening_id,
+                tickets:checkout_data.tickets.map((ticket)=>{
+                        return{
+                            ticket_type_id: ticket.ticketType === 'normalny' ? 1 : 2,
+                            seats:[
+                                {row_number:ticket.split("-")[1], seat_number:ticket.split("-")[2]}
+                            ],
+                            first_name: checkout_data.customer.first_name,
+                            last_name: checkout_data.customer.last_name,
+                            email: checkout_data.customer.email,
+                            phone_number: checkout_data.customer.phone
+                        }
+                    })
+            }
+
+            const resp = await buyTicket(payload)
+            await sleep(5000)
+            if (resp.status !== 201){
+                setErrorMessage("Błąd podczas zakupu biletów")
+            }
+            else{
+
+                const data = await resp.data
+
+                const order_confirmation_payload = {
+                    total_price: data.total_price,
+                    order_number:'ABCDG',//data.tickets
+                    //email:
+                }
+
+                navigate('/success')
+            }
         }
         else{
             setErrorMessage('Uzupełnij wszystkie wymagane pola i wybierz metodę płatności.');
