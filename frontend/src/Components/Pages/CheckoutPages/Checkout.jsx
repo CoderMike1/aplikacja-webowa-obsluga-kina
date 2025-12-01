@@ -15,9 +15,6 @@ const PROGRESS_BAR = {
 const Checkout = () =>{
     const {state:checkout_data,setSeats,setTickets,setStep} = useCheckout()
 
-
-
-
     const step = checkout_data.step;
     const seats = checkout_data.seats;
     const image = checkout_data.movie_image;
@@ -32,11 +29,6 @@ const Checkout = () =>{
     });
     const auditorium = checkout_data.auditorium;
     const projection_type = checkout_data.projection_type
-
-
-
-
-
 
     return (
         <div className="checkout_s1_container">
