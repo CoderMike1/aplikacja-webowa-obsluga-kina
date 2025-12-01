@@ -118,3 +118,38 @@ class PurchaseSerializer(serializers.Serializer):
         reservation.save()
 
         return ticket
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    reservation_id = serializers.IntegerField(source="reservation.id", read_only=True)
+    screening = serializers.SerializerMethodField()
+    seats = serializers.SerializerMethodField()
+    ticket_type = serializers.CharField(source="type.name")
+
+    class Meta:
+        model = Ticket
+        fields = [
+            "id",
+            "order_number",
+            "total_price",
+            "ticket_type",
+            "purchased_at",
+            "reservation_id",
+            "screening",
+            "seats"
+        ]
+
+    def get_screening(self, obj):
+        screening = obj.reservation.screening
+        return {
+            "id": screening.id,
+            "movie": screening.movie.title if hasattr(screening, "movie") else None,
+            "start_time": screening.start_time,
+            "auditorium_id": screening.auditorium.id,
+        }
+
+    def get_seats(self, obj):
+        return [
+            {"id": seat.id, "row": seat.row, "number": seat.number}
+            for seat in obj.reservation.seats.all()
+        ]
