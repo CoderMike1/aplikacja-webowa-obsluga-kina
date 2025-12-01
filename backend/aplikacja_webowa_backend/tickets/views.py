@@ -21,14 +21,20 @@ class ScreeningSeatsView(APIView):
             .values_list("seats__id", flat=True)
         )
 
-        seat_data = []
+        rows = {}
         for seat in seats:
-            status_str = "SOLD" if seat.id in sold_seat_ids else "FREE"
-            seat_ser = SeatReadSerializer(seat).data
-            seat_ser["status"] = status_str
-            seat_data.append(seat_ser)
+            row_key = seat.row_number
+            if row_key not in rows:
+                rows[row_key] = []
 
-        return Response(seat_data)
+            rows[row_key].append({
+                "id": seat.id,
+                "row_number": seat.row_number,
+                "seat_number": seat.seat_number,
+                "status": "SOLD" if seat.id in sold_seat_ids else "FREE",
+            })
+
+        return Response(rows)
 
 class InstantPurchaseView(APIView):
     permission_classes = [IsAuthenticated]
