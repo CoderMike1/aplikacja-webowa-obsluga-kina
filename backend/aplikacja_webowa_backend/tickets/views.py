@@ -10,6 +10,7 @@ from .serializers import (
     ReservationWriteSerializer,
     ReservationReadSerializer,
     PurchaseSerializer,
+    TicketSerializer
 )
 from auditorium.serializers import SeatReadSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -73,12 +74,15 @@ class PurchaseView(APIView):
     def post(self, request, reservation_id):
         data = {
             'reservation_id': reservation_id,
-            'ticket_type_id': request.data.get('ticket_type_id')  # trzeba podać typ biletu
+            'ticket_type_id': request.data.get('ticket_type_id')
         }
         serializer = PurchaseSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
+
         ticket = serializer.save()
+
         return Response(
-            {"ticket_id": ticket.id, "total_price": ticket.total_price},
+            TicketSerializer(ticket).data,
             status=status.HTTP_201_CREATED
         )
+
