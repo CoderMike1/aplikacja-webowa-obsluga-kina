@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.utils import timezone
 from screenings.models import Screening
 from auditorium.models import Seat
-from tickets.models import Reservation, Ticket
+from tickets.models import Reservation, Ticket, TicketType, calculate_ticket_price
 from auditorium.serializers import SeatReadSerializer
 
 
@@ -13,14 +13,13 @@ class ReservationWriteSerializer(serializers.Serializer):
     def validate(self, data):
         screening_id = data["screening_id"]
         seat_ids = data["seat_ids"]
-        user = self.context["request"].user
 
         try:
             screening = Screening.objects.get(id=screening_id)
         except Screening.DoesNotExist:
             raise serializers.ValidationError("Screening not found")
 
-        seats = Seat.objects.filter(id__in=seat_ids).select_related('auditorium')
+        seats = Seat.objects.filter(id__in=seat_ids)
         if seats.count() != len(seat_ids):
             raise serializers.ValidationError("One or more seats do not exist")
 
@@ -81,6 +80,7 @@ class ReservationReadSerializer(serializers.ModelSerializer):
 
 class PurchaseSerializer(serializers.Serializer):
     reservation_id = serializers.IntegerField()
+    ticket_type_id = serializers.IntegerField(required=True)
 
     def validate(self, data):
         try:
@@ -94,19 +94,27 @@ class PurchaseSerializer(serializers.Serializer):
             raise serializers.ValidationError("Reservation already finalized")
 
         data["reservation"] = reservation
+        try:
+            ticket_type = TicketType.objects.get(id=data["ticket_type_id"])
+        except TicketType.DoesNotExist:
+            raise serializers.ValidationError("Ticket type not found")
+
+        data["ticket_type"] = ticket_type
         return data
 
     def save(self):
         reservation = self.validated_data["reservation"]
-        reservation.is_finalized = True
-        reservation.save()
-
-        # total_price = sum(seat.seat_type.price if seat.seat_type else 0 for seat in reservation.seats.all())
-        # zmienilem ci logike bo juz nie ma seat_type w modelu Seat
-        total_price = 0
+        ticket_type = self.validated_data["ticket_type"]
+        temp_ticket = Ticket(reservation=reservation, type=ticket_type)
+        price = calculate_ticket_price(reservation)
 
         ticket = Ticket.objects.create(
             reservation=reservation,
-            total_price=total_price
+            type=ticket_type,
+            total_price=price
         )
+
+        reservation.is_finalized = True
+        reservation.save()
+
         return ticket

@@ -12,10 +12,12 @@ from .serializers import (
     PurchaseSerializer,
 )
 from auditorium.serializers import SeatReadSerializer
-from rest_framework.permissions import IsAdminUser, SAFE_METHODS, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class ScreeningSeatsView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, pk):
         screening = get_object_or_404(Screening, id=pk)
         seats = Seat.objects.filter(auditorium=screening.auditorium)
@@ -50,12 +52,7 @@ class ScreeningSeatsView(APIView):
 
 
 class ReservationView(APIView):
-    # dodalem ci autentykacje taką jak w innych views
-    def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ReservationWriteSerializer(data=request.data, context={'request': request})
@@ -64,16 +61,24 @@ class ReservationView(APIView):
         read_serializer = ReservationReadSerializer(reservation)
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
+    def get(self, request):
+        reservations = Reservation.objects.filter(user=request.user).order_by('-reserved_at')
+        serializer = ReservationReadSerializer(reservations, many=True)
+        return Response(serializer.data)
+
 
 class PurchaseView(APIView):
-    def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, reservation_id):
-        serializer = PurchaseSerializer(data={'reservation_id': reservation_id})
+        data = {
+            'reservation_id': reservation_id,
+            'ticket_type_id': request.data.get('ticket_type_id')  # trzeba podać typ biletu
+        }
+        serializer = PurchaseSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         ticket = serializer.save()
-        return Response({"ticket_id": ticket.id, "total_price": ticket.total_price}, status=status.HTTP_201_CREATED)
+        return Response(
+            {"ticket_id": ticket.id, "total_price": ticket.total_price},
+            status=status.HTTP_201_CREATED
+        )

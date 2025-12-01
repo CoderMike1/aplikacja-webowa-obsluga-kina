@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Reservation, Ticket
+from .models import Reservation, Ticket, TicketType, PromotionRule
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
@@ -32,3 +32,14 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ('purchased_at',)
     search_fields = ('reservation__user__username', 'reservation__screening__movie__title')
     ordering = ('-purchased_at',)
+
+@admin.register(TicketType)
+class TicketTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
+    search_fields = ('name',)
+
+@admin.register(PromotionRule)
+class PromotionRuleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'discount_percent', 'valid_from', 'valid_to', 'weekday', 'ticket_type', 'screening')
+    list_filter = ('ticket_type', 'screening', 'weekday', 'valid_from', 'valid_to')
+    search_fields = ('name',)
