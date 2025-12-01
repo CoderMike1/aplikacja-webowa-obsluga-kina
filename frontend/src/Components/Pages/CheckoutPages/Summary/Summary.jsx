@@ -1,8 +1,9 @@
 import './Summary.css'
 import {useCheckout} from "../../../../context/CheckoutContext.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ProcessingPayment from "../ProcessingPayment/ProcessingPayment.jsx";
 import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../../../../context/Auth.jsx";
 
 const sleep = async (ms) => new Promise(resolve => setTimeout(resolve,ms))
 
@@ -11,10 +12,12 @@ const Summary = () =>{
     const [processing,setProcessing] = useState(false)
     const {state:checkout_data,setCustomer,setPayment} = useCheckout()
 
+    const {user,isLoggedIn} = useAuthContext()
+
     const navigate = useNavigate();
 
     const tickets = checkout_data.tickets
-    const service_fee = 4;
+    const service_fee = 0;
     const total_price = tickets.reduce((acc, ticket) => acc + ticket.price, 0) + service_fee;
 
     const firstName = checkout_data.customer.first_name || '';
@@ -23,6 +26,22 @@ const Summary = () =>{
     const phoneNumber = checkout_data.customer.phone_number || '';
     const paymentMethod = checkout_data.payment_method || null
 
+    useEffect(()=>{
+
+        if (isLoggedIn){
+            setCustomer(
+                {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    email: user.email,
+                    phone: user.phone_number,
+                }
+            )
+        }
+
+    },[isLoggedIn,user])
+
+    console.log(checkout_data)
 
     const handleBuyButton = async (e) =>{
         e.preventDefault()

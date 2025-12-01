@@ -4,7 +4,7 @@ import './SelectSeats.css'
 
 
 const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
-    console.log(seatMap)
+    console.log(seats)
     return (
         <div className="checkout_auditorium__container">
             <h2 className="checkout_auditorium_title">Sala {auditorium}</h2>
@@ -20,7 +20,8 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
                             <div className="checkout_auditorium__row-number">{rowNumber}</div>
                             <div className="checkout_auditorium_row_seats">
                                 {rowSeats.map((seat) => {
-                                    const {id,row,seat_number,reserved} = seat
+                                    const {id:seat_id,row,seat_number,reserved} = seat
+                                    const id = `${seat_id}-${rowNumber}-${seat_number}`
                                     const isSelected = seats.includes(id);
                                     return (
                                         <button
@@ -34,7 +35,7 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
                                                 .filter(Boolean)
                                                 .join(" ")}
                                             onClick={() =>
-                                                setSeats(row, seat_number, seat)
+                                                setSeats(id,reserved)
                                             }
                                         >
                                             {seat_number+1}

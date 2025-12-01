@@ -74,10 +74,8 @@ export const CheckoutProvider = ({children}) =>{
             step:new_step
         }))
     }
-    const setSeats = (rowIndex, seatNumber, seat) => {
-        if (seat.reserved) return;
-
-        const id = `${rowIndex + 1}-${seatNumber}`;
+    const setSeats = (id,reserved) => {
+        if (reserved) return;
 
         setState(prev => {
             const prevSeats = Array.isArray(prev.seats) ? prev.seats : [];

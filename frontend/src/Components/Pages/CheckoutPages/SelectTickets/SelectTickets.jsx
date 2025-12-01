@@ -40,7 +40,7 @@ const SelectTickets = ({checkout_data,setTickets,setStep}) =>{
                         <div className="checkout__tickets_item" key={i}>
                             <div className="ticket_info">
                                 <h3>Bilet #{i + 1}</h3>
-                                <p>Rząd {seat.split("-")[0]} Miejsce {seat.split("-")[1]}</p>
+                                <p>Rząd {seat.split("-")[1]} Miejsce {seat.split("-")[2]}</p>
                             </div>
                             <div className="ticket_option">
                                 <select
