@@ -1,10 +1,9 @@
 import './SelectSeats.css'
-import {seatMap} from "./seatMap.js";
+//import {seatMap} from "./seatMap.js";
 
 
 
-const SelectSeats = ({auditorium,seats,setSeats,setStep}) =>{
-
+const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
 
     return (
         <div className="checkout_auditorium__container">
@@ -27,7 +26,7 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep}) =>{
                                             "seat",
                                             seat.reserved ? "seat--reserved" : "seat--available",
                                             isSelected ? "seat--selected" : "",
-                                            seat.type === "wheelchair" ? "seat--wheelchair" : "",
+                                            //seat.type === "wheelchair" ? "seat--wheelchair" : "",
                                         ]
                                             .filter(Boolean)
                                             .join(" ")}
@@ -57,10 +56,7 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep}) =>{
                               <span className="legend-box legend-box--reserved" /> miejsca
                               niedostępne
                             </span>
-                <span>
-                              <span className="legend-box legend-box--wheelchair" /> miejsca dla
-                              niepełnosprawnych
-                            </span>
+
             </div>
 
             <div className="checkout_s1_submit">

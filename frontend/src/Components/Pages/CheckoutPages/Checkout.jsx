@@ -13,7 +13,7 @@ const PROGRESS_BAR = {
 }
 
 const Checkout = () =>{
-    const {state:checkout_data,setSeats,setTickets,setStep} = useCheckout()
+    const {state:checkout_data,setSeats,setTickets,setStep,seatMap} = useCheckout()
 
     const step = checkout_data.step;
     const seats = checkout_data.seats;
@@ -29,6 +29,9 @@ const Checkout = () =>{
     });
     const auditorium = checkout_data.auditorium;
     const projection_type = checkout_data.projection_type
+
+
+
 
     return (
         <div className="checkout_s1_container">
@@ -86,7 +89,7 @@ const Checkout = () =>{
                 </div>
                 {
                     step === 1 ?
-                        <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} setStep={setStep}/>
+                        <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} setStep={setStep} seatMap={seatMap}/>
                         :
                         step === 2?
                             <SelectTickets checkout_data={checkout_data} setTickets={setTickets} setStep={setStep}/>

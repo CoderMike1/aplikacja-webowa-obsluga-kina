@@ -76,10 +76,6 @@
     color: white;
 }
 
-.seat--wheelchair {
-    background: #1976d2;
-}
-
 .seat--available:hover {
     transform: translateY(-2px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -125,10 +121,6 @@
 
 .legend-box--reserved {
     background: #9e9e9e;
-}
-
-.legend-box--wheelchair {
-    background: #1976d2;
 }
 
 /* --- PRZYCISK "PRZEJDŹ DALEJ" --- */

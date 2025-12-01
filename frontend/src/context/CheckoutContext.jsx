@@ -1,4 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
+import {getSeatMap} from "../services/movieService.js";
 
 const CheckoutContext = createContext(null)
 
@@ -24,6 +25,8 @@ const INITIAL_FORM = {
 }
 const STORAGE_KEY = "kino_checkout";
 export const CheckoutProvider = ({children}) =>{
+
+    const [seatMap,setSeatMap] = useState({})
 
     const [state, setState] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -147,6 +150,22 @@ export const CheckoutProvider = ({children}) =>{
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }, [state]);
 
+    useEffect(() => {
+        (async ()=>{
+            const resp = await getSeatMap(state.auditorium)
+            console.log(resp)
+            if (resp.status !== 200){
+                throw new Error("Problem z ladowaniem mapy sali.")
+            }
+            else{
+                const data = await resp.data
+                console.log(data)
+                setSeatMap(data)
+            }
+
+        })()
+    }, [state.auditorium]);
+
 
 
     const value = {
@@ -157,7 +176,8 @@ export const CheckoutProvider = ({children}) =>{
         setTickets,
         setStep,
         setCustomer,
-        setPayment
+        setPayment,
+        seatMap
     }
     return (
         <CheckoutContext.Provider value={value}>

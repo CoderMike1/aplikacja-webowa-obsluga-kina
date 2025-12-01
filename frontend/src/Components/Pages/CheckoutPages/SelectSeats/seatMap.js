@@ -1,10 +1,10 @@
 
-const createRow = (seatCount, wheelchairSeats = []) =>
+const createRow = (seatCount) =>
     Array.from({ length: seatCount }, (_, index) => {
         const seatNumber = index + 1;
         return {
             number: seatNumber,
-            type: wheelchairSeats.includes(seatNumber) ? "wheelchair" : "normal",
+            //type: wheelchairSeats.includes(seatNumber) ? "wheelchair" : "normal",
             reserved: false,
         };
     });
@@ -16,8 +16,8 @@ export const seatMap = [
     createRow(22),                      // rząd 3
     createRow(22),                      // rząd 4
     createRow(22),                      // rząd 5
-    createRow(22, [1, 2]),              // rząd 6 – np. dwa miejsca dla niepełnosprawnych
-    createRow(22, [1, 2]),              // rząd 7
+    createRow(22, ),              // rząd 6 – np. dwa miejsca dla niepełnosprawnych
+    createRow(22, ),              // rząd 7
     createRow(22),                      // rząd 8
 
     // Środkowa część sali – trochę mniej miejsc
@@ -29,6 +29,6 @@ export const seatMap = [
     // Tył sali – jeszcze mniej miejsc
     createRow(18),                      // rząd 13
     createRow(18),                      // rząd 14
-    createRow(18, [9, 10]),             // rząd 15 – np. centralne miejsca dla niepełnosprawnych
+    createRow(18, ),             // rząd 15 – np. centralne miejsca dla niepełnosprawnych
     createRow(18),                      // rząd 16
 ];
