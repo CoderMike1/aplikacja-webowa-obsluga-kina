@@ -1,71 +1,119 @@
+# serializers.py
 from rest_framework import serializers
-from django.utils import timezone
 from screenings.models import Screening
 from auditorium.models import Seat
 from tickets.models import Ticket, TicketType, calculate_ticket_price
-from auditorium.serializers import SeatReadSerializer
+from django.db.models import Max
+
+
+class TicketSeatSerializer(serializers.Serializer):
+    row_number = serializers.IntegerField(min_value=0)
+    seat_number = serializers.IntegerField(min_value=1)
+
+
+class TicketPurchaseItemSerializer(serializers.Serializer):
+    ticket_type_id = serializers.IntegerField()
+    seats = TicketSeatSerializer(many=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField(required=False, allow_blank=True)
 
 
 class InstantPurchaseSerializer(serializers.Serializer):
     screening_id = serializers.IntegerField()
-    seat_ids = serializers.ListField(child=serializers.IntegerField())
-    ticket_type_id = serializers.IntegerField()
+    tickets = TicketPurchaseItemSerializer(many=True)
 
     def validate(self, data):
-        screening_id = data["screening_id"]
-        seat_ids = data["seat_ids"]
-        ticket_type_id = data["ticket_type_id"]
-
         try:
-            screening = Screening.objects.get(id=screening_id)
+            screening = Screening.objects.get(id=data["screening_id"])
         except Screening.DoesNotExist:
             raise serializers.ValidationError("Screening not found")
-
-        seats = Seat.objects.filter(id__in=seat_ids, auditorium=screening.auditorium)
-        if seats.count() != len(seat_ids):
-            raise serializers.ValidationError("Some seats do not exist")
-
-        try:
-            ticket_type = TicketType.objects.get(id=ticket_type_id)
-        except TicketType.DoesNotExist:
-            raise serializers.ValidationError("TicketType not found")
-
-        if Ticket.objects.filter(screening=screening, seats__in=seats).exists():
-            raise serializers.ValidationError("One or more seats already sold")
-
         data["screening"] = screening
-        data["seats"] = seats
-        data["ticket_type"] = ticket_type
+
+        seat_stats = screening.auditorium.seats.aggregate(
+            max_row=Max("row_number"),
+            max_number=Max("seat_number")
+        )
+        max_row = seat_stats['max_row']
+        max_number = seat_stats['max_number']
+
+        for item in data["tickets"]:
+            try:
+                ticket_type = TicketType.objects.get(id=item["ticket_type_id"])
+            except TicketType.DoesNotExist:
+                raise serializers.ValidationError("TicketType not found")
+            item["ticket_type"] = ticket_type
+
+            seat_objs = []
+            for s in item["seats"]:
+                if not (0 <= s["row_number"] <= max_row):
+                    raise serializers.ValidationError(
+                        f"Row {s['row_number']} is out of range (0-{max_row})")
+                if not (1 <= s["seat_number"] <= max_number):
+                    raise serializers.ValidationError(
+                        f"Seat number {s['seat_number']} is out of range (1-{max_number})")
+
+                try:
+                    seat = Seat.objects.get(
+                        auditorium=screening.auditorium,
+                        row_number=s["row_number"],
+                        seat_number=s["seat_number"]
+                    )
+                except Seat.DoesNotExist:
+                    raise serializers.ValidationError(
+                        f"Seat {s['row_number']}-{s['seat_number']} does not exist")
+
+                if Ticket.objects.filter(screening=screening, seats=seat).exists():
+                    raise serializers.ValidationError(
+                        f"Seat {s['row_number']}-{s['seat_number']} is already sold")
+
+                seat_objs.append(seat)
+
+            item["seats_objs"] = seat_objs
+
         return data
 
     def create(self, validated_data):
-        user = self.context["request"].user
+        request = self.context.get("request")
+        user = request.user if request and request.user.is_authenticated else None
         screening = validated_data["screening"]
-        seats = validated_data["seats"]
-        ticket_type = validated_data["ticket_type"]
 
-        total_price = calculate_ticket_price(seats, ticket_type, screening)
+        tickets_created = []
+        for item in validated_data["tickets"]:
+            ticket_type = item["ticket_type"]
+            seats = item["seats_objs"]
+            total_price = calculate_ticket_price(seats, ticket_type, screening)
 
-        ticket = Ticket.objects.create(
-            user=user,
-            screening=screening,
-            type=ticket_type,
-            total_price=total_price
-        )
-        ticket.seats.set(seats)
-        return ticket
+            ticket = Ticket.objects.create(
+                user=user,
+                screening=screening,
+                type=ticket_type,
+                total_price=total_price,
+                first_name=item["first_name"],
+                last_name=item["last_name"],
+                email=item["email"],
+                phone_number=item.get("phone_number", ""),
+                payment_status="PENDING"
+            )
+            ticket.seats.set(seats)
+            tickets_created.append(ticket)
+
+        return tickets_created
+
 
 class TicketSerializer(serializers.ModelSerializer):
     screening = serializers.SerializerMethodField()
     seats = serializers.SerializerMethodField()
     ticket_type = serializers.CharField(source="type.name")
+    price = serializers.DecimalField(source="total_price", max_digits=8, decimal_places=2)
 
     class Meta:
         model = Ticket
         fields = [
             "id",
             "order_number",
-            "total_price",
+            "price",
             "ticket_type",
             "purchased_at",
             "screening",
@@ -83,6 +131,6 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def get_seats(self, obj):
         return [
-            {"id": seat.id, "row": seat.row, "number": seat.number}
+            {"id": seat.id, "row_number": seat.row_number, "seat_number": seat.seat_number}
             for seat in obj.seats.all()
         ]
