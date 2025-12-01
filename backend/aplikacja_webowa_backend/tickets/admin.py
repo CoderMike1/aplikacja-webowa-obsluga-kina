@@ -1,37 +1,31 @@
 from django.contrib import admin
-from .models import Reservation, Ticket, TicketType, PromotionRule
-
-@admin.register(Reservation)
-class ReservationAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'screening',
-        'user',
-        'reserved_at',
-        'expires_at',
-        'is_finalized',
-        'seats_list'
-    )
-    list_filter = ('is_finalized', 'screening', 'user')
-    search_fields = ('user__username', 'screening__movie__title')
-    ordering = ('-reserved_at',)
-
-    def seats_list(self, obj):
-        return ", ".join([f"R{seat.row_number}S{seat.seat_number}" for seat in obj.seats.all()])
-    seats_list.short_description = "Seats"
-
+from .models import Ticket, TicketType, PromotionRule
+from auditorium.models import Seat
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'reservation',
+        'order_number',
+        'user',
+        'get_ticket_type',  # zamiast ticket_type
+        'screening',
         'purchased_at',
-        'total_price'
+        'total_price',
+        'seats_list'
     )
-    list_filter = ('purchased_at',)
-    search_fields = ('reservation__user__username', 'reservation__screening__movie__title')
+    list_filter = ('purchased_at', 'type', 'screening')
+    search_fields = ('user__username', 'screening__movie__title')
     ordering = ('-purchased_at',)
+
+    def seats_list(self, obj):
+        return ", ".join([f"R{seat.row}S{seat.number}" for seat in obj.seats.all()])
+    seats_list.short_description = "Seats"
+
+    def get_ticket_type(self, obj):
+        return obj.type.name
+    get_ticket_type.short_description = "Ticket Type"
+
 
 @admin.register(TicketType)
 class TicketTypeAdmin(admin.ModelAdmin):
@@ -40,6 +34,14 @@ class TicketTypeAdmin(admin.ModelAdmin):
 
 @admin.register(PromotionRule)
 class PromotionRuleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'discount_percent', 'valid_from', 'valid_to', 'weekday', 'ticket_type', 'screening')
+    list_display = (
+        'name',
+        'discount_percent',
+        'valid_from',
+        'valid_to',
+        'weekday',
+        'ticket_type',
+        'screening'
+    )
     list_filter = ('ticket_type', 'screening', 'weekday', 'valid_from', 'valid_to')
     search_fields = ('name',)
