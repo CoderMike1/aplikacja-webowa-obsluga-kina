@@ -1,4 +1,5 @@
 import './SelectTickets.css'
+import { useEffect } from 'react'
 
 const PRICES = {
     'ulgowy':20.00,
@@ -6,6 +7,25 @@ const PRICES = {
 }
 
 const SelectTickets = ({checkout_data,setTickets,setStep}) =>{
+    //  ustawienie domyślnych wartości dla seats na bilet typu "normalny"
+    // jak chcesz ustawić tak jak było wcześniej usuń
+    // od
+    useEffect(() => {
+        if (!checkout_data?.seats?.length) return;
+        const tickets = checkout_data.tickets || [];
+        const missingSeats = checkout_data.seats.filter(
+            (seat) => !tickets.some((t) => t.seat === seat)
+        );
+        if (missingSeats.length === 0) return;
+        missingSeats.forEach((seat) => {
+            const idx = checkout_data.seats.indexOf(seat);
+            if (idx !== -1) {
+                setTickets('normalny', seat, idx, PRICES['normalny']);
+            }
+        });
+    }, [checkout_data.seats, checkout_data.tickets, setTickets]); 
+    // do
+    // XD
     return (
 
        <div className="checkout__tickets_container">

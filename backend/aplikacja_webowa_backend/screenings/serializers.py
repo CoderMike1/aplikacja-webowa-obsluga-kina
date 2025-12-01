@@ -2,7 +2,7 @@ from rest_framework import serializers
 from datetime import timedelta
 from django.utils import timezone
 from movies.serializers import GenreSerializer, MovieReadSerializer
-from auditorium.serializers import AuditoriumSerializer
+from auditorium.serializers import AuditoriumReadSerializer
 from movies.models import Movie
 from auditorium.models import Auditorium
 from .models import ProjectionType, Screening
@@ -46,7 +46,7 @@ class ScreeningGroupedListSerializer(serializers.ListSerializer):
 
             groups[mid]['projection_types'][pid]['screenings'].append({
                 'id': screening.pk,
-                'auditorium': AuditoriumSerializer(screening.auditorium, context=self.context).data,
+                'auditorium': AuditoriumReadSerializer(screening.auditorium, context=self.context).data,
                 'published_at': dtfield.to_representation(screening.published_at),
                 'start_time': dtfield.to_representation(screening.start_time),
                 'created_at': dtfield.to_representation(screening.created_at),
@@ -65,7 +65,7 @@ class ScreeningGroupedListSerializer(serializers.ListSerializer):
 class ScreeningReadSerializer(serializers.ModelSerializer):
     # Odczyt pojedynczego seansu (używany też przy odpowiedzi po utworzeniu)
     movie = MovieReadSerializer(read_only=True)  # powiązany film
-    auditorium = AuditoriumSerializer(read_only=True)  # powiązana sala
+    auditorium = AuditoriumReadSerializer(read_only=True)  # powiązana sala
     genres = GenreSerializer(source='movie.genres', many=True, read_only=True)  # gatunki filmu
     projection_type = ProjectionTypeSerializer(read_only=True)  # typ projekcji
 
