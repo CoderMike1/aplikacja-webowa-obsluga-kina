@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser, SAFE_METHODS
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Auditorium, Seat
 from .serializers import (
@@ -12,6 +13,7 @@ from .serializers import (
     SeatReadSerializer,
     SeatWriteSerializer,
 )
+from .filters import SeatFilter
 
 
 class AuditoriumAPIView(APIView):
@@ -81,6 +83,11 @@ class SeatAPIView(APIView):
 
     def get(self, request):
         seats = Seat.objects.select_related('auditorium')
+        
+        filterset = SeatFilter(request.GET, queryset=seats)
+        if filterset.is_valid():
+            seats = filterset.qs
+        
         serializer = SeatReadSerializer(seats, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
