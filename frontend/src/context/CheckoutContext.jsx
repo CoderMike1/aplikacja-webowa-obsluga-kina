@@ -153,7 +153,6 @@ export const CheckoutProvider = ({children}) =>{
     useEffect(() => {
         (async ()=>{
             const resp = await getSeatMap(state.auditorium)
-            console.log(resp)
             if (resp.status !== 200){
                 throw new Error("Problem z ladowaniem mapy sali.")
             }

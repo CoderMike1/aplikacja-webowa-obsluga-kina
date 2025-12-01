@@ -32,7 +32,6 @@ const Checkout = () =>{
 
 
 
-
     return (
         <div className="checkout_s1_container">
             <div className="checkout_s1_inner">

@@ -4,45 +4,51 @@ import './SelectSeats.css'
 
 
 const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
-
+    console.log(seatMap)
     return (
         <div className="checkout_auditorium__container">
             <h2 className="checkout_auditorium_title">Sala {auditorium}</h2>
             <div className="screen">Ekran</div>
             <div className="checkout_auditorium__list">
-                {seatMap.map((row,rowIndex) =>(
-                    <div className="checkout_auditorium__row" key={rowIndex}>
-                        <div className="checkout_auditorium__row-number">{rowIndex+1}</div>
+                {seatMap &&
+                Object.keys(seatMap).map((rowKey)=>{
+                    const rowSeats = seatMap[rowKey];
+                    const rowNumber = Number(rowKey)+1;
 
-                        <div className="checkout_auditorium_row_seats">
-                            {row.map((seat,seatIndex) => {
-                                const id = `${rowIndex + 1}-${seat.number}`;
-                                const isSelected = seats.includes(id);
+                    return (
+                        <div className="checkout_auditorium__row" key={rowKey}>
+                            <div className="checkout_auditorium__row-number">{rowNumber}</div>
+                            <div className="checkout_auditorium_row_seats">
+                                {rowSeats.map((seat) => {
+                                    const {id,row,seat_number,reserved} = seat
+                                    const isSelected = seats.includes(id);
+                                    return (
+                                        <button
+                                            key={id}
+                                            className={[
+                                                "seat",
+                                                reserved ? "seat--reserved" : "seat--available",
+                                                isSelected ? "seat--selected" : "",
+                                                //seat.type === "wheelchair" ? "seat--wheelchair" : "",
+                                            ]
+                                                .filter(Boolean)
+                                                .join(" ")}
+                                            onClick={() =>
+                                                setSeats(row, seat_number, seat)
+                                            }
+                                        >
+                                            {seat_number+1}
+                                        </button>
+                                    );
 
-                                return (
-                                    <button
-                                        key={seatIndex}
-                                        className={[
-                                            "seat",
-                                            seat.reserved ? "seat--reserved" : "seat--available",
-                                            isSelected ? "seat--selected" : "",
-                                            //seat.type === "wheelchair" ? "seat--wheelchair" : "",
-                                        ]
-                                            .filter(Boolean)
-                                            .join(" ")}
-                                        onClick={() =>
-                                            setSeats(rowIndex, seat.number, seat)
-                                        }
-                                    >
-                                        {seat.number}
-                                    </button>
-                                );
-
-                            })}
+                                })}
+                            </div>
+                            <div className="checkout_auditorium__row-number">{rowNumber}</div>
                         </div>
-                        <div className="checkout_auditorium__row-number">{rowIndex + 1}</div>
-                    </div>
-                ))}
+                    )
+
+                })
+                }
             </div>
 
             <div className="checkout_auditorium_legend">
