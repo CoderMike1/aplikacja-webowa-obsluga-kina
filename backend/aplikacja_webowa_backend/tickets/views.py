@@ -31,7 +31,7 @@ class ScreeningSeatsView(APIView):
                 "id": seat.id,
                 "row_number": seat.row_number,
                 "seat_number": seat.seat_number,
-                "status": "SOLD" if seat.id in sold_seat_ids else "FREE",
+                "reserved": True if seat.id in sold_seat_ids else False,
             })
 
         return Response(rows)
