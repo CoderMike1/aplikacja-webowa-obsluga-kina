@@ -3,7 +3,6 @@ from django.conf import settings
 from screenings.models import Screening
 from auditorium.models import Seat
 import uuid
-from django.utils import timezone
 
 class TicketType(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -13,21 +12,39 @@ class TicketType(models.Model):
         return f"{self.name} ({self.price} zł)"
 
 class Ticket(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
     screening = models.ForeignKey(Screening, on_delete=models.CASCADE)
     seats = models.ManyToManyField(Seat)
     type = models.ForeignKey(TicketType, on_delete=models.PROTECT)
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     purchased_at = models.DateTimeField(auto_now_add=True)
     order_number = models.CharField(max_length=50, unique=True, blank=True)
+    first_name = models.CharField(max_length=100, default="")
+    last_name = models.CharField(max_length=100, default="")
+    email = models.EmailField(default="")
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+
+    PAYMENT_STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('PAID', 'Paid'),
+        ('FAILED', 'Failed'),
+    )
+    payment_status = models.CharField(
+        max_length=10,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='PENDING'
+    )
 
     def save(self, *args, **kwargs):
         if not self.order_number:
             self.order_number = f"ORD{int(timezone.now().timestamp())}-{uuid.uuid4().hex[:6]}"
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"Ticket #{self.id} ({self.type.name}) for screening {self.screening_id}"
 
 from django.utils import timezone
 
