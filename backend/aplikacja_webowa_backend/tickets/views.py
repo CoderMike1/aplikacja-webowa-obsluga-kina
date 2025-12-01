@@ -5,9 +5,9 @@ from django.shortcuts import get_object_or_404
 from screenings.models import Screening
 from auditorium.models import Seat
 from .models import Ticket
-from .serializers import TicketSerializer, InstantPurchaseSerializer
+from .serializers import InstantPurchaseSerializer, TicketSerializer
 from auditorium.serializers import SeatReadSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
 class ScreeningSeatsView(APIView):
     permission_classes = [AllowAny]
@@ -37,16 +37,25 @@ class ScreeningSeatsView(APIView):
         return Response(rows)
 
 class InstantPurchaseView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = InstantPurchaseSerializer(
             data=request.data, context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
-        ticket = serializer.save()
+        tickets = serializer.save()
 
-        return Response(
-            TicketSerializer(ticket).data,
-            status=status.HTTP_201_CREATED
-        )
+        ticket_data = TicketSerializer(tickets, many=True).data
+
+        total_sum = 0
+        for t in ticket_data:
+            t["price"] = float(t["price"])
+            total_sum += t["price"]
+
+        response_data = {
+            "tickets": ticket_data,
+            "total_price": total_sum
+        }
+
+        return Response(response_data, status=status.HTTP_201_CREATED)
