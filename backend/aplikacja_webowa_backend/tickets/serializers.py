@@ -83,6 +83,6 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def get_seats(self, obj):
         return [
-            {"id": seat.id, "row": seat.row, "number": seat.number}
+            {"id": seat.id, "row_number": seat.row_number, "seat_number": seat.seat_number}
             for seat in obj.seats.all()
         ]

@@ -15,6 +15,7 @@ import MovieDetailsPage from "./Components/Pages/MovieDetailsPage/MovieDetailsPa
 import SelectSeats from "./Components/Pages/CheckoutPages/SelectSeats/SelectSeats.jsx";
 import Checkout from "./Components/Pages/CheckoutPages/Checkout.jsx";
 import Success from "./Components/Pages/CheckoutPages/Success/Success.jsx";
+import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage.jsx";
 const router = createBrowserRouter([
     {
         path:'/',
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
             {path:'/promocje', element:<PromosPage/>},
             {path:'/filmy/:movieID', element:<MovieDetailsPage/>},
             {path:"/checkout",element:<Checkout/>},
-            {path:'/success',element:<Success/>}
+            {path:'/success',element:<Success/>},
+            {path:'/profil',element:<ProfilePage/>}
         ]
     }
 ])
