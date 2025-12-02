@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import './Tickets.css'
 import { authApi } from '../../../../api/client.js'
+import { useAuthContext } from '../../../../context/Auth.jsx'
 
 const Tickets = () => {
-    const [tickets, setTickets] = useState([])
+    const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const { accessToken } = useAuthContext()
 
     useEffect(() => {
         let mounted = true
@@ -14,9 +16,33 @@ const Tickets = () => {
             try {
                 setLoading(true)
                 setError(null)
-                const resp = await authApi.get('/me/tickets/')
+                if (!accessToken) return
+                const resp = await authApi.get('/me/tickets/', {
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                })
                 if (mounted) {
-                    setTickets(Array.isArray(resp.data) ? resp.data : [])
+                    // Group tickets by order_number
+                    const ticketsArray = Array.isArray(resp.data) ? resp.data : []
+                    const grouped = new Map()
+
+                    for (const ticket of ticketsArray) {
+                        const orderNum = ticket.order_number || 'unknown'
+                        if (!grouped.has(orderNum)) {
+                            grouped.set(orderNum, {
+                                order_number: orderNum,
+                                purchase_time: ticket.purchased_at,
+                                screening: ticket.screening,
+                                tickets: [],
+                                total_price: 0
+                            })
+                        }
+                        const order = grouped.get(orderNum)
+                        order.tickets.push(ticket)
+                        const priceNum = typeof ticket.price === 'string' ? parseFloat(ticket.price) : (ticket.price || 0)
+                        order.total_price += isNaN(priceNum) ? 0 : priceNum
+                    }
+
+                    setOrders(Array.from(grouped.values()))
                 }
             } catch (e) {
                 if (mounted) setError('Nie udało się pobrać biletów.')
@@ -26,41 +52,55 @@ const Tickets = () => {
         }
         fetchTickets()
         return () => { mounted = false }
-    }, [])
-
-    const renderSeats = (seats = []) => {
-        if (!seats.length) return '—'
-        return seats.map(s => `Rząd ${s.row_number}, Miejsce ${s.seat_number}`).join(' | ')
-    }
+    }, [accessToken])
 
     return (
         <div className="tickets_root">
             <h2 className="tickets_heading">Twoje bilety</h2>
             {error && <div className="tickets_error">{error}</div>}
             {loading && <div className="tickets_loading">Ładowanie biletów...</div>}
-            {!loading && !error && tickets.length === 0 && (
+            {!loading && !error && orders.length === 0 && (
                 <div className="tickets_empty">Brak zakupionych biletów.</div>
             )}
-            {!loading && !error && tickets.length > 0 && (
+            {!loading && !error && orders.length > 0 && (
                 <ul className="tickets_list">
-                    {tickets.map(t => {
-                        const purchased = t.purchased_at ? dayjs(t.purchased_at).format('DD.MM.YYYY HH:mm') : '—'
-                        const screeningTime = t.screening?.start_time ? dayjs(t.screening.start_time).format('DD.MM.YYYY HH:mm') : '—'
-                        const movieTitle = t.screening?.movie || 'Film'
-                        const priceText = typeof t.price === 'string' ? `${t.price} zł` : (t.price != null ? `${t.price.toFixed(2)} zł` : '—')
+                    {orders.map((o, idx) => {
+                        const purchased = o.purchase_time ? dayjs(o.purchase_time).format('DD.MM.YYYY HH:mm') : '—'
+                        const screeningTime = o.screening?.start_time ? dayjs(o.screening.start_time).format('DD.MM.YYYY HH:mm') : '—'
+                        const movieTitle = o.screening?.movie || 'Film'
+                        const auditorium = o.screening?.auditorium_id ?? '—'
+                        const totalText = typeof o.total_price === 'string' ? `${o.total_price} zł` : (o.total_price != null ? `${Number(o.total_price).toFixed(2)} zł` : '—')
+
                         return (
-                            <li key={t.id} className="ticket_item">
+                            <li key={o.order_number || idx} className="ticket_item">
                                 <div className="ticket_header">
                                     <div className="ticket_movie">{movieTitle}</div>
-                                    <div className="ticket_order">#{t.order_number || t.id}</div>
+                                    <div className="ticket_order">#{o.order_number || '—'}</div>
                                 </div>
+
                                 <div className="ticket_meta">
                                     <div><span>Seans:</span> {screeningTime}</div>
+                                    <div><span>Sala:</span> {auditorium}</div>
                                     <div><span>Zakup:</span> {purchased}</div>
-                                    <div><span>Typ:</span> {t.ticket_type || 'Standard'}</div>
-                                    <div><span>Cena:</span> {priceText}</div>
-                                    <div style={{ gridColumn: '1 / -1' }}><span>Miejsca:</span> {renderSeats(t.seats)}</div>
+                                    <div><span>Cena łączna:</span> {totalText}</div>
                                 </div>
+
+                                {Array.isArray(o.tickets) && o.tickets.length > 0 && (
+                                    <div className="ticket_details">
+                                        {o.tickets.map((t, i) => {
+                                            const itemPrice = typeof t.price === 'string' ? `${t.price} zł` : (t.price != null ? `${Number(t.price).toFixed(2)} zł` : '—')
+                                            const seat = t.seats?.[0]
+                                            const seatText = seat ? `Rząd ${seat.row_number}, Miejsce ${seat.seat_number}` : '—'
+                                            return (
+                                                <div key={t.id || i} className="ticket_detail_row">
+                                                    <span className="ticket_detail_type">{t.ticket_type}</span>
+                                                    <span className="ticket_detail_seat">{seatText}</span>
+                                                    <span className="ticket_detail_price">{itemPrice}</span>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )}
                             </li>
                         )
                     })}

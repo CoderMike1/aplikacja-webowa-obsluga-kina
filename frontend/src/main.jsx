@@ -16,6 +16,7 @@ import SelectSeats from "./Components/Pages/CheckoutPages/SelectSeats/SelectSeat
 import Checkout from "./Components/Pages/CheckoutPages/Checkout.jsx";
 import Success from "./Components/Pages/CheckoutPages/Success/Success.jsx";
 import ProfilePage from "./Components/Pages/ProfilePages/ProfilePage.jsx";
+import { ProfileProvider } from './context/ProfileContext.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       { path: '/filmy/:movieID', element: <MovieDetailsPage /> },
       { path: "/checkout", element: <Checkout /> },
       { path: '/success', element: <Success /> },
-      { path: '/profil', element: <ProfilePage /> }
+      { path: '/profil', element: <ProfileProvider><ProfilePage /></ProfileProvider> }
     ]
   }
 ])

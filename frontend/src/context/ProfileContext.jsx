@@ -5,7 +5,7 @@ import { useAuthContext } from './Auth'
 const ProfileContext = createContext(null)
 
 export const ProfileProvider = ({ children }) => {
-    const { isLoggedIn } = useAuthContext()
+    const { isLoggedIn, accessToken } = useAuthContext()
     const [profile, setProfile] = useState(null)
     const [cloudinary, setCloudinary] = useState({ cloud_name: '', upload_preset: '', allowed_domain: '' })
     const [loading, setLoading] = useState(false)
@@ -16,9 +16,10 @@ export const ProfileProvider = ({ children }) => {
         setLoading(true)
         setError('')
         try {
+            const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
             const [pRes, cRes] = await Promise.all([
-                authApi.get('/profile/'),
-                authApi.get('/profile/avatar/config/')
+                authApi.get('/profile/', { headers: authHeader }),
+                authApi.get('/profile/avatar/config/', { headers: authHeader })
             ])
             setProfile(pRes.data)
             setCloudinary(cRes.data)
@@ -28,13 +29,14 @@ export const ProfileProvider = ({ children }) => {
         } finally {
             setLoading(false)
         }
-    }, [])
+    }, [accessToken])
 
     const updateProfile = useCallback(async (payload) => {
         setSaving(true)
         setError('')
         try {
-            const res = await authApi.patch('/profile/', payload)
+            const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
+            const res = await authApi.patch('/profile/', payload, { headers: authHeader })
             setProfile(res.data)
             return res.data
         } catch (e) {
@@ -44,7 +46,7 @@ export const ProfileProvider = ({ children }) => {
         } finally {
             setSaving(false)
         }
-    }, [])
+    }, [accessToken])
 
     const uploadAvatarUnsigned = useCallback(async (file) => {
         if (!file || !cloudinary.cloud_name || !cloudinary.upload_preset) {

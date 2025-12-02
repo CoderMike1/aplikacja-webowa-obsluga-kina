@@ -1,18 +1,18 @@
-import {createContext, useCallback, useContext, useEffect, useState} from "react";
-import {authApi} from "../api/client.js";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { authApi } from "../api/client.js";
 
 
 const AuthContext = createContext(null)
 
 
-export const AuthProvider = ({children}) =>{
+export const AuthProvider = ({ children }) => {
 
-    const [accessToken,setAccessToken] = useState(null);
-    const [user,setUser] = useState(null);
-    const [loading,setLoading] = useState(true)
-    const [authLoading,setAuthLoading] = useState(false)
+    const [accessToken, setAccessToken] = useState(null);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true)
+    const [authLoading, setAuthLoading] = useState(false)
 
-    const [userDetails,setUserDetails] = useState({})
+    const [userDetails, setUserDetails] = useState({})
 
     const isLoggedIn = !!accessToken && !!user;
     console.log(accessToken)
@@ -40,7 +40,7 @@ export const AuthProvider = ({children}) =>{
 
     const refreshAccessToken = useCallback(async () => {
         try {
-            const res = await authApi.post("/token/refresh/",null,{
+            const res = await authApi.post("/token/refresh/", null, {
                 needAuth: false
             });
             const { access } = res.data;
@@ -72,14 +72,14 @@ export const AuthProvider = ({children}) =>{
     const login = async (email, password) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/login/", { email, password },{needAuth:false});
+            const res = await authApi.post("/login/", { email, password }, { needAuth: false });
             const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
             await fetchMe(access);
             return res.data;
         }
-        catch (err){
+        catch (err) {
             throw err
         }
         finally {
@@ -90,7 +90,7 @@ export const AuthProvider = ({children}) =>{
     const register = async (payload) => {
         setAuthLoading(true);
         try {
-            const res = await authApi.post("/register/", payload,{needAuth:false});
+            const res = await authApi.post("/register/", payload, { needAuth: false });
             const { access } = res.data;
             setAccessToken(access);
             authApi.defaults.headers.common["Authorization"] = `Bearer ${access}`;
@@ -103,8 +103,8 @@ export const AuthProvider = ({children}) =>{
 
 
     //
-    const getUserDetails = async ()=>{
-        const token =  accessToken;
+    const getUserDetails = async () => {
+        const token = accessToken;
         if (!token) return;
         try {
             const res = await authApi.get("/me/", {
@@ -122,7 +122,7 @@ export const AuthProvider = ({children}) =>{
 
 
     return (
-        <AuthContext.Provider value={{user, accessToken,login,register,isLoggedIn,refreshAccessToken,getUserDetails,userDetails}}>
+        <AuthContext.Provider value={{ user, accessToken, login, register, isLoggedIn, refreshAccessToken, getUserDetails, userDetails }}>
             {children}
         </AuthContext.Provider>
     )

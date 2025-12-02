@@ -4,7 +4,7 @@ import './Settings.css'
 const Settings = ({ profile, saving, updateField, onSave, twoFactorEnabledDraft }) => {
     return (
         <div className="settings_section settings_root">
-            <div className="form_row">
+            {/* <div className="form_row">
                 <div className="form_field form_switch">
                     <label>2FA</label>
                     <input
@@ -17,7 +17,8 @@ const Settings = ({ profile, saving, updateField, onSave, twoFactorEnabledDraft 
             <p>Tutaj dodamy np. zmianę hasła.</p>
             <div className="form_actions">
                 <button className="btn btn-primary" onClick={onSave} disabled={saving}>Zapisz ustawienia</button>
-            </div>
+            </div> */}
+            <p>ustawienia</p>
         </div>
     )
 }

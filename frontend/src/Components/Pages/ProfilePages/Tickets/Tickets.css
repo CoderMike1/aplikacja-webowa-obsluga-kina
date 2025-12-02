@@ -88,3 +88,36 @@
     font-weight: 600;
     color: #111827;
 }
+
+.ticket_details {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ticket_detail_row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    gap: 12px;
+    font-size: .9rem;
+    color: #374151;
+    padding: 6px 0;
+}
+
+.ticket_detail_type {
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.ticket_detail_seat {
+    color: #475569;
+}
+
+.ticket_detail_price {
+    text-align: right;
+    font-weight: 600;
+    color: #111827;
+}

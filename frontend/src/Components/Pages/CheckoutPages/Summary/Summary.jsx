@@ -12,8 +12,8 @@ const Summary = () =>{
     const [errorMessage,setErrorMessage] = useState('');
     const [processing,setProcessing] = useState(false)
     const {state:checkout_data,setCustomer,setPayment,setOrderConfirmation} = useCheckout()
-
-    const {user,isLoggedIn} = useAuthContext()
+    //const {user,isLoggedIn} = useAuthContext()
+    const {user,isLoggedIn, accessToken} = useAuthContext()
 
     const navigate = useNavigate();
 
@@ -66,7 +66,8 @@ const Summary = () =>{
             console.log(payload);
 
             try {
-                const resp = await buyTicket(payload);
+                //const resp = await buyTicket(payload);
+                const resp = await buyTicket(payload, accessToken);
 
                 await sleep(5000);
                 if (resp.status !== 201) {

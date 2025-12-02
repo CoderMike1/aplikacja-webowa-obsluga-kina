@@ -10,7 +10,14 @@ import Settings from './Settings/Settings'
 const ProfilePage = () => {
     const [loading, setLoading] = useState(true)
     const { isLoggedIn } = useAuthContext()
-    const { profile, loading: loadingProfile, saving, error, setError, updateProfile, uploadAvatarUnsigned, loadProfile } = useProfileContext()
+    const profileCtx = useProfileContext()
+    // Jeśli provider jeszcze się nie zmontował (np. HMR / routing), pokaż bezpieczny fallback
+    if (!profileCtx) {
+        return (
+            <div className="profile_container"><div className="profile_card"><p>Ładowanie profilu…</p></div></div>
+        )
+    }
+    const { profile, loading: loadingProfile, saving, error, setError, updateProfile, uploadAvatarUnsigned, loadProfile } = profileCtx
     const fileInputRef = useRef(null)
     const [tab, setTab] = useState('dane')
     const [editingUsername, setEditingUsername] = useState(false)
