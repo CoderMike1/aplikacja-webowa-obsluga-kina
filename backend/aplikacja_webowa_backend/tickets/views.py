@@ -5,9 +5,9 @@ from django.shortcuts import get_object_or_404
 from screenings.models import Screening
 from auditorium.models import Seat
 from .models import Ticket
-from .serializers import InstantPurchaseSerializer, TicketSerializer
-from auditorium.serializers import SeatReadSerializer
+from .serializers import InstantPurchaseSerializer, InstantPurchaseResponseSerializer
 from rest_framework.permissions import AllowAny
+
 
 class ScreeningSeatsView(APIView):
     permission_classes = [AllowAny]
@@ -31,31 +31,37 @@ class ScreeningSeatsView(APIView):
                 "id": seat.id,
                 "row_number": seat.row_number,
                 "seat_number": seat.seat_number,
-                "reserved": True if seat.id in sold_seat_ids else False,
+                "reserved": seat.id in sold_seat_ids,
             })
 
         return Response(rows)
+
 
 class InstantPurchaseView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = InstantPurchaseSerializer(
-            data=request.data, context={'request': request}
+        input_serializer = InstantPurchaseSerializer(
+            data=request.data,
+            context={'request': request}
         )
-        serializer.is_valid(raise_exception=True)
-        tickets = serializer.save()
+        input_serializer.is_valid(raise_exception=True)
+        tickets = input_serializer.save()
 
-        ticket_data = TicketSerializer(tickets, many=True).data
+        tickets_serializer = InstantPurchaseResponseSerializer(
+            tickets,
+            many=True
+        )
 
-        total_sum = 0
-        for t in ticket_data:
-            t["price"] = float(t["price"])
-            total_sum += t["price"]
+        total_price = sum(t.total_price for t in tickets)
+        order_number = tickets[0].order_number
+        purchase_time = tickets[0].purchased_at
 
         response_data = {
-            "tickets": ticket_data,
-            "total_price": total_sum
+            "order_number": order_number,
+            "purchase_time": purchase_time,
+            "tickets": tickets_serializer.data,
+            "total_price": total_price
         }
 
         return Response(response_data, status=status.HTTP_201_CREATED)
