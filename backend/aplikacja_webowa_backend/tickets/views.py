@@ -57,11 +57,22 @@ class InstantPurchaseView(APIView):
         order_number = tickets[0].order_number
         purchase_time = tickets[0].purchased_at
 
+        first_ticket = tickets[0]
+        customer_info = {
+            "loggedIn": first_ticket.user is not None,
+            "first_name": first_ticket.first_name,
+            "last_name": first_ticket.last_name,
+            "email": first_ticket.email,
+            "phone": first_ticket.phone_number,
+        }
+
         response_data = {
             "order_number": order_number,
             "purchase_time": purchase_time,
+            "customer_info": customer_info,
             "tickets": tickets_serializer.data,
             "total_price": total_price
         }
 
         return Response(response_data, status=status.HTTP_201_CREATED)
+
