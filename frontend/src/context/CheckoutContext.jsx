@@ -151,19 +151,32 @@ export const CheckoutProvider = ({children}) =>{
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }, [state]);
 
-    useEffect(() => {
-        (async ()=>{
-            const resp = await getSeatMap(state.auditorium)
-            if (resp.status !== 200){
-                throw new Error("Problem z ladowaniem mapy sali.")
-            }
-            else{
-                const data = await resp.data
-                setSeatMap(data)
-            }
+    // useEffect(() => {
+    //     (async ()=>{
+    //         console.log("laduje sale")
+    //         const resp = await getSeatMap(state.auditorium)
+    //         if (resp.status !== 200){
+    //             throw new Error("Problem z ladowaniem mapy sali.")
+    //         }
+    //         else{
+    //             const data = await resp.data
+    //             setSeatMap(data)
+    //         }
+    //
+    //     })()
+    // }, [state.auditorium]);
 
-        })()
-    }, [state.auditorium]);
+    const loadSeatMap = async ()=>{
+        console.log("laduje sale")
+        const resp = await getSeatMap(state.screening_id)
+        if (resp.status !== 200){
+            return null
+        }
+        else{
+            const data = await resp.data
+            return data
+        }
+    }
 
 
 
@@ -176,7 +189,7 @@ export const CheckoutProvider = ({children}) =>{
         setStep,
         setCustomer,
         setPayment,
-        seatMap,
+        loadSeatMap,
         orderConfirmation,
         setOrderConfirmation
     }

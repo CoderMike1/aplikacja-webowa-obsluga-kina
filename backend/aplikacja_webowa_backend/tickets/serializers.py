@@ -31,13 +31,6 @@ class InstantPurchaseSerializer(serializers.Serializer):
 
         data["screening"] = screening
 
-        seat_stats = screening.auditorium.seats.aggregate(
-            max_row=Max("row_number"),
-            max_number=Max("seat_number")
-        )
-        max_row = seat_stats["max_row"]
-        max_number = seat_stats["max_number"]
-
         for item in data["tickets"]:
             try:
                 ticket_type = TicketType.objects.get(id=item["ticket_type_id"])
@@ -48,17 +41,15 @@ class InstantPurchaseSerializer(serializers.Serializer):
             seat_objs = []
 
             for s in item["seats"]:
-                if not (0 <= s["row_number"] <= max_row):
-                    raise serializers.ValidationError(f"Row {s['row_number']} is out of range")
-                if not (1 <= s["seat_number"] <= max_number):
-                    raise serializers.ValidationError(f"Seat {s['seat_number']} is out of range")
+                row_seats = Seat.objects.filter(
+                    auditorium=screening.auditorium,
+                    row_number=s["row_number"]
+                )
+                if not row_seats.exists():
+                    raise serializers.ValidationError(f"Row {s['row_number']} does not exist")
 
                 try:
-                    seat = Seat.objects.get(
-                        auditorium=screening.auditorium,
-                        row_number=s["row_number"],
-                        seat_number=s["seat_number"]
-                    )
+                    seat = row_seats.get(seat_number=s["seat_number"])
                 except Seat.DoesNotExist:
                     raise serializers.ValidationError(
                         f"Seat {s['row_number']}-{s['seat_number']} does not exist"

@@ -1,10 +1,19 @@
 import './SelectSeats.css'
+import {useEffect, useState} from "react";
 //import {seatMap} from "./seatMap.js";
 
 
 
-const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
-    console.log(seats)
+const SelectSeats = ({auditorium,seats,setSeats,setStep,loadSeatMap}) =>{
+    const [seatMap,setSeatMap] = useState([])
+
+    useEffect(()=>{
+        (async ()=>{
+            const result = await loadSeatMap();
+            setSeatMap(result)
+        })()
+    },[])
+    console.log(seatMap)
     return (
         <div className="checkout_auditorium__container">
             <h2 className="checkout_auditorium_title">Sala {auditorium}</h2>
@@ -13,7 +22,7 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
                 {seatMap &&
                 Object.keys(seatMap).map((rowKey)=>{
                     const rowSeats = seatMap[rowKey];
-                    const rowNumber = Number(rowKey)+1;
+                    const rowNumber = Number(rowKey);
 
                     return (
                         <div className="checkout_auditorium__row" key={rowKey}>
@@ -38,7 +47,7 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,seatMap}) =>{
                                                 setSeats(id,reserved)
                                             }
                                         >
-                                            {seat_number+1}
+                                            {seat_number}
                                         </button>
                                     );
 
