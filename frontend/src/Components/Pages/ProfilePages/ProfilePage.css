@@ -1,0 +1,242 @@
+/* Moved from ProfilePage/ProfilePage.css */
+/* Kontener strony profilu */
+.profile_container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    font-family: 'Inter', sans-serif, serif;
+}
+
+.profile_card {
+    width: min(80vw, 1200px);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    padding: 20px 24px;
+}
+
+/* Nagłówek w stylu checkout__inner_header */
+.profile_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.profile_header_left {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+}
+
+.profile_avatar {
+    height: min(15vh, 160px);
+    width: min(15vh, 160px);
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.profile_avatar:hover {
+    box-shadow: 0 6px 14px rgba(29, 78, 216, 0.35);
+    outline: 2px solid rgba(29, 78, 216, 0.25);
+    transition: box-shadow 0.2s ease, outline 0.2s ease;
+}
+
+.profile_header_info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile_header_info h4 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Subtle hover border around username, similar to inputs */
+.profile_username {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: border-color 0.15s ease;
+}
+
+.profile_username:hover {
+    border-color: rgba(229, 231, 235, 0.6);
+}
+
+.profile_header_info p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+.profile_header_info span {
+    margin-top: 2px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #1d4ed8;
+}
+
+.profile_header_right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: end;
+    gap: 4px;
+}
+
+/* Form */
+.profile_form {
+    margin-top: 8px;
+}
+
+.profile_body {
+    display: flex;
+    gap: 20px;
+}
+
+.profile_sidebar {
+    width: 280px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px;
+    height: 100%;
+    align-self: stretch;
+}
+
+.sidebar_item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.sidebar_item.active {
+    background: #e5e7eb;
+}
+
+.sidebar_item:hover:not(.active) {
+    background: #f3f4f6;
+}
+
+.profile_content {
+    flex: 1;
+}
+
+.form_row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.form_field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form_field label {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.form_field input[type='text'],
+.form_field input[type='tel'],
+.form_field textarea {
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.form_switch {
+    align-items: center;
+}
+
+.form_switch input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+}
+
+.form_actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Error box */
+.profile_error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile_card {
+        width: 95vw;
+    }
+
+    .profile_body {
+        flex-direction: column;
+    }
+
+    .profile_sidebar {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+
+    .sidebar_item {
+        flex: 1;
+        text-align: center;
+    }
+
+    .form_row {
+        flex-direction: column;
+    }
+}

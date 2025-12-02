@@ -1,0 +1,25 @@
+.details_form {}
+
+/* Styl DatePicker tak jak zwykły input tekstowy */
+.date_picker .MuiOutlinedInput-root {
+    padding: 0;
+    /* usuwamy wewnętrzny padding wrappera */
+    border-radius: 8px;
+    font-size: .95rem;
+}
+
+.date_picker .MuiOutlinedInput-root input {
+    padding: 10px 12px;
+}
+
+.date_picker .MuiOutlinedInput-notchedOutline {
+    border-color: #e5e7eb;
+}
+
+.date_picker .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #1d4ed8;
+}
+
+.date_picker .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #cbd5e1;
+}

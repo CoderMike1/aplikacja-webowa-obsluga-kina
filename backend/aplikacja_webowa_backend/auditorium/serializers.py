@@ -28,8 +28,8 @@ class SeatReadSerializer(serializers.ModelSerializer):
 
 
 class SeatWriteSerializer(serializers.ModelSerializer):
-    row_number = serializers.IntegerField(min_value=0)
-    seat_number = serializers.IntegerField(min_value=0)
+    row_number = serializers.IntegerField(min_value=1)
+    seat_number = serializers.IntegerField(min_value=1)
     auditorium_id = serializers.PrimaryKeyRelatedField(
         queryset=Auditorium.objects.all(), source='auditorium', write_only=True, required=True)
 

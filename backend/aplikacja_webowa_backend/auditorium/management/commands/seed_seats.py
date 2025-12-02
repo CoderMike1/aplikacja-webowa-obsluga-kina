@@ -99,7 +99,6 @@ class Command(BaseCommand):
                 continue
 
             # If appending only, keep existing seats and add more after current max row
-            # If appending only, keep existing seats and add more after current max row
             if to_append > 0 and not force and existing_count > 0:
                 if dry_run:
                     modified.append(
@@ -109,7 +108,8 @@ class Command(BaseCommand):
 
                 with transaction.atomic():
                     max_row = auditorium.seats.aggregate(m=Max('row_number'))['m']
-                    start_row = 0 if max_row is None else max_row + 1
+                    # 1-based rows: start at 1 when none, otherwise next after max
+                    start_row = 1 if max_row is None else max_row + 1
                     remaining = to_append
                     row_index = start_row
                     while remaining > 0:
@@ -118,7 +118,7 @@ class Command(BaseCommand):
                             Seat.objects.create(
                                 auditorium=auditorium,
                                 row_number=row_index,
-                                seat_number=seat_index
+                                seat_number=seat_index + 1  # 1-based seats
                             )
                         remaining -= seats_in_this_row
                         row_index += 1
@@ -143,17 +143,17 @@ class Command(BaseCommand):
             with transaction.atomic():
                 if force and existing_count > 0:
                     auditorium.seats.all().delete()
-                # Zero-based row_number and seat_number
+                # 1-based row_number and seat_number
                 for row_index, seats_in_row in enumerate(pattern):
                     for seat_index in range(seats_in_row):
                         Seat.objects.create(
                             auditorium=auditorium,
-                            row_number=row_index,
-                            seat_number=seat_index
+                            row_number=row_index + 1,
+                            seat_number=seat_index + 1
                         )
                 # Optionally append more after base pattern
                 if to_append > 0:
-                    start_row = len(pattern)
+                    start_row = len(pattern) + 1  # next 1-based row
                     remaining = to_append
                     row_index = start_row
                     while remaining > 0:
@@ -162,7 +162,7 @@ class Command(BaseCommand):
                             Seat.objects.create(
                                 auditorium=auditorium,
                                 row_number=row_index,
-                                seat_number=seat_index
+                                seat_number=seat_index + 1
                             )
                         remaining -= seats_in_this_row
                         row_index += 1

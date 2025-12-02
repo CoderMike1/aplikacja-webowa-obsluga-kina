@@ -6,6 +6,11 @@ from django.contrib.auth.models import update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
 from accounts import serializers
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+
+from tickets.models import Ticket
+from tickets.serializers import TicketSerializer
+from django.conf import settings
 
 
 class RegisterView(APIView):
@@ -125,6 +130,55 @@ class UserInfo(APIView):
             "last_name":user.last_name,
             "phone_number":user.phone
         })
+
+
+class UserProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+
+    def get(self, request):
+        serializer = serializers.ProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        serializer = serializers.ProfileSerializer(request.user, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = serializers.ChangePasswordSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data["new_password"]
+        user = request.user
+        user.set_password(new_password)
+        user.save(update_fields=["password"])
+        return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+
+class MyTicketsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        qs = Ticket.objects.filter(user=request.user).order_by('-purchased_at')
+        data = TicketSerializer(qs, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class AvatarUploadConfigView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            "cloud_name": getattr(settings, "CLOUDINARY_CLOUD_NAME", ""),
+            "upload_preset": getattr(settings, "CLOUDINARY_UPLOAD_PRESET", ""),
+            "allowed_domain": getattr(settings, "CLOUDINARY_ALLOWED_DOMAIN", "res.cloudinary.com"),
+        }, status=status.HTTP_200_OK)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

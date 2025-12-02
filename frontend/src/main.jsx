@@ -6,7 +6,7 @@ import App from './App.jsx'
 
 
 //inicjalizacja elementu odpowiedzialnego za routing
-import  {createBrowserRouter, RouterProvider} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import MainPage from "./Components/Pages/MainPage/MainPage.jsx";
 import CinemasProgram from "./Components/Pages/CinemasProgramPage/CinemasProgram.jsx";
 import NewsPage from "./Components/Pages/NewsPage/NewsPage.jsx";
@@ -15,28 +15,28 @@ import MovieDetailsPage from "./Components/Pages/MovieDetailsPage/MovieDetailsPa
 import SelectSeats from "./Components/Pages/CheckoutPages/SelectSeats/SelectSeats.jsx";
 import Checkout from "./Components/Pages/CheckoutPages/Checkout.jsx";
 import Success from "./Components/Pages/CheckoutPages/Success/Success.jsx";
-import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage.jsx";
+import ProfilePage from "./Components/Pages/ProfilePages/ProfilePage.jsx";
 const router = createBrowserRouter([
-    {
-        path:'/',
-        element:<App/>,
-        children:[
-            {path:'/', element:<MainPage/>},
-            {path:'/repertuar', element:<CinemasProgram/>},
-            {path:'/nowosci',element:<NewsPage/>},
-            {path:'/promocje', element:<PromosPage/>},
-            {path:'/filmy/:movieID', element:<MovieDetailsPage/>},
-            {path:"/checkout",element:<Checkout/>},
-            {path:'/success',element:<Success/>},
-            {path:'/profil',element:<ProfilePage/>}
-        ]
-    }
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { path: '/', element: <MainPage /> },
+      { path: '/repertuar', element: <CinemasProgram /> },
+      { path: '/nowosci', element: <NewsPage /> },
+      { path: '/promocje', element: <PromosPage /> },
+      { path: '/filmy/:movieID', element: <MovieDetailsPage /> },
+      { path: "/checkout", element: <Checkout /> },
+      { path: '/success', element: <Success /> },
+      { path: '/profil', element: <ProfilePage /> }
+    ]
+  }
 ])
 
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </StrictMode>,
 )
