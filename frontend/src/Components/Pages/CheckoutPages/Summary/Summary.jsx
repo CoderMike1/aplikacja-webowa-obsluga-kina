@@ -4,13 +4,14 @@ import {useEffect, useState} from "react";
 import ProcessingPayment from "../ProcessingPayment/ProcessingPayment.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../../../context/Auth.jsx";
+import {buyTicket} from "../../../../services/movieService.js";
 
 const sleep = async (ms) => new Promise(resolve => setTimeout(resolve,ms))
 
 const Summary = () =>{
     const [errorMessage,setErrorMessage] = useState('');
     const [processing,setProcessing] = useState(false)
-    const {state:checkout_data,setCustomer,setPayment} = useCheckout()
+    const {state:checkout_data,setCustomer,setPayment,setOrderConfirmation} = useCheckout()
 
     const {user,isLoggedIn} = useAuthContext()
 
@@ -41,24 +42,84 @@ const Summary = () =>{
 
     },[isLoggedIn,user])
 
-    console.log(checkout_data)
+    const handleBuyButton = async (e) => {
+        e.preventDefault();
+        setErrorMessage('');
+        if (firstName !== '' && lastName !== '' && email !== '' && phoneNumber !== '' && paymentMethod) {
+            setProcessing(true);
 
-    const handleBuyButton = async (e) =>{
-        e.preventDefault()
-        setErrorMessage('')
-        if (firstName !== '' && lastName !== '' && email !== '' && phoneNumber !== '' && paymentMethod){
-            setProcessing(true)
-            await sleep(5000)
-            navigate('/success')
+            const payload = {
+                screening_id: checkout_data.screening_id,
+                tickets: checkout_data.tickets.map((ticket) => {
+                    return {
+                        ticket_type_id: ticket.ticketType === 'normalny' ? 1 : 2,
+                        seats: [
+                            { row_number: ticket.seat.split("-")[1], seat_number: ticket.seat.split("-")[2] }
+                        ],
+                        first_name: checkout_data.customer.first_name,
+                        last_name: checkout_data.customer.last_name,
+                        email: checkout_data.customer.email,
+                        phone_number: checkout_data.customer.phone
+                    };
+                })
+            };
+            console.log(payload);
 
-        }
-        else{
+            try {
+                const resp = await buyTicket(payload);
+
+                await sleep(5000);
+                if (resp.status !== 201) {
+                    const errorMessages = [];
+                    if (resp.data?.tickets) {
+                        resp.data.tickets.forEach(ticket => {
+                            if (ticket.email) {
+                                errorMessages.push(ticket.email);
+                            }
+                            if (ticket.phone_number) {
+                                errorMessages.push(ticket.phone_number);
+                            }
+                        });
+                    }
+                    setErrorMessage(errorMessages.length > 0 ? errorMessages.join(' | ') : "Błąd podczas zakupu biletów");
+                    setProcessing(false);
+                } else {
+                    const data = await resp.data;
+
+                    const order_confirmation_payload = {
+                        total_price: data.total_price,
+                        order_number: data.order_number,
+                        first_name: data.customer_info.first_name,
+                        last_name: data.customer_info.last_name,
+                        email: data.customer_info.email,
+                        phone_number: data.customer_info.phone_number,
+                        screening_info: {
+                            id: data.tickets[0].screening.id,
+                            movie_title: data.tickets[0].screening.movie,
+                            movie_start_time: data.tickets[0].screening.start_time,
+                            auditorium: data.tickets[0].screening.auditorium_id
+                        },
+                        tickets: data.tickets.map((ticket) => {
+                            return {
+                                ticket_type: ticket.ticketType === 'normalny',
+                                seat: { row_number: ticket.seat.row_number, seat_number: ticket.seat.seat_number },
+                                price: ticket.price
+                            };
+                        })
+                    };
+                    setOrderConfirmation(order_confirmation_payload);
+                    navigate('/success');
+                }
+            } catch (error) {
+                console.error('Błąd przy wysyłaniu zapytania:', error);
+                setErrorMessage("Błąd podczas zakupu biletów");
+                setProcessing(false);
+            }
+        } else {
             setErrorMessage('Uzupełnij wszystkie wymagane pola i wybierz metodę płatności.');
+            setProcessing(false);
         }
-
-    }
-
-
+    };
     return (
         <div className="checkout__summary_container">
             {processing && <ProcessingPayment/>}
@@ -107,7 +168,7 @@ const Summary = () =>{
                                     <div className="row_right_info">
                                         <div>
                                             <span>Bilet #{ticket.id+1}</span>
-                                            <p>Rząd {ticket.seat.split("-")[0]} Miejsce {ticket.seat.split("-")[1]}</p>
+                                            <p>Rząd {ticket.seat.split("-")[1]} Miejsce {ticket.seat.split("-")[2]}</p>
                                         </div>
                                         <p>{ticket.ticketType}</p>
                                     </div>

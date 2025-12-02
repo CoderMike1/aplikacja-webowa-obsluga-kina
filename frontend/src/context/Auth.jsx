@@ -12,15 +12,11 @@ export const AuthProvider = ({children}) =>{
     const [loading,setLoading] = useState(true)
     const [authLoading,setAuthLoading] = useState(false)
 
+    const [userDetails,setUserDetails] = useState({})
+
     const isLoggedIn = !!accessToken && !!user;
     console.log(accessToken)
-    // useEffect(() => {
-    //     if (accessToken) {
-    //         authApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    //     } else {
-    //         delete authApi.defaults.headers.common["Authorization"];
-    //     }
-    // }, [accessToken]);
+
 
     const fetchMe = useCallback(
         async (tokenOverride) => {
@@ -106,8 +102,27 @@ export const AuthProvider = ({children}) =>{
 
 
 
+    //
+    const getUserDetails = async ()=>{
+        const token =  accessToken;
+        if (!token) return;
+        try {
+            const res = await authApi.get("/me/", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUserDetails(res.data);
+        } catch (err) {
+            console.error("fetchMe error", err);
+            setUser(null);
+        }
+    }
+
+
+
     return (
-        <AuthContext.Provider value={{user, accessToken,login,register,isLoggedIn,refreshAccessToken}}>
+        <AuthContext.Provider value={{user, accessToken,login,register,isLoggedIn,refreshAccessToken,getUserDetails,userDetails}}>
             {children}
         </AuthContext.Provider>
     )

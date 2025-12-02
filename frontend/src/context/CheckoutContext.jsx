@@ -8,6 +8,7 @@ const INITIAL_FORM = {
     movie_title:null,
     movie_image:null,
     movie_directors:null,
+    screening_id:null,
     showtime_hour:null,
     showtime_full_date:null,
     projection_type:null,
@@ -28,6 +29,8 @@ export const CheckoutProvider = ({children}) =>{
 
     const [seatMap,setSeatMap] = useState({})
 
+    const [orderConfirmation,setOrderConfirmation] = useState({})
+
     const [state, setState] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -42,7 +45,7 @@ export const CheckoutProvider = ({children}) =>{
     });
 
 
-    const startCheckout = ({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium}) =>{
+    const startCheckout = ({movie_title,movie_image,movie_directors,screening_id,showtime_hour,showtime_full_date,projection_type,auditorium}) =>{
 
         const now = Date.now();
         setState({
@@ -50,6 +53,7 @@ export const CheckoutProvider = ({children}) =>{
             movie_title,
             movie_image,
             movie_directors,
+            screening_id,
             showtime_hour,
             showtime_full_date,
             projection_type,
@@ -139,7 +143,6 @@ export const CheckoutProvider = ({children}) =>{
             }
         ))
     }
-
     const resetCheckout= () =>{
         setState(INITIAL_FORM)
     }
@@ -148,20 +151,32 @@ export const CheckoutProvider = ({children}) =>{
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }, [state]);
 
-    useEffect(() => {
-        (async ()=>{
-            const resp = await getSeatMap(state.auditorium)
-            if (resp.status !== 200){
-                throw new Error("Problem z ladowaniem mapy sali.")
-            }
-            else{
-                const data = await resp.data
-                console.log(data)
-                setSeatMap(data)
-            }
+    // useEffect(() => {
+    //     (async ()=>{
+    //         console.log("laduje sale")
+    //         const resp = await getSeatMap(state.auditorium)
+    //         if (resp.status !== 200){
+    //             throw new Error("Problem z ladowaniem mapy sali.")
+    //         }
+    //         else{
+    //             const data = await resp.data
+    //             setSeatMap(data)
+    //         }
+    //
+    //     })()
+    // }, [state.auditorium]);
 
-        })()
-    }, [state.auditorium]);
+    const loadSeatMap = async ()=>{
+        console.log("laduje sale")
+        const resp = await getSeatMap(state.screening_id)
+        if (resp.status !== 200){
+            return null
+        }
+        else{
+            const data = await resp.data
+            return data
+        }
+    }
 
 
 
@@ -174,7 +189,9 @@ export const CheckoutProvider = ({children}) =>{
         setStep,
         setCustomer,
         setPayment,
-        seatMap
+        loadSeatMap,
+        orderConfirmation,
+        setOrderConfirmation
     }
     return (
         <CheckoutContext.Provider value={value}>
