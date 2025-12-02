@@ -8,6 +8,8 @@ const Success = () =>{
 
     const service_fee = 0;
 
+    console.log(orderConfirmation)
+
     return (
         <div className="checkout__success__container">
             <div className="checkout__success__header">
@@ -26,7 +28,7 @@ const Success = () =>{
 
                     <div className="success__movie_info">
                         <h4>{screening_info.movie_title || "Tytuł filmu"}</h4>
-                        <p>state.movie_directors</p>
+                        <p>{state.movie_directors}</p>
                         <p>
                             {state.projection_type && <span>{state.projection_type}</span>}
                             {screening_info.auditorium && (

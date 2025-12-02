@@ -59,7 +59,7 @@ const Summary = () =>{
                         first_name: checkout_data.customer.first_name,
                         last_name: checkout_data.customer.last_name,
                         email: checkout_data.customer.email,
-                        phone_number: checkout_data.customer.phone
+                        phone_number: checkout_data.customer.phone_number
                     };
                 })
             };
@@ -87,13 +87,15 @@ const Summary = () =>{
                 } else {
                     const data = await resp.data;
 
+                    console.log(data)
+
                     const order_confirmation_payload = {
                         total_price: data.total_price,
                         order_number: data.order_number,
                         first_name: data.customer_info.first_name,
                         last_name: data.customer_info.last_name,
                         email: data.customer_info.email,
-                        phone_number: data.customer_info.phone_number,
+                        phone_number: data.customer_info.phone,
                         screening_info: {
                             id: data.tickets[0].screening.id,
                             movie_title: data.tickets[0].screening.movie,

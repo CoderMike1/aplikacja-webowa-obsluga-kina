@@ -19,7 +19,7 @@ const INITIAL_FORM = {
         first_name: "",
         last_name: "",
         email: "",
-        phone: "",
+        phone_number: "",
     },
     payment_method:null,
     expiresAt:null
