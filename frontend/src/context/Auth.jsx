@@ -100,6 +100,19 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const logout = async () => {
+        try {
+            await authApi.post('/logout/', null, {
+                headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+            });
+        } catch (err) {
+            // ignore
+        } finally {
+            setAccessToken(null);
+            setUser(null);
+            delete authApi.defaults.headers.common["Authorization"];
+        }
+    };
 
 
     //
@@ -122,7 +135,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, login, register, isLoggedIn, refreshAccessToken, getUserDetails, userDetails }}>
+        <AuthContext.Provider value={{ user, accessToken, login, register, logout, isLoggedIn, refreshAccessToken, getUserDetails, userDetails }}>
             {children}
         </AuthContext.Provider>
     )

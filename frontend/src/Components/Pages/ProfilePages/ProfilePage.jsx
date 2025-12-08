@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { Navigate } from 'react-router-dom'
 import './ProfilePage.css'
 import { useAuthContext } from '../../../context/Auth'
 import { useProfileContext } from '../../../context/ProfileContext'
@@ -11,6 +12,10 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true)
     const { isLoggedIn } = useAuthContext()
     const profileCtx = useProfileContext()
+    // Guard: redirect unauthenticated users to main page
+    if (!isLoggedIn) {
+        return <Navigate to="/" replace />
+    }
     // Jeśli provider jeszcze się nie zmontował (np. HMR / routing), pokaż bezpieczny fallback
     if (!profileCtx) {
         return (

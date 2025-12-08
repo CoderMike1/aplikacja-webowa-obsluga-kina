@@ -1,3 +1,5 @@
+from time import timezone
+import uuid
 from rest_framework import serializers
 from screenings.models import Screening
 from auditorium.models import Seat
