@@ -68,11 +68,14 @@ class PromotionRule(models.Model):
         if not self.is_active():
             return False
 
-        if self.weekday is not None and screening.start_time.weekday() != self.weekday:
+        if screening is None:
+            return False
+
+        if self.weekday is not None and screening.start_time.weekday() != (self.weekday - 1):
             return False
 
         if self.time_from and self.time_to:
-            screening_time = screening.start_time.time()
+            screening_time = screening.start_time.replace(second=0, microsecond=0).time()
             if not (self.time_from <= screening_time <= self.time_to):
                 return False
 
@@ -92,11 +95,24 @@ def calculate_ticket_price(seats, ticket_type, screening):
     seats_count = len(seats)
 
     active_promos = PromotionRule.objects.all()
-    applicable_promos = [p for p in active_promos if p.matches(seats_count, ticket_type, screening)]
+    applicable_promos = []
+
+    print(f"\n--- Sprawdzanie promocji dla seansu '{screening}' i typu biletu '{ticket_type}' ---")
+    for p in active_promos:
+        match = p.matches(seats_count, ticket_type, screening)
+        print(f"Promocja '{p.name}': aktywna={p.is_active()}, dopasowana={match}")
+        if match:
+            applicable_promos.append(p)
 
     if applicable_promos:
         best_promo = max(applicable_promos, key=lambda p: p.discount_percent)
+        print(f"Najlepsza promocja: '{best_promo.name}' z {best_promo.discount_percent}% zniżki")
         base_price *= (1 - best_promo.discount_percent / 100)
+    else:
+        print("Brak dopasowanych promocji")
 
     total_price = round(base_price * seats_count, 2)
+    print(f"Cena końcowa za {seats_count} bilet(y): {total_price} zł")
     return total_price
+
+
