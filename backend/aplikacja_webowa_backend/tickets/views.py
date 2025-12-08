@@ -8,6 +8,50 @@ from auditorium.models import Seat
 from .models import Ticket, PromotionRule, TicketType
 from .serializers import InstantPurchaseSerializer, InstantPurchaseResponseSerializer, PromotionRuleSerializer
 from rest_framework.permissions import AllowAny
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from io import BytesIO
+import logging
+from django.conf import settings
+from django.template.loader import get_template
+
+
+
+
+logger = logging.getLogger(__name__)
+
+class TicketPDFView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, order_number):
+        ticket = get_object_or_404(Ticket, order_number=order_number)
+        seats = ticket.seats.all()
+        screening = ticket.screening
+
+        html_string = render_to_string('tickets/ticket_pdf.html', {
+            'ticket': ticket,
+            'seats': seats,
+            'screening': screening,
+            'request': request,
+            'MEDIA_URL': settings.MEDIA_URL,
+            'STATIC_URL': settings.STATIC_URL,
+        })
+
+        pdf_buffer = BytesIO()
+        pisa_status = pisa.CreatePDF(html_string, dest=pdf_buffer)
+
+        if pisa_status.err:
+            logger.error(f'Błąd przy generowaniu PDF dla biletu {ticket.order_number}')
+            return HttpResponse('Błąd przy generowaniu PDF', status=500)
+
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="ticket_{ticket.order_number}.pdf"'
+        with open('debug.html', 'w', encoding='utf-8') as f:
+            f.write(html_string)
+        print(len(pdf_buffer.getvalue()))
+
+        return response
+
 
 
 class ScreeningSeatsView(APIView):
@@ -55,7 +99,6 @@ class InstantPurchaseView(APIView):
         )
 
         total_price = sum(t.total_price for t in tickets)
-        # Wspólny numer zamówienia dla całej transakcji (nie modyfikujemy bazy)
         purchase_time = tickets[0].purchased_at
         group_order_number = f"ORD{int(purchase_time.timestamp())}-{uuid.uuid4().hex[:6]}"
 
@@ -78,12 +121,12 @@ class InstantPurchaseView(APIView):
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
+
 class PromotionListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
         promotions = PromotionRule.objects.all()
-
         screening_id = request.query_params.get("screening_id")
         ticket_type_id = request.query_params.get("ticket_type_id")
 

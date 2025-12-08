@@ -1,12 +1,11 @@
-from time import timezone
-import uuid
+from django.utils import timezone
 from rest_framework import serializers
 from screenings.models import Screening
 from auditorium.models import Seat
 from tickets.models import Ticket, TicketType, calculate_ticket_price, PromotionRule
 from django.db.models import Max
 from screenings.serializers import ScreeningReadSerializer
-
+import uuid
 
 class TicketSeatSerializer(serializers.Serializer):
     row_number = serializers.IntegerField(min_value=1)
