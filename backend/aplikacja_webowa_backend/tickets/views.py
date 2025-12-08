@@ -1,3 +1,4 @@
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -54,8 +55,9 @@ class InstantPurchaseView(APIView):
         )
 
         total_price = sum(t.total_price for t in tickets)
-        order_number = tickets[0].order_number
+        # Wspólny numer zamówienia dla całej transakcji (nie modyfikujemy bazy)
         purchase_time = tickets[0].purchased_at
+        group_order_number = f"ORD{int(purchase_time.timestamp())}-{uuid.uuid4().hex[:6]}"
 
         first_ticket = tickets[0]
         customer_info = {
@@ -67,7 +69,7 @@ class InstantPurchaseView(APIView):
         }
 
         response_data = {
-            "order_number": order_number,
+            "order_number": group_order_number,
             "purchase_time": purchase_time,
             "customer_info": customer_info,
             "tickets": tickets_serializer.data,

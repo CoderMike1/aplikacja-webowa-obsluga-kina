@@ -35,7 +35,7 @@ class ScreeningView(APIView):
         movie_ids = list(movie_ids_qs)
 
         paginator = PageNumberPagination()
-        paginator.page_size = 10
+        paginator.page_size = 200
 
         page_movie_ids = paginator.paginate_queryset(movie_ids, request, view=self)
 

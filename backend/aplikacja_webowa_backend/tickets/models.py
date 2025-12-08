@@ -23,7 +23,7 @@ class Ticket(models.Model):
     type = models.ForeignKey(TicketType, on_delete=models.PROTECT)
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     purchased_at = models.DateTimeField(auto_now_add=True)
-    order_number = models.CharField(max_length=50, unique=True, blank=True)
+    order_number = models.CharField(max_length=50, blank=True)
     first_name = models.CharField(max_length=100, default="")
     last_name = models.CharField(max_length=100, default="")
     email = models.EmailField(default="")

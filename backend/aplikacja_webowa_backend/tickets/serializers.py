@@ -7,7 +7,7 @@ from screenings.serializers import ScreeningReadSerializer
 
 
 class TicketSeatSerializer(serializers.Serializer):
-    row_number = serializers.IntegerField(min_value=0)
+    row_number = serializers.IntegerField(min_value=1)
     seat_number = serializers.IntegerField(min_value=1)
 
 
@@ -74,6 +74,9 @@ class InstantPurchaseSerializer(serializers.Serializer):
 
         tickets_created = []
 
+        # Wspólny numer zamówienia dla całej transakcji
+        group_order_number = f"ORD{int(timezone.now().timestamp())}-{uuid.uuid4().hex[:6]}"
+
         for item in validated_data["tickets"]:
             ticket_type = item["ticket_type"]
             seats = item["seats_objs"]
@@ -84,6 +87,7 @@ class InstantPurchaseSerializer(serializers.Serializer):
                 screening=screening,
                 type=ticket_type,
                 total_price=total_price,
+                order_number=group_order_number,
                 first_name=item["first_name"],
                 last_name=item["last_name"],
                 email=item["email"],
