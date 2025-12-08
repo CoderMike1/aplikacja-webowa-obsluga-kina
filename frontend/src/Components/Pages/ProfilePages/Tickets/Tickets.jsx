@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import './Tickets.css'
 import { authApi } from '../../../../api/client.js'
 import { useAuthContext } from '../../../../context/Auth.jsx'
+import { Link } from 'react-router-dom'
 
 const Tickets = () => {
     const [orders, setOrders] = useState([])
@@ -74,7 +75,9 @@ const Tickets = () => {
                         return (
                             <li key={o.order_number || idx} className="ticket_item">
                                 <div className="ticket_header">
-                                    <div className="ticket_movie">{movieTitle}</div>
+                                    <Link to={`/filmy/${o.screening?.id ?? ''}`} className="ticket_movie" title="Przejdź do szczegółów seansu">
+                                        {movieTitle}
+                                    </Link>
                                     <div className="ticket_order">#{o.order_number || '—'}</div>
                                 </div>
 
