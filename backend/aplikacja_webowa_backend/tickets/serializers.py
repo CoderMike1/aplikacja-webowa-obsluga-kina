@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from screenings.models import Screening
 from auditorium.models import Seat
-from tickets.models import Ticket, TicketType, calculate_ticket_price
+from tickets.models import Ticket, TicketType, calculate_ticket_price, PromotionRule
 from django.db.models import Max
+from screenings.serializers import ScreeningReadSerializer
 
 
 class TicketSeatSerializer(serializers.Serializer):
@@ -153,4 +154,23 @@ class TicketSerializer(serializers.ModelSerializer):
         return [
             {"id": seat.id, "row_number": seat.row_number, "seat_number": seat.seat_number}
             for seat in obj.seats.all()
+        ]
+
+
+class PromotionRuleSerializer(serializers.ModelSerializer):
+    screening = ScreeningReadSerializer(read_only=True)
+    class Meta:
+        model = PromotionRule
+        fields = [
+            "id",
+            "name",
+            "discount_percent",
+            "min_tickets",
+            "weekday",
+            "time_from",
+            "time_to",
+            "ticket_type",
+            "screening",
+            "valid_from",
+            "valid_to",
         ]
