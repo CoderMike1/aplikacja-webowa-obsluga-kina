@@ -15,6 +15,7 @@ from io import BytesIO
 import logging
 from django.conf import settings
 from django.template.loader import get_template
+import time
 from .filters import TicketFilter
 
 
@@ -24,8 +25,21 @@ logger = logging.getLogger(__name__)
 
 class TicketPDFView(APIView):
     permission_classes = [AllowAny]
+
+    def get_ticket_with_retry(self, order_number, retries=5, delay=0.2):
+        for attempt in range(retries):
+            try:
+                return Ticket.objects.get(order_number=order_number)
+            except Ticket.DoesNotExist:
+                time.sleep(delay)
+        raise Ticket.DoesNotExist
+
     def get(self, request, order_number):
-        ticket = get_object_or_404(Ticket, order_number=order_number)
+        try:
+            ticket = self.get_ticket_with_retry(order_number)
+        except Ticket.DoesNotExist:
+            return HttpResponse(f"Ticket {order_number} not found", status=404)
+
         seats = ticket.seats.all()
         screening = ticket.screening
 
@@ -45,14 +59,13 @@ class TicketPDFView(APIView):
             logger.error(f'Błąd przy generowaniu PDF dla biletu {ticket.order_number}')
             return HttpResponse('Błąd przy generowaniu PDF', status=500)
 
-        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'inline; filename="ticket_{ticket.order_number}.pdf"'
-        with open('debug.html', 'w', encoding='utf-8') as f:
-            f.write(html_string)
-        print(len(pdf_buffer.getvalue()))
+        response = HttpResponse(
+            pdf_buffer.getvalue(),
+            content_type='application/pdf'
+        )
+        response['Content-Disposition'] = f'attachment; filename="ticket_{ticket.order_number}.pdf"'
 
         return response
-
 
 
 class ScreeningSeatsView(APIView):
@@ -93,16 +106,11 @@ class InstantPurchaseView(APIView):
         )
         input_serializer.is_valid(raise_exception=True)
         tickets = input_serializer.save()
+        tickets_serializer = InstantPurchaseResponseSerializer(tickets, many=True)
 
-        tickets_serializer = InstantPurchaseResponseSerializer(
-            tickets,
-            many=True
-        )
+        group_order_number = tickets[0].order_number
 
         total_price = sum(t.total_price for t in tickets)
-        purchase_time = tickets[0].purchased_at
-        group_order_number = f"ORD{int(purchase_time.timestamp())}-{uuid.uuid4().hex[:6]}"
-
         first_ticket = tickets[0]
         customer_info = {
             "loggedIn": first_ticket.user is not None,
@@ -114,7 +122,7 @@ class InstantPurchaseView(APIView):
 
         response_data = {
             "order_number": group_order_number,
-            "purchase_time": purchase_time,
+            "purchase_time": first_ticket.purchased_at,
             "customer_info": customer_info,
             "tickets": tickets_serializer.data,
             "total_price": total_price

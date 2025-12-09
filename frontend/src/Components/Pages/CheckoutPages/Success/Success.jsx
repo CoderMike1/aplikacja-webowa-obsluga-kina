@@ -1,5 +1,7 @@
 import {useCheckout} from "../../../../context/CheckoutContext.jsx";
 import './Success.css'
+import {getTicketPDF} from "../../../../services/movieService.js";
+
 
 const Success = () => {
     const {state, orderConfirmation } = useCheckout();
@@ -8,32 +10,33 @@ const Success = () => {
 
     const service_fee = 0;
 
-    const downloadTicketPDF = async () => {
-        try {
-            const response = await fetch(`/api/tickets/ticket/${order_number}/pdf/`, {
-                method: 'GET',
-            });
 
-            if (!response.ok) {
-                throw new Error('Błąd podczas pobierania PDF');
-            }
+const downloadTicketPDF = async () => {
+  try {
+      const response = await getTicketPDF(order_number);
 
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+      if (response.status !== 200) {
+          throw new Error('Błąd podczas pobierania PDF');
+      }
 
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ticket_${order_number}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
+      const blob = response.data;
+      const url = window.URL.createObjectURL(blob);
 
-        } catch (error) {
-            console.error(error);
-            alert('Nie udało się pobrać biletu PDF');
-        }
-    }
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ticket_${order_number}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+    alert('Nie udało się pobrać biletu PDF');
+  }
+};
+
+
+
 
     return (
         <div className="checkout__success__container">
