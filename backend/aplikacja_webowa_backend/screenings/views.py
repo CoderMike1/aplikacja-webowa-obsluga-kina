@@ -101,7 +101,6 @@ class ScreeningDetailView(APIView):
 
 class ProjectionTypeListView(APIView):
     def get_permissions(self):
-        # Public read access for listing projection types
         return [AllowAny()]
 
     def get(self, request):

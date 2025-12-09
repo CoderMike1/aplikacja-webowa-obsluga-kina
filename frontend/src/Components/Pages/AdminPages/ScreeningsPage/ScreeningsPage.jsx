@@ -242,7 +242,7 @@ const ScreeningsPage = () => {
                             )}
                             <datalist id="movies_list">
                                 {movieOptions.map(m => (
-                                    <option key={m.id} value={m.id}>{`${m.title || ''} — ${m.directors || ''}`}</option>
+                                    <option key={m.id} value={m.id}>{`${m.title || ''} - ${m.directors || ''}`}</option>
                                 ))}
                             </datalist>
                         </label>
@@ -261,8 +261,8 @@ const ScreeningsPage = () => {
                             )}
                             <datalist id="auditoriums_list">
                                 {auditoriumOptions.map(a => (
-                                    <option key={a.id} value={a.id} label={`${a.id} — ${a.name}`}>
-                                        {`${a.id} — ${a.name}`}
+                                    <option key={a.id} value={a.id} label={`${a.id} - ${a.name}`}>
+                                        {`${a.id} - ${a.name}`}
                                     </option>
                                 ))}
                             </datalist>
@@ -316,14 +316,14 @@ const ScreeningsPage = () => {
                                 )}
                                 <div className="screenings__movie_meta">
                                     <h3 className="screenings__movie_title">{group.movie?.title}</h3>
-                                    <div className="screenings__movie_sub">{group.movie?.directors || '—'}</div>
+                                    <div className="screenings__movie_sub">{group.movie?.directors || '-'}</div>
                                 </div>
                             </div>
 
                             <div className="screenings__types">
                                 {(group.projection_types || []).map((pt, i) => (
                                     <div className="screenings__type" key={i}>
-                                        <div className="screenings__type_title">{pt.projection_type || '—'}</div>
+                                        <div className="screenings__type_title">{pt.projection_type || '-'}</div>
                                         <div className="screenings__table">
                                             <div className="screenings__head">
                                                 <div>Seans ID</div>
@@ -336,9 +336,9 @@ const ScreeningsPage = () => {
                                             {(pt.screenings || []).map((s) => (
                                                 <div className="screenings__row" key={s.id}>
                                                     <div>#{s.id}</div>
-                                                    <div>{s.auditorium ? `${s.auditorium.id ?? '—'}, ${s.auditorium.name ?? '—'}` : '—'}</div>
-                                                    <div>{s.start_time ? dayjs(s.start_time).format('YYYY-MM-DD HH:mm') : '—'}</div>
-                                                    <div>{s.published_at ? dayjs(s.published_at).format('YYYY-MM-DD HH:mm') : '—'}</div>
+                                                    <div>{s.auditorium ? `${s.auditorium.id ?? '-'}, ${s.auditorium.name ?? '-'}` : '-'}</div>
+                                                    <div>{s.start_time ? dayjs(s.start_time).format('YYYY-MM-DD HH:mm') : '-'}</div>
+                                                    <div>{s.published_at ? dayjs(s.published_at).format('YYYY-MM-DD HH:mm') : '-'}</div>
                                                     <div className="btn_row">
                                                         <button type="button" className="btn" onClick={() => startEdit(s)}>Edytuj</button>
                                                         <button type="button" className="btn danger" onClick={() => deleteScreening(s.id)}>Usuń</button>

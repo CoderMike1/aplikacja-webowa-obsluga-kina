@@ -68,7 +68,7 @@ const SalesChart = () => {
     return (
       <div className="saleschart__container">
         <div className="saleschart__inner">
-          <div className="saleschart__title">Sprzedaż biletów — ostatnie 30 dni</div>
+          <div className="saleschart__title">Sprzedaż biletów - ostatnie 30 dni</div>
           <div className="saleschart__empty">Brak sprzedanych biletów w wybranym okresie.</div>
         </div>
       </div>
@@ -79,7 +79,7 @@ const SalesChart = () => {
     <div className="saleschart__container">
       <div className="saleschart__inner">
         <div className="saleschart__header">
-          <div className="saleschart__title">Sprzedaż biletów — ostatnie 30 dni</div>
+          <div className="saleschart__title">Sprzedaż biletów - ostatnie 30 dni</div>
           <div className="saleschart__stats">
             <span>Łącznie: <strong>{series.total}</strong></span>
             <span>Średnio/dzień: <strong>{Math.round(series.avg)}</strong></span>

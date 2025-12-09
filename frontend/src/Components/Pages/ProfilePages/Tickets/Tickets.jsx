@@ -66,11 +66,11 @@ const Tickets = () => {
             {!loading && !error && orders.length > 0 && (
                 <ul className="tickets_list">
                     {orders.map((o, idx) => {
-                        const purchased = o.purchase_time ? dayjs(o.purchase_time).format('DD.MM.YYYY HH:mm') : '—'
-                        const screeningTime = o.screening?.start_time ? dayjs(o.screening.start_time).format('DD.MM.YYYY HH:mm') : '—'
+                        const purchased = o.purchase_time ? dayjs(o.purchase_time).format('DD.MM.YYYY HH:mm') : '-'
+                        const screeningTime = o.screening?.start_time ? dayjs(o.screening.start_time).format('DD.MM.YYYY HH:mm') : '-'
                         const movieTitle = o.screening?.movie || 'Film'
-                        const auditorium = o.screening?.auditorium_id ?? '—'
-                        const totalText = typeof o.total_price === 'string' ? `${o.total_price} zł` : (o.total_price != null ? `${Number(o.total_price).toFixed(2)} zł` : '—')
+                        const auditorium = o.screening?.auditorium_id ?? '-'
+                        const totalText = typeof o.total_price === 'string' ? `${o.total_price} zł` : (o.total_price != null ? `${Number(o.total_price).toFixed(2)} zł` : '-')
 
                         return (
                             <li key={o.order_number || idx} className="ticket_item">
@@ -78,7 +78,7 @@ const Tickets = () => {
                                     <Link to={`/filmy/${o.screening?.id ?? ''}`} className="ticket_movie" title="Przejdź do szczegółów seansu">
                                         {movieTitle}
                                     </Link>
-                                    <div className="ticket_order">#{o.order_number || '—'}</div>
+                                    <div className="ticket_order">#{o.order_number || '-'}</div>
                                 </div>
 
                                 <div className="ticket_meta">
@@ -91,9 +91,9 @@ const Tickets = () => {
                                 {Array.isArray(o.tickets) && o.tickets.length > 0 && (
                                     <div className="ticket_details">
                                         {o.tickets.map((t, i) => {
-                                            const itemPrice = typeof t.price === 'string' ? `${t.price} zł` : (t.price != null ? `${Number(t.price).toFixed(2)} zł` : '—')
+                                            const itemPrice = typeof t.price === 'string' ? `${t.price} zł` : (t.price != null ? `${Number(t.price).toFixed(2)} zł` : '-')
                                             const seat = t.seats?.[0]
-                                            const seatText = seat ? `Rząd ${seat.row_number}, Miejsce ${seat.seat_number}` : '—'
+                                            const seatText = seat ? `Rząd ${seat.row_number}, Miejsce ${seat.seat_number}` : '-'
                                             return (
                                                 <div key={t.id || i} className="ticket_detail_row">
                                                     <span className="ticket_detail_type">{t.ticket_type}</span>
