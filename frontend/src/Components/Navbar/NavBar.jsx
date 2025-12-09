@@ -8,7 +8,7 @@ const NavBar = () => {
 
     const { showLoginForm, showRegisterForm } = useAuthUI();
 
-    const { isLoggedIn, logout } = useAuthContext()
+    const { isLoggedIn, user, logout } = useAuthContext()
     const navigate = useNavigate();
 
 
@@ -23,23 +23,28 @@ const NavBar = () => {
 
                 <div className="navbar__middle">
                     <ul className="navbar__menu">
-                        {/*className="is-active"*/}
                         <li>
                             <NavLink
                                 to='/repertuar'
-                                className={({ isActive }) =>
-                                    isActive ? "is-active" : ""
-                                }
+                                className={({ isActive }) => (isActive ? "is-active" : "")}
                             >
                                 Repertuar
                             </NavLink>
                         </li>
+                        {user?.is_staff && (
+                            <li>
+                                <NavLink
+                                    to='/panel-pracownika'
+                                    className={({ isActive }) => (isActive ? "is-active" : "")}
+                                >
+                                    Panel pracownika
+                                </NavLink>
+                            </li>
+                        )}
                         <li>
                             <NavLink
                                 to='/nowosci'
-                                className={({ isActive }) =>
-                                    isActive ? "is-active" : ""
-                                }
+                                className={({ isActive }) => (isActive ? "is-active" : "")}
                             >
                                 Nowości
                             </NavLink>
@@ -47,9 +52,7 @@ const NavBar = () => {
                         <li>
                             <NavLink
                                 to='/promocje'
-                                className={({ isActive }) =>
-                                    isActive ? "is-active" : ""
-                                }
+                                className={({ isActive }) => (isActive ? "is-active" : "")}
                             >
                                 Promocje
                             </NavLink>

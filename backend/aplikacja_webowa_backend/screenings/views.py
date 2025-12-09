@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Screening
+from .models import Screening, ProjectionType
 from .serializers import ScreeningReadSerializer, ScreeningWriteSerializer
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -97,3 +97,14 @@ class ScreeningDetailView(APIView):
         screening = get_object_or_404(Screening, pk=pk)
         screening.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProjectionTypeListView(APIView):
+    def get_permissions(self):
+        # Public read access for listing projection types
+        return [AllowAny()]
+
+    def get(self, request):
+        items = ProjectionType.objects.all().order_by('name')
+        data = [{'id': pt.id, 'name': pt.name} for pt in items]
+        return Response(data, status=status.HTTP_200_OK)

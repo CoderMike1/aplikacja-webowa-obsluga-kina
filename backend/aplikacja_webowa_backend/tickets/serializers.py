@@ -93,7 +93,7 @@ class InstantPurchaseSerializer(serializers.Serializer):
                 last_name=item["last_name"],
                 email=item["email"],
                 phone_number=item.get("phone_number", ""),
-                payment_status="PENDING",
+                payment_status="PAID",
             )
             ticket.seats.set(seats)
             tickets_created.append(ticket)

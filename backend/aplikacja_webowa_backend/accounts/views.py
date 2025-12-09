@@ -126,6 +126,7 @@ class UserInfo(APIView):
             "id": user.id,
             "email": user.email,
             "username": user.username,
+            "is_staff": user.is_staff,
             "first_name":user.first_name,
             "last_name":user.last_name,
             "phone_number":user.phone

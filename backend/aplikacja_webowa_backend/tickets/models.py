@@ -37,7 +37,7 @@ class Ticket(models.Model):
     payment_status = models.CharField(
         max_length=10,
         choices=PAYMENT_STATUS_CHOICES,
-        default='PENDING'
+        default='PAID'
     )
 
     def save(self, *args, **kwargs):

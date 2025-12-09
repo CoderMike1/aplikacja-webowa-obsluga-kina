@@ -7,7 +7,7 @@ from screenings.models import Screening
 from auditorium.models import Seat
 from .models import Ticket, PromotionRule, TicketType
 from .serializers import InstantPurchaseSerializer, InstantPurchaseResponseSerializer, PromotionRuleSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
@@ -15,6 +15,7 @@ from io import BytesIO
 import logging
 from django.conf import settings
 from django.template.loader import get_template
+from .filters import TicketFilter
 
 
 
@@ -148,3 +149,31 @@ class PromotionListView(APIView):
 
         serializer = PromotionRuleSerializer(promotions, many=True)
         return Response(serializer.data)
+
+
+class TicketsView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        qs = Ticket.objects.all().select_related('screening__movie', 'type').prefetch_related('seats')
+        # Apply django-filters FilterSet manually within APIView
+        filterset = TicketFilter(request.query_params, queryset=qs)
+        qs = filterset.qs
+
+        # Build lightweight payload for dashboard/analytics
+        data = []
+        for t in qs:
+            data.append({
+                'id': t.id,
+                'order_number': t.order_number,
+                'purchased_at': t.purchased_at,
+                'total_price': str(t.total_price),
+                'payment_status': t.payment_status,
+                'type': t.type.name if t.type_id else None,
+                'screening_id': t.screening_id,
+                'movie_title': getattr(getattr(t.screening, 'movie', None), 'title', None),
+                'seats_count': t.seats.count(),
+                'user_id': t.user_id,
+            })
+
+        return Response(data)

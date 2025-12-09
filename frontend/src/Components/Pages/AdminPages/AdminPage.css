@@ -1,0 +1,125 @@
+.admin__container {
+    --bg: #ffffff;
+    --card: #ffffff;
+    --card-border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent: #1d4ed8;
+    --accent-2: #3b82f6;
+    --danger: #ef4444;
+    --shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif, serif;
+}
+
+.admin__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 16px;
+}
+
+.admin__header h2 {
+    margin: 0;
+    letter-spacing: .2px;
+    color: var(--text);
+}
+
+.admin__header p {
+    color: var(--muted);
+}
+
+
+/* Removed legacy filters and forms styles no longer used */
+
+.admin__error {
+    color: #fecaca;
+    background: rgba(239, 68, 68, .12);
+    border: 1px solid rgba(239, 68, 68, .25);
+    padding: .85rem 1rem;
+    border-radius: .6rem;
+}
+
+.admin__loading {
+    opacity: .85;
+}
+
+/* Groups removed with screenings preview */
+
+.admin__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.admin__card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+}
+
+.admin__card h3 {
+    margin: 0 0 .6rem 0;
+    color: var(--text);
+}
+
+.admin__card p {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Tabs */
+.admin__tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.admin__tab_btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: #f9fafb;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin__tab_btn.active {
+    background: #e5e7eb;
+}
+
+.admin__tab_btn:hover:not(.active) {
+    background: #f3f4f6;
+}
+
+.admin__link_btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #1d4ed8;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Removed screenings table styles */
+
+/* Pager removed */
+
+@media (max-width: 900px) {
+    .admin__cards {
+        grid-template-columns: 1fr;
+    }
+}

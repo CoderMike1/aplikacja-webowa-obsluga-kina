@@ -1,0 +1,1054 @@
+{
+    "count": 19,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "movie": {
+                "id": 43,
+                "genres": [
+                    {
+                        "id": 9,
+                        "name": "Animacja"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Przygodowy"
+                    },
+                    {
+                        "id": 7,
+                        "name": "Fantasy"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Avatar: The Way of Water",
+                "original_title": "Avatar: The Way of Water",
+                "description": "Jake Sully i Neytiri muszą chronić swoją rodzinę przed nowym zagrożeniem na Pandorze.",
+                "release_date": "2022-12-16",
+                "cinema_release_date": "2025-11-29",
+                "duration_minutes": 192,
+                "directors": "James Cameron",
+                "poster_path": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-18T12:30:44.257358Z",
+                "updated_at": "2025-11-18T16:06:17.823484Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 33,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:19:51.907574Z",
+                            "start_time": "2025-11-21T16:20:00Z",
+                            "created_at": "2025-11-18T16:19:52.093204Z",
+                            "updated_at": "2025-11-18T16:19:52.093210Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 32,
+                "genres": [
+                    {
+                        "id": 4,
+                        "name": "Przygodowy"
+                    },
+                    {
+                        "id": 5,
+                        "name": "Romans"
+                    }
+                ],
+                "category": "upcoming",
+                "title": "Barbie",
+                "original_title": "Barbie",
+                "description": "Barbie opuszcza idealny świat, by odkryć prawdziwe życie i siebie samą.",
+                "release_date": "2026-03-08",
+                "cinema_release_date": "2026-03-08",
+                "duration_minutes": 114,
+                "directors": "Greta Gerwig",
+                "poster_path": "https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-18T16:06:54.069370Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 44,
+                            "auditorium": {
+                                "id": 10,
+                                "name": "Baśniowa"
+                            },
+                            "published_at": "2025-12-01T16:19:38Z",
+                            "start_time": "2025-12-09T17:50:00Z",
+                            "created_at": "2025-12-01T16:19:56.506857Z",
+                            "updated_at": "2025-12-08T14:48:43.887032Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 40,
+                "genres": [],
+                "category": "special_event",
+                "title": "Black Panther: Wakanda Forever",
+                "original_title": "Black Panther: Wakanda Forever",
+                "description": "Wakanda staje przed nowym zagrożeniem po śmierci króla T’Challi.",
+                "release_date": "2026-11-11",
+                "cinema_release_date": "2026-11-11",
+                "duration_minutes": 161,
+                "directors": "Ryan Coogler",
+                "poster_path": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg",
+                "is_special_event": true,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 22,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T15:52:42.425012Z",
+                            "start_time": "2025-11-19T13:30:00Z",
+                            "created_at": "2025-11-18T15:52:42.612546Z",
+                            "updated_at": "2025-11-18T15:52:42.612552Z"
+                        },
+                        {
+                            "id": 31,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:19:11.291959Z",
+                            "start_time": "2025-11-21T09:50:00Z",
+                            "created_at": "2025-11-18T16:19:11.527177Z",
+                            "updated_at": "2025-11-18T16:19:11.527182Z"
+                        },
+                        {
+                            "id": 30,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:18:52.617999Z",
+                            "start_time": "2025-11-21T20:50:00Z",
+                            "created_at": "2025-11-18T16:18:52.802212Z",
+                            "updated_at": "2025-11-18T16:18:52.802219Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 36,
+                "genres": [],
+                "category": "special_event",
+                "title": "Diuna: Część druga",
+                "original_title": "Dune: Part Two",
+                "description": "Paul Atreides kontynuuje swoją drogę jako wybraniec na Arrakis.",
+                "release_date": "2026-10-10",
+                "cinema_release_date": "2026-10-10",
+                "duration_minutes": 166,
+                "directors": "Denis Villeneuve",
+                "poster_path": "https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg",
+                "is_special_event": true,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 24,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T15:59:24.351419Z",
+                            "start_time": "2025-11-19T18:40:00Z",
+                            "created_at": "2025-11-18T15:59:24.559620Z",
+                            "updated_at": "2025-11-18T15:59:24.559624Z"
+                        },
+                        {
+                            "id": 25,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:00:06.589584Z",
+                            "start_time": "2025-11-19T22:10:00Z",
+                            "created_at": "2025-11-18T16:00:06.775634Z",
+                            "updated_at": "2025-11-18T16:00:06.775640Z"
+                        },
+                        {
+                            "id": 26,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:01:06.335475Z",
+                            "start_time": "2025-11-20T10:10:00Z",
+                            "created_at": "2025-11-18T16:01:06.528837Z",
+                            "updated_at": "2025-11-18T16:01:06.528842Z"
+                        },
+                        {
+                            "id": 29,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:18:26.282396Z",
+                            "start_time": "2025-11-21T17:30:00Z",
+                            "created_at": "2025-11-18T16:18:26.465609Z",
+                            "updated_at": "2025-11-18T16:18:26.465614Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 27,
+                "genres": [],
+                "category": "upcoming",
+                "title": "Gladiator",
+                "original_title": "Gladiator",
+                "description": "Generał rzymski zostaje zdradzony i zmuszony do walki jako gladiator.",
+                "release_date": "2026-08-18",
+                "cinema_release_date": "2026-08-18",
+                "duration_minutes": 155,
+                "directors": "Ridley Scott",
+                "poster_path": "https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 39,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:23:47.182519Z",
+                            "start_time": "2025-11-20T19:30:00Z",
+                            "created_at": "2025-11-18T16:23:47.361965Z",
+                            "updated_at": "2025-11-18T16:23:47.361971Z"
+                        }
+                    ]
+                },
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 41,
+                            "auditorium": {
+                                "id": 5,
+                                "name": "Rubinowa"
+                            },
+                            "published_at": "2025-12-01T16:18:11Z",
+                            "start_time": "2025-12-04T18:00:00Z",
+                            "created_at": "2025-12-01T16:18:45.486930Z",
+                            "updated_at": "2025-12-01T16:18:45.486937Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 23,
+                "genres": [],
+                "category": "upcoming",
+                "title": "Incepcja",
+                "original_title": "Inception",
+                "description": "Złodziej, który potrafi kraść sekrety ze snów, dostaje zadanie wszczepienia idei w umysł celu.",
+                "release_date": "2026-05-22",
+                "cinema_release_date": "2026-05-22",
+                "duration_minutes": 148,
+                "directors": "Christopher Nolan",
+                "poster_path": "https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 42,
+                            "auditorium": {
+                                "id": 4,
+                                "name": "Szafirowa"
+                            },
+                            "published_at": "2025-12-01T16:18:47Z",
+                            "start_time": "2025-12-03T17:50:00Z",
+                            "created_at": "2025-12-01T16:19:18.904520Z",
+                            "updated_at": "2025-12-01T16:19:18.904527Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 22,
+                "genres": [
+                    {
+                        "id": 3,
+                        "name": "Akcja"
+                    },
+                    {
+                        "id": 7,
+                        "name": "Fantasy"
+                    }
+                ],
+                "category": "upcoming",
+                "title": "Interstellar",
+                "original_title": "Interstellar",
+                "description": "Zespół astronautów wyrusza przez tunel czasoprzestrzenny w poszukiwaniu nowego domu dla ludzkości.",
+                "release_date": "2026-03-15",
+                "cinema_release_date": "2026-03-15",
+                "duration_minutes": 169,
+                "directors": "Christopher Nolan",
+                "poster_path": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-18T16:13:47.281885Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 27,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:17:52.507772Z",
+                            "start_time": "2025-11-21T10:10:00Z",
+                            "created_at": "2025-11-18T16:17:52.695179Z",
+                            "updated_at": "2025-11-18T16:17:52.695185Z"
+                        },
+                        {
+                            "id": 28,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:18:09.554824Z",
+                            "start_time": "2025-11-21T13:50:00Z",
+                            "created_at": "2025-11-18T16:18:09.739442Z",
+                            "updated_at": "2025-11-18T16:18:09.739447Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 7,
+                "genres": [
+                    {
+                        "id": 1,
+                        "name": "Komedia"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Dramat"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Joker",
+                "original_title": "Joker",
+                "description": "Arthur Fleck, zmagający się z chorobą psychiczną komik, stopniowo popada w obłęd i przemienia się w Jokera, stając się symbolem buntu w Gotham.",
+                "release_date": "2019-10-04",
+                "cinema_release_date": "2025-11-29",
+                "duration_minutes": 122,
+                "directors": "Todd Phillips",
+                "poster_path": "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T09:58:16.115700Z",
+                "updated_at": "2025-11-18T16:04:57.847961Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 19,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T15:48:19.464086Z",
+                            "start_time": "2025-11-18T17:30:00Z",
+                            "created_at": "2025-11-18T15:48:19.644988Z",
+                            "updated_at": "2025-11-18T15:48:19.644995Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 62,
+                "genres": [],
+                "category": "special_event",
+                "title": "Koncert Queen: Live in Concert",
+                "original_title": "Queen: Live in Concert",
+                "description": "Wyjątkowy koncert zespołu Queen w ramach światowej trasy.",
+                "release_date": "2025-12-15",
+                "cinema_release_date": "2025-12-15",
+                "duration_minutes": 180,
+                "directors": "Brian May",
+                "poster_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJmynVOW95hvdmyjmRN3MVlfXaU3B4IQ0Wbg&s",
+                "is_special_event": true,
+                "created_at": "2025-11-18T13:15:14.864436Z",
+                "updated_at": "2025-11-18T13:15:14.864436Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 16,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T13:47:42Z",
+                            "start_time": "2025-11-19T19:00:00Z",
+                            "created_at": "2025-11-18T13:48:27.250736Z",
+                            "updated_at": "2025-11-18T13:48:27.250743Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 17,
+                "genres": [
+                    {
+                        "id": 4,
+                        "name": "Przygodowy"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Kraina lodu II",
+                "original_title": "Frozen II",
+                "description": "Elsa, Anna i ich przyjaciele wyruszają poza Arendelle, aby odkryć źródło magicznego głosu oraz prawdę o mocy Elsy i historii królestwa.",
+                "release_date": "2019-11-22",
+                "cinema_release_date": "2025-11-18",
+                "duration_minutes": 103,
+                "directors": "Chris Buck, Jennifer Lee",
+                "poster_path": "https://image.tmdb.org/t/p/w500/qdfARIhgpgZOBh3vfNhWS4hmSo3.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T09:58:17.396713Z",
+                "updated_at": "2025-11-18T16:15:52.443083Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 40,
+                            "auditorium": {
+                                "id": 8,
+                                "name": "Platynowa"
+                            },
+                            "published_at": "2025-11-24T21:45:27Z",
+                            "start_time": "2025-11-26T18:00:00Z",
+                            "created_at": "2025-11-24T21:46:00.152978Z",
+                            "updated_at": "2025-11-24T21:46:00.152986Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 19,
+                "genres": [
+                    {
+                        "id": 1,
+                        "name": "Komedia"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Kraina lodu III",
+                "original_title": "Frozen II",
+                "description": "Elsa, Anna i ich przyjaciele wyruszają poza Arendelle, aby odkryć źródło magicznego głosu oraz prawdę o mocy Elsy i historii królestwa.",
+                "release_date": "2025-11-05",
+                "cinema_release_date": "2025-11-18",
+                "duration_minutes": 103,
+                "directors": "Chris Buck, Jennifer Lee",
+                "poster_path": "https://image.tmdb.org/t/p/w500/qdfARIhgpgZOBh3vfNhWS4hmSo3.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T13:30:29.914543Z",
+                "updated_at": "2025-11-04T15:37:56.884911Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 4,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-05T17:50:00Z",
+                            "start_time": "2025-11-05T17:50:00Z",
+                            "created_at": "2025-11-05T18:52:20.682900Z",
+                            "updated_at": "2025-11-18T14:30:10.040665Z"
+                        }
+                    ]
+                },
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 1,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-19T16:34:06.341775Z",
+                            "start_time": "2025-11-29T23:40:00Z",
+                            "created_at": "2025-11-05T17:42:16.190371Z",
+                            "updated_at": "2025-11-15T19:14:52.761478Z"
+                        }
+                    ]
+                },
+                {
+                    "projection_type": "IMAX",
+                    "screenings": [
+                        {
+                            "id": 3,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-05T18:47:10Z",
+                            "start_time": "2025-11-06T00:00:00Z",
+                            "created_at": "2025-11-05T18:47:15.906441Z",
+                            "updated_at": "2025-11-18T14:29:51.781552Z"
+                        },
+                        {
+                            "id": 5,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-05T18:59:22Z",
+                            "start_time": "2025-11-06T02:20:00Z",
+                            "created_at": "2025-11-05T18:59:28.294088Z",
+                            "updated_at": "2025-11-05T18:59:28.294096Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 30,
+                "genres": [],
+                "category": "upcoming",
+                "title": "Mad Max: Na drodze gniewu",
+                "original_title": "Mad Max: Fury Road",
+                "description": "W postapokaliptycznym świecie Max pomaga Furiosie uciec przed tyranem.",
+                "release_date": "2026-09-30",
+                "cinema_release_date": "2026-09-30",
+                "duration_minutes": 120,
+                "directors": "George Miller",
+                "poster_path": "https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 20,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T15:51:36.722854Z",
+                            "start_time": "2025-11-18T19:00:00Z",
+                            "created_at": "2025-11-18T15:51:37.013896Z",
+                            "updated_at": "2025-11-18T15:51:37.013901Z"
+                        },
+                        {
+                            "id": 21,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T15:51:53.174781Z",
+                            "start_time": "2025-11-19T10:00:00Z",
+                            "created_at": "2025-11-18T15:51:53.375821Z",
+                            "updated_at": "2025-11-18T15:51:53.375827Z"
+                        },
+                        {
+                            "id": 34,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:20:41.509849Z",
+                            "start_time": "2025-11-20T11:20:00Z",
+                            "created_at": "2025-11-18T16:20:41.704506Z",
+                            "updated_at": "2025-11-18T16:20:41.704512Z"
+                        },
+                        {
+                            "id": 36,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:21:41.591812Z",
+                            "start_time": "2025-11-20T17:20:00Z",
+                            "created_at": "2025-11-18T16:21:41.780100Z",
+                            "updated_at": "2025-11-18T16:21:41.780106Z"
+                        },
+                        {
+                            "id": 37,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:21:49.022538Z",
+                            "start_time": "2025-11-20T19:50:00Z",
+                            "created_at": "2025-11-18T16:21:49.206125Z",
+                            "updated_at": "2025-11-18T16:21:49.206131Z"
+                        },
+                        {
+                            "id": 35,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:21:27Z",
+                            "start_time": "2025-12-08T20:00:00Z",
+                            "created_at": "2025-11-18T16:21:27.260609Z",
+                            "updated_at": "2025-12-08T15:11:26.805713Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 1,
+                "genres": [
+                    {
+                        "id": 1,
+                        "name": "Komedia"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Dramat"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Nietykalni",
+                "original_title": "Intouchables",
+                "description": "Ta historia zdarzyła się naprawdę. Sparaliżowany na skutek wypadku milioner zatrudnia do pomocy i opieki młodego chłopaka z przedmieścia, który właśnie wyszedł z więzienia. Zderzenie dwóch skrajnie różnych światów daje początek szeregowi niewiarygodnych przygód i przyjaźni, która czyni ich... nietykalnymi.",
+                "release_date": "2025-10-29",
+                "cinema_release_date": "2025-11-18",
+                "duration_minutes": 112,
+                "directors": "Olivier Nakache, Éric Toledano",
+                "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/vthovD3LEV0OF1Re0rRumHHgiCA.jpg",
+                "is_special_event": false,
+                "created_at": "2025-10-28T12:32:00.010765Z",
+                "updated_at": "2025-10-28T12:32:00.010775Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 18,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T15:46:20.794977Z",
+                            "start_time": "2025-11-18T22:30:00Z",
+                            "created_at": "2025-11-18T15:46:20.981126Z",
+                            "updated_at": "2025-11-18T15:46:20.981131Z"
+                        },
+                        {
+                            "id": 15,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T13:48:20.541873Z",
+                            "start_time": "2025-11-18T22:40:00Z",
+                            "created_at": "2025-11-18T13:48:20.746241Z",
+                            "updated_at": "2025-11-18T13:48:20.746249Z"
+                        },
+                        {
+                            "id": 7,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-15T17:13:44.684954Z",
+                            "start_time": "2025-11-28T17:00:00Z",
+                            "created_at": "2025-11-15T17:13:44.685115Z",
+                            "updated_at": "2025-11-15T17:13:44.685119Z"
+                        },
+                        {
+                            "id": 8,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-15T17:14:02.941096Z",
+                            "start_time": "2025-11-28T19:30:00Z",
+                            "created_at": "2025-11-15T17:14:02.941246Z",
+                            "updated_at": "2025-11-15T17:14:02.941252Z"
+                        },
+                        {
+                            "id": 10,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-15T18:32:32.917368Z",
+                            "start_time": "2025-11-28T20:50:00Z",
+                            "created_at": "2025-11-15T18:32:33.098399Z",
+                            "updated_at": "2025-11-15T18:32:33.098405Z"
+                        },
+                        {
+                            "id": 6,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-15T17:11:42.575194Z",
+                            "start_time": "2025-11-28T22:00:00Z",
+                            "created_at": "2025-11-15T17:11:42.575374Z",
+                            "updated_at": "2025-11-15T17:11:42.575379Z"
+                        },
+                        {
+                            "id": 11,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-15T18:33:11.975266Z",
+                            "start_time": "2025-11-28T23:40:00Z",
+                            "created_at": "2025-11-15T18:33:12.168272Z",
+                            "updated_at": "2025-11-15T18:33:12.168276Z"
+                        },
+                        {
+                            "id": 9,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-15T17:34:31.690047Z",
+                            "start_time": "2025-11-29T00:30:00Z",
+                            "created_at": "2025-11-15T17:34:31.690229Z",
+                            "updated_at": "2025-11-15T17:34:31.690233Z"
+                        },
+                        {
+                            "id": 12,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-15T19:04:33.792042Z",
+                            "start_time": "2025-11-29T03:00:00Z",
+                            "created_at": "2025-11-15T19:04:33.981395Z",
+                            "updated_at": "2025-11-15T19:04:33.981401Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 31,
+                "genres": [],
+                "category": "upcoming",
+                "title": "Obecność",
+                "original_title": "The Conjuring",
+                "description": "Rodzina nawiedzana przez demona prosi o pomoc parę badaczy zjawisk paranormalnych.",
+                "release_date": "2026-10-31",
+                "cinema_release_date": "2026-10-31",
+                "duration_minutes": 112,
+                "directors": "James Wan",
+                "poster_path": "https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 23,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T15:58:25.067677Z",
+                            "start_time": "2025-11-19T10:40:00Z",
+                            "created_at": "2025-11-18T15:58:25.247981Z",
+                            "updated_at": "2025-11-18T15:58:25.247986Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 33,
+                "genres": [],
+                "category": "special_event",
+                "title": "Oppenheimer",
+                "original_title": "Oppenheimer",
+                "description": "Historia J. Roberta Oppenheimera i narodzin bomby atomowej.",
+                "release_date": "2026-04-12",
+                "cinema_release_date": "2026-04-12",
+                "duration_minutes": 180,
+                "directors": "Christopher Nolan",
+                "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                "is_special_event": true,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 43,
+                            "auditorium": {
+                                "id": 7,
+                                "name": "Złota"
+                            },
+                            "published_at": "2025-12-01T16:19:20Z",
+                            "start_time": "2025-12-08T16:00:00Z",
+                            "created_at": "2025-12-01T16:19:37.294828Z",
+                            "updated_at": "2025-12-08T15:08:41.032739Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 46,
+                "genres": [],
+                "category": "now_playing",
+                "title": "Shang-Chi and the Legend of the Ten Rings",
+                "original_title": "Shang-Chi and the Legend of the Ten Rings",
+                "description": "Shang-Chi zostaje wciągnięty w świat tajemniczych Dziesięciu Pierścieni.",
+                "release_date": "2021-09-03",
+                "cinema_release_date": "2025-11-18",
+                "duration_minutes": 132,
+                "directors": "Destin Daniel Cretton",
+                "poster_path": "https://image.tmdb.org/t/p/w500/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-18T12:30:44.257358Z",
+                "updated_at": "2025-11-18T12:30:44.257358Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "3D",
+                    "screenings": [
+                        {
+                            "id": 17,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T13:49:52Z",
+                            "start_time": "2025-11-19T13:00:00Z",
+                            "created_at": "2025-11-18T13:50:28.775560Z",
+                            "updated_at": "2025-11-18T13:50:28.775569Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 34,
+                "genres": [],
+                "category": "special_event",
+                "title": "Spider-Man: Bez drogi do domu",
+                "original_title": "Spider-Man: No Way Home",
+                "description": "Peter Parker mierzy się z konsekwencjami ujawnienia swojej tożsamości.",
+                "release_date": "2026-05-20",
+                "cinema_release_date": "2026-05-20",
+                "duration_minutes": 148,
+                "directors": "Jon Watts",
+                "poster_path": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+                "is_special_event": true,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "IMAX",
+                    "screenings": [
+                        {
+                            "id": 45,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-12-08T14:44:23Z",
+                            "start_time": "2025-12-09T15:00:00Z",
+                            "created_at": "2025-12-08T14:44:59.218195Z",
+                            "updated_at": "2025-12-08T14:44:59.218203Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 42,
+                "genres": [
+                    {
+                        "id": 2,
+                        "name": "Dramat"
+                    },
+                    {
+                        "id": 6,
+                        "name": "Horror"
+                    }
+                ],
+                "category": "now_playing",
+                "title": "Titane",
+                "original_title": "Titane",
+                "description": "Alexia, kobieta z metalową płytką w głowie, po serii gwałtownych wydarzeń zmienia tożsamość i ucieka, co prowadzi do mrocznej i nieoczekiwanej relacji z ojcem, który jej szuka.",
+                "release_date": "2021-07-13",
+                "cinema_release_date": "2025-11-18",
+                "duration_minutes": 108,
+                "directors": "Julia Ducournau",
+                "poster_path": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/iYuA58vjE6ZAnZJYFgNqp46ANXZ.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-18T12:12:18.505238Z",
+                "updated_at": "2025-11-18T12:12:18.505250Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 32,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-18T16:19:34.626640Z",
+                            "start_time": "2025-11-21T13:20:00Z",
+                            "created_at": "2025-11-18T16:19:34.816297Z",
+                            "updated_at": "2025-11-18T16:19:34.816302Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "movie": {
+                "id": 28,
+                "genres": [],
+                "category": "upcoming",
+                "title": "Titanic",
+                "original_title": "Titanic",
+                "description": "Miłość rozkwita na pokładzie Titanica, który zmierza ku katastrofie.",
+                "release_date": "2026-12-19",
+                "cinema_release_date": "2026-12-19",
+                "duration_minutes": 195,
+                "directors": "James Cameron",
+                "poster_path": "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+                "is_special_event": false,
+                "created_at": "2025-11-04T00:00:00Z",
+                "updated_at": "2025-11-04T00:00:00Z"
+            },
+            "projection_types": [
+                {
+                    "projection_type": "2D",
+                    "screenings": [
+                        {
+                            "id": 2,
+                            "auditorium": {
+                                "id": 1,
+                                "name": "Brylantowa"
+                            },
+                            "published_at": "2025-11-05T18:46:19Z",
+                            "start_time": "2025-11-05T20:10:00Z",
+                            "created_at": "2025-11-05T18:46:25.963032Z",
+                            "updated_at": "2025-11-05T18:46:25.963040Z"
+                        },
+                        {
+                            "id": 38,
+                            "auditorium": {
+                                "id": 2,
+                                "name": "Diamentowa"
+                            },
+                            "published_at": "2025-11-18T16:22:27.363499Z",
+                            "start_time": "2025-11-20T14:10:00Z",
+                            "created_at": "2025-11-18T16:22:27.547771Z",
+                            "updated_at": "2025-11-18T16:22:27.547776Z"
+                        }
+                    ]
+                },
+                {
+                    "projection_type": "4DX",
+                    "screenings": [
+                        {
+                            "id": 46,
+                            "auditorium": {
+                                "id": 10,
+                                "name": "Baśniowa"
+                            },
+                            "published_at": "2025-12-08T15:12:47Z",
+                            "start_time": "2025-12-10T17:00:00Z",
+                            "created_at": "2025-12-08T15:18:18.486157Z",
+                            "updated_at": "2025-12-08T15:18:18.486163Z"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
