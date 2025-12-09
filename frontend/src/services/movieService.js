@@ -21,6 +21,8 @@ export const buyTicket = (payload, accessToken) =>
         }
     )
 
-export const getTicketPDF = (order_number) => api.get(`/ticket/${order_number}/pdf/)
+export const getTicketPDF = (order_number) => api.get(`/tickets/ticket/${order_number}/pdf/`,{
+    responseType:"blob"
+})
 
 

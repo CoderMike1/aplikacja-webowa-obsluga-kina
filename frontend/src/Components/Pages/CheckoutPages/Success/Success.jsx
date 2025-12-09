@@ -13,18 +13,22 @@ const Success = () => {
 
 const downloadTicketPDF = async () => {
   try {
-    const response = await getTicketPDF(order_number)
-    if (!response.ok) throw new Error('Błąd podczas pobierania PDF');
+      const response = await getTicketPDF(order_number);
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ticket_${order_number}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
+      if (response.status !== 200) {
+          throw new Error('Błąd podczas pobierania PDF');
+      }
+
+      const blob = response.data;
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ticket_${order_number}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error(error);
     alert('Nie udało się pobrać biletu PDF');
