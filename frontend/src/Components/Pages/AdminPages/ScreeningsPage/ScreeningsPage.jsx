@@ -49,7 +49,9 @@ const ScreeningsPage = () => {
         try {
             const res = await api.get('/movies/', { params: { page_size: 50 } })
             const items = res.data?.results || res.data || []
-            setMovieOptions(items)
+            const today = dayjs().format('YYYY-MM-DD')
+            const allowed = items.filter(m => m?.cinema_release_date && m.cinema_release_date <= today)
+            setMovieOptions(allowed)
         } catch (e) {
             console.error(e)
         }
@@ -156,6 +158,18 @@ const ScreeningsPage = () => {
         e.preventDefault()
         setError('')
         try {
+            // Validate movie selection against allowed list (cinema_release_date <= today)
+            const chosenId = addForm.movie_id ? Number(addForm.movie_id) : null
+            const allowedIds = new Set(movieOptions.map(m => Number(m.id)))
+            if (!chosenId || !allowedIds.has(chosenId)) {
+                setAddErrors(prev => ({
+                    ...prev,
+                    movie_id: [
+                        'Wybierz film z listy dostępnych (premiera kinowa nie później niż dziś).'
+                    ]
+                }))
+                return
+            }
             const payload = {
                 movie_id: addForm.movie_id ? Number(addForm.movie_id) : undefined,
                 auditorium_id: addForm.auditorium_id ? Number(addForm.auditorium_id) : undefined,
