@@ -22,24 +22,24 @@
 <body>
 
     <div class="header">
-        <h1>Bilet Kino</h1>
-        <h2>Numer zamówienia: {{ ticket.order_number }}</h2>
+        <h1>Bilet Last Kino</h1>
+        <h2>Numer zamowienia: {{ ticket.order_number }}</h2>
     </div>
 
     <div class="ticket-info">
-        <p><strong>Imię i nazwisko:</strong> {{ ticket.first_name }} {{ ticket.last_name }}</p>
+        <p><strong>Imie i nazwisko:</strong> {{ ticket.first_name }} {{ ticket.last_name }}</p>
         <p><strong>Email:</strong> {{ ticket.email }}</p>
         <p><strong>Film:</strong> {{ screening.movie.title }}</p>
         <p><strong>Start seansu:</strong> {{ screening.start_time }}</p>
         <p><strong>Sala:</strong> {{ screening.auditorium.name }}</p>
         <p><strong>Rodzaj biletu:</strong> {{ ticket.type.name }}</p>
-        <p><strong>Cena całkowita:</strong> {{ ticket.total_price }} zł</p>
+        <p><strong>Cena calkowita:</strong> {{ ticket.total_price }} zl</p>
     </div>
 
-    <h3>Miejsca w zamówieniu:</h3>
+    <h3>Miejsca w zamowieniu:</h3>
     <table>
         <tr>
-            <th>Rząd</th>
+            <th>Rzad</th>
             <th>Miejsce</th>
         </tr>
         {% for seat in seats %}
@@ -51,8 +51,8 @@
     </table>
 
     <div class="footer">
-        <p>Dziękujemy za zakup w Last Kino 🎬</p>
-        <p>Prosimy o okazanie tego biletu przy wejściu do sali</p>
+        <p>Dziekujemy za zakup w Last Kino 🎬</p>
+        <p>Prosimy o okazanie tego biletu przy wejsciu do sali</p>
     </div>
 </body>
 </html>
