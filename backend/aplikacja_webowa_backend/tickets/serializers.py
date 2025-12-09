@@ -75,7 +75,6 @@ class InstantPurchaseSerializer(serializers.Serializer):
 
         tickets_created = []
 
-        # Wspólny numer zamówienia dla całej transakcji
         group_order_number = f"ORD{int(timezone.now().timestamp())}-{uuid.uuid4().hex[:6]}"
 
         for item in validated_data["tickets"]:
@@ -99,6 +98,7 @@ class InstantPurchaseSerializer(serializers.Serializer):
             tickets_created.append(ticket)
 
         return tickets_created
+
 
 class InstantPurchaseResponseSerializer(serializers.Serializer):
     ticket_type = serializers.CharField(source="type.name")
