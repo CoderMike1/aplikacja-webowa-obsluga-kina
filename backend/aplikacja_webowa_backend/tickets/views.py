@@ -12,6 +12,8 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
+import base64
+import qrcode
 import logging
 from django.conf import settings
 from django.template.loader import get_template
@@ -22,6 +24,16 @@ from .filters import TicketFilter
 
 
 logger = logging.getLogger(__name__)
+
+def make_qr_data_url(payload: str) -> str:
+    qr = qrcode.QRCode(version=1, box_size=4, border=2)
+    qr.add_data(payload)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    buf = BytesIO()
+    img.save(buf, format='PNG')
+    b64 = base64.b64encode(buf.getvalue()).decode('ascii')
+    return f"data:image/png;base64,{b64}"
 
 class TicketPDFView(APIView):
     permission_classes = [AllowAny]
@@ -42,6 +54,9 @@ class TicketPDFView(APIView):
 
         seats = ticket.seats.all()
         screening = ticket.screening
+        # Generate QR payload: use order number (or replace with verification URL)
+        qr_payload = f"{ticket.order_number}"
+        qr_data_url = make_qr_data_url(qr_payload)
 
         html_string = render_to_string('tickets/ticket_pdf.html', {
             'ticket': ticket,
@@ -50,6 +65,7 @@ class TicketPDFView(APIView):
             'request': request,
             'MEDIA_URL': settings.MEDIA_URL,
             'STATIC_URL': settings.STATIC_URL,
+            'qr_data_url': qr_data_url,
         })
 
         pdf_buffer = BytesIO()
