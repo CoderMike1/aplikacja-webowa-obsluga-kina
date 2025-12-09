@@ -8,7 +8,32 @@ const Success = () =>{
 
     const service_fee = 0;
 
-    console.log(orderConfirmation)
+    const downloadTicketPDF = async () => {
+        try {
+            const response = await fetch(`/api/tickets/ticket/${order_number}/pdf/`, {
+                method: 'GET',
+            });
+
+            if (!response.ok) {
+                throw new Error('Błąd podczas pobierania PDF');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ticket_${order_number}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error(error);
+            alert('Nie udało się pobrać biletu PDF');
+        }
+    }
 
     return (
         <div className="checkout__success__container">
@@ -28,7 +53,7 @@ const Success = () =>{
 
                     <div className="success__movie_info">
                         <h4>{screening_info.movie_title || "Tytuł filmu"}</h4>
-                        <p>{state.movie_directors}</p>
+                        <p>state.movie_directors</p>
                         <p>
                             {state.projection_type && <span>{state.projection_type}</span>}
                             {screening_info.auditorium && (

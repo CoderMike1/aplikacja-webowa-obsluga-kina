@@ -2,12 +2,14 @@ import './NavBar.css'
 import logo from "../../assets/logo.png"
 import { useAuthUI } from "../../context/authUIContext.jsx";
 import { useAuthContext } from "../../context/Auth.jsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import logoutIcon from "../../assets/logout.png";
 const NavBar = () => {
 
     const { showLoginForm, showRegisterForm } = useAuthUI();
 
-    const { isLoggedIn } = useAuthContext()
+    const { isLoggedIn, logout } = useAuthContext()
+    const navigate = useNavigate();
 
 
     return (
@@ -56,24 +58,32 @@ const NavBar = () => {
                 </div>
 
                 <div className="navbar__right">
-                    {isLoggedIn ?
-                        <div className="navbar__my_account">
-                                <NavLink 
-                                to="/profil"
-                                className={({ isActive }) =>
-                                    isActive ? "is-active" : ""
-                                }    
-                                    >
+                    {isLoggedIn ? (
+                        <div className="navbar__my_account" style={{ display: 'flex', gap: '0px', alignItems: 'center' }}>
+                            <div className="navbar__my_account_button" style={{ display: 'flex', gap: '0px' }}>
+                                <NavLink
+                                    to="/profil"
+                                    className={({ isActive }) =>
+                                        isActive ? "is-active" : ""
+                                    }
+                                >
                                     <button>Moje konto</button>
-                                    </NavLink>
+                                </NavLink>
+                            </div>
+
+                            <div className="navbar__logout">
+                                <button onClick={() => { logout(); navigate('/'); }} title="Wyloguj">
+                                    <img src={logoutIcon} alt="Wyloguj" style={{ width: 20, height: 20 }} />
+                                </button></div>
                         </div>
 
-                        :
+
+                    ) : (
                         <div className="navbar__login">
                             <button onClick={() => showLoginForm()}>Zaloguj się</button>
                             <button onClick={() => showRegisterForm()}>Stwórz konto</button>
                         </div>
-                    }
+                    )}
 
                 </div>
             </div>

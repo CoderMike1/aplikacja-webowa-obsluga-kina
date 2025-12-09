@@ -25,4 +25,5 @@ urlpatterns = [
     path('profile/password/', ChangePasswordView.as_view(), name='change_password'),
     path('me/tickets/', MyTicketsView.as_view(), name='my_tickets'),
     path('profile/avatar/config/', AvatarUploadConfigView.as_view(), name='avatar_upload_config'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 ]
