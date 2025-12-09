@@ -1,10 +1,10 @@
 import {useCheckout} from "../../../../context/CheckoutContext.jsx";
 import './Success.css'
-const Success = () =>{
 
+const Success = () => {
     const {state, orderConfirmation } = useCheckout();
 
-    const {total_price,order_number,first_name,last_name,email,phone_number,screening_info,tickets} = orderConfirmation
+    const {total_price, order_number, first_name, last_name, email, phone_number, screening_info, tickets} = orderConfirmation
 
     const service_fee = 0;
 
@@ -80,7 +80,7 @@ const Success = () =>{
                         {tickets.map((ticket, i) => (
                             <div className="success__ticket_row" key={i}>
                                 <div className="success__ticket_details">
-                                    <span className="ticket_title">Bilet #{i+ 1}</span>
+                                    <span className="ticket_title">Bilet #{i + 1}</span>
                                     <p>
                                         Rząd {ticket.seat.row_number} Miejsce {ticket.seat.seat_number}
                                     </p>
@@ -92,6 +92,7 @@ const Success = () =>{
                             </div>
                         ))}
                     </div>
+
                     <div className="success__contact_block">
                         <h4>Dane kontaktowe</h4>
                         <p><strong>Imię i nazwisko:</strong> {first_name || last_name ? `${first_name} ${last_name}` : "—"}</p>
@@ -108,13 +109,18 @@ const Success = () =>{
                         <span>Łącznie zapłacono</span>
                         <span>{total_price} zł</span>
                     </div>
+
+                    <div className="success__download_ticket">
+                        <button onClick={downloadTicketPDF}>
+                            Pobierz bilet PDF
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
         </div>
     )
-
 }
 
-export default Success
-
+export default Success;
