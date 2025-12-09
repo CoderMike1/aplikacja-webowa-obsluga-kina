@@ -40,11 +40,6 @@ class Ticket(models.Model):
         default='PENDING'
     )
 
-    def save(self, *args, **kwargs):
-        if not self.order_number:
-            self.order_number = f"ORD{int(timezone.now().timestamp())}-{uuid.uuid4().hex[:6]}"
-        super().save(*args, **kwargs)
-
 
 from django.utils import timezone
 
