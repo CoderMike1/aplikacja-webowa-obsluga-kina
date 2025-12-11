@@ -17,6 +17,8 @@ const RegisterForm = () =>{
 
     const {register} = useAuthContext();
 
+    const [processing,setProcessing] = useState(false)
+
 
     const {closeForm,showLoginForm} = useAuthUI()
 
@@ -31,9 +33,11 @@ const RegisterForm = () =>{
 
     const handleRegister = async (e) =>{
         e.preventDefault()
+        setProcessing(true)
 
         if (password !== confirmPassword){
             setErrorMessage("Hasła się różnią")
+            setProcessing(false)
         }
         else{
 
@@ -49,13 +53,16 @@ const RegisterForm = () =>{
                 const resp = await register(payload)
                 closeForm()
                 clearForm()
+                setProcessing(false)
             }
             catch (err){
                 if (err.response && err.response.status === 400){
                     setErrorMessage(err.response.data)
+                    setProcessing(false)
                 }
                 else{
                     setErrorMessage("Wystąpił błąd. Spróbuj ponownie.");
+                    setProcessing(false)
                 }
             }
         }
@@ -121,7 +128,7 @@ const RegisterForm = () =>{
                     onChange={(e)=>setConfirmPassword(e.target.value)}
                     required={true}
                 />
-                <button className="register_form_btn__submit">Załóż konto</button>
+                <button className="register_form_btn__submit">{!processing ? "Załóż konto" :"Rejestracja..."}</button>
                 <p>Masz konto? <button className="register_form_btn_login" type="button" onClick={()=>{showLoginForm()}}>Zaloguj się</button></p>
             </form>
         </div>
