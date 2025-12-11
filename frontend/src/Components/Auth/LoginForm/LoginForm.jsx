@@ -6,6 +6,7 @@ import {useAuthContext} from "../../../context/Auth.jsx";
 const LoginForm = () =>{
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
+    const [processing,setProcessing] = useState(false)
 
     const [errorMessage,setErrorMessage] = useState("")
 
@@ -15,19 +16,23 @@ const LoginForm = () =>{
 
     const handleLogin = async (e) =>{
         e.preventDefault()
+        setProcessing(true)
         setErrorMessage("")
         try{
             const resp = await login(email,password)
             setEmail("")
             setPassword("")
             closeForm()
+            setProcessing(false)
         }
         catch (err){
             if (err.response?.status === 400 || err.response?.status === 401){
                 setErrorMessage("Niepoprawny e-mail lub hasło.")
+                setProcessing(false)
             }
             else{
                 setErrorMessage("Wystąpił błąd serwera, spróbuj ponownie.")
+                setProcessing(false)
             }
         }
 
@@ -59,7 +64,7 @@ const LoginForm = () =>{
                     onChange={(e)=>setPassword(e.target.value)}
                     required={true}
                 />
-                <button className="login_form_btn__submit">Zaloguj się</button>
+                <button className="login_form_btn__submit">{!processing ? "Zaloguj się" : "Logowanie..."}</button>
                 <p>Nie masz konta? <button className="login_form_btn_register" type="button" onClick={()=>{showRegisterForm()}}>Zarejestruj się</button></p>
             </form>
         </div>
