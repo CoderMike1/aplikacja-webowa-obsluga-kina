@@ -18,6 +18,7 @@
 /* HEADER Z PLAKATEM, INFO I PRAWĄ STRONĄ */
 
 .checkout__inner_header {
+    position:relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,7 +76,10 @@
 /* ŚRODEK Z PROGRESS BAREM */
 
 .checkout_inner_header_middle {
-    margin-right:5vw
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }
 
 .checkout_progress {
@@ -83,6 +87,7 @@
     max-width: 600px;
     margin: 0 auto 24px;
     font-family: 'Inter', sans-serif;
+    display: inline-block;
 }
 
 .checkout_progress_labels {
