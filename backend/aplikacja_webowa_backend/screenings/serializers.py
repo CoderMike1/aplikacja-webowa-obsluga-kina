@@ -98,6 +98,8 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
     # Jeśli nie podano published_at, ustaw domyślnie teraz; dopuszczamy też None w payloadzie
     # (wtedy validate_published_at zamieni None na teraz)
     published_at = serializers.DateTimeField(required=False, allow_null=True, default=timezone.now)
+    procjection_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=ProjectionType.objects.all(), source='projection_type', write_only=True, required=False, allow_null=False)
 
     class Meta:
         model = Screening
@@ -120,10 +122,10 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
         allowed_minutes = {0, 10, 20, 30, 40, 50}
         if value.minute not in allowed_minutes or value.second != 0 or value.microsecond != 0:
             raise serializers.ValidationError(
-                "start_time must be aligned to full hour or 10/20/30/40/50 minutes (seconds must be 0)"
+                "Start seansu musi być wyrównany do pełnej godziny lub 10/20/30/40/50 minut (sekundy muszą być równe 0)"
             )
         if value < now:
-            raise serializers.ValidationError("start_time must be in the future")
+            raise serializers.ValidationError("Start seansu musi być w przyszłości")
         return value
     
 
@@ -139,7 +141,7 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
         # Sprawdzaj przeszłość tylko gdy pole rzeczywiście było w payloadzie klienta
         provided_explicitly = isinstance(getattr(self, 'initial_data', None), dict) and 'published_at' in self.initial_data and self.initial_data.get('published_at') is not None
         if provided_explicitly and value < now:
-            raise serializers.ValidationError("published_at must be in the present or future")
+            raise serializers.ValidationError("Publikacja seansu musi być w teraźniejszości lub przyszłości")
         return value
 
     def validate(self, attrs):
@@ -158,14 +160,14 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
             movie_premiere = movie.cinema_release_date
             if start_time.date() < movie_premiere:
                 raise serializers.ValidationError({
-                    'start_time': 'Screening cannot start before the movie cinema_release_date.'
+                    'start_time': 'Seans nie może się rozpocząć przed datą premiery kinowej filmu.'
                 })
 
         # start_time nie może być wcześniejszy niż published_at (logika: nie publikujemy seansu "po fakcie")
         if published_at is not None and start_time is not None:
             if start_time < published_at:
                 raise serializers.ValidationError({
-                    'start_time': 'Screening start_time cannot be earlier than published_at.'
+                    'start_time': 'Start seansu nie może być wcześniejszy niż data publikacji.'
                 })
         # Sprawdzenie tylko gdy mamy komplet kluczowych danych
         if auditorium is not None and start_time is not None:
@@ -179,7 +181,7 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
             if dup_qs.exists():
                 raise serializers.ValidationError({
                     'non_field_errors': [
-                        'A screening in this auditorium at the given start_time already exists.'
+                        'Seans o podanym czasie w tej sali już istnieje.'
                     ]
                 })
 
@@ -204,7 +206,7 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                     if prev_end + buffer > start_time:
                         raise serializers.ValidationError({
                             'non_field_errors': [
-                                'Start time is too early: must be at least 30 minutes after the previous screening ends.'
+                                'Start seansu jest za wczesny: musi być co najmniej 30 minut po zakończeniu poprzedniego seansu.'
                             ]
                         })
 
@@ -222,7 +224,7 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                     if proposed_end + buffer > nxt.start_time:
                         raise serializers.ValidationError({
                             'non_field_errors': [
-                                'Screening would overlap or leave insufficient gap before the next screening (need 30 minutes buffer).'
+                                'Seans nachodzi na poprzedni lub nie pozostawia wystarczającej przerwy przed następnym seansem (wymagany bufor 30 minut).'
                             ]
                         })
         return attrs

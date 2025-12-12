@@ -14,7 +14,9 @@
     color: var(--text);
     font-family: 'Inter', sans-serif, serif;
 }
-
+input {
+    font-family: 'Inter', sans-serif, serif;
+}
 .admin__header {
     display: flex;
     align-items: center;
@@ -42,6 +44,7 @@
     border: 1px solid rgba(239, 68, 68, .25);
     padding: .85rem 1rem;
     border-radius: .6rem;
+    margin: 6px;
 }
 
 .admin__loading {

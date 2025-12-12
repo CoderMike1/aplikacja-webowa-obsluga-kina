@@ -78,7 +78,7 @@ class ScreeningDetailView(APIView):
         try:
             instance = serializer.save()
         except IntegrityError:
-            return Response({"non_field_errors": ["A screening in this auditorium at the given start_time already exists."]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"non_field_errors": ["Seans w tym seansie o podanym czasie rozpoczęcia już istnieje."]}, status=status.HTTP_400_BAD_REQUEST)
         read = ScreeningReadSerializer(instance, context={'request': request})
         return Response(read.data, status=status.HTTP_200_OK)
 

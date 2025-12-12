@@ -17,6 +17,7 @@ import Checkout from "./Components/Pages/CheckoutPages/Checkout.jsx";
 import Success from "./Components/Pages/CheckoutPages/Success/Success.jsx";
 import ProfilePage from "./Components/Pages/ProfilePages/ProfilePage.jsx";
 import { ProfileProvider } from './context/ProfileContext.jsx';
+import { CloudinaryProvider } from './context/CloudinaryContext.jsx';
 import AdminPage from "./Components/Pages/AdminPages/AdminPage.jsx";
 import ScreeningsPage from "./Components/Pages/AdminPages/ScreeningsPage/ScreeningsPage.jsx";
 const router = createBrowserRouter([
@@ -31,9 +32,8 @@ const router = createBrowserRouter([
       { path: '/filmy/:movieID', element: <MovieDetailsPage /> },
       { path: "/checkout", element: <Checkout /> },
       { path: '/success', element: <Success /> },
-      { path: '/profil', element: <ProfileProvider><ProfilePage /></ProfileProvider> },
-      { path: '/panel-pracownika', element: <AdminPage /> },
-      { path: '/panel-pracownika/seanse', element: <ScreeningsPage /> }
+      { path: '/profil', element: <CloudinaryProvider><ProfileProvider><ProfilePage /></ProfileProvider></CloudinaryProvider> },
+      { path: '/panel-pracownika', element: <CloudinaryProvider><AdminPage /></CloudinaryProvider> },
     ]
   }
 ])

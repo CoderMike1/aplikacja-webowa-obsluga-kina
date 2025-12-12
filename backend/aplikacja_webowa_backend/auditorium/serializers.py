@@ -12,7 +12,7 @@ class AuditoriumReadSerializer(serializers.ModelSerializer):
 class AuditoriumWriteSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         max_length=255,
-        validators=[UniqueValidator(queryset=Auditorium.objects.all(), message="Auditorium with this name already exists.")]
+        validators=[UniqueValidator(queryset=Auditorium.objects.all(), message="Sala o tej nazwie już istnieje.")],
     )
 
     class Meta:
@@ -46,7 +46,7 @@ class SeatWriteSerializer(serializers.ModelSerializer):
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                raise serializers.ValidationError({'non_field_errors': ['Seat with given row_number and seat_number already exists in this auditorium.']})
+                raise serializers.ValidationError({'non_field_errors': ['Miejsce o tym numerze w tej sali już istnieje.']})
         return attrs
 
     

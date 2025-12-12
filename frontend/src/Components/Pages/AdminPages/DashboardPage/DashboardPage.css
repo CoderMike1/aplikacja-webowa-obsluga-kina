@@ -1,0 +1,32 @@
+/* Simple responsive grid for dashboard */
+button:hover {
+    cursor: pointer;
+
+
+}
+
+.dashboard__container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dashboard__grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 12px;
+}
+
+.dashboard__col {
+    grid-column: span 6;
+}
+
+.dashboard__col--full {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+    .dashboard__col {
+        grid-column: 1 / -1;
+    }
+}

@@ -1,17 +1,28 @@
 import './AdminPage.css'
 import { useAuthContext } from '../../../context/Auth.jsx'
+import { useEffect } from 'react'
+import { useCloudinaryContext } from '../../../context/CloudinaryContext.jsx'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import DashboardPage from './DashboardPage/DashboardPage.jsx'
 import ScreeningsPage from './ScreeningsPage/ScreeningsPage.jsx'
+import MoviesPage from './MoviesPage/MoviesPage.jsx'
 
 const AdminPage = () => {
     const { user } = useAuthContext()
+    const { loadCloudinaryConfig } = useCloudinaryContext() || {}
     const [tab, setTab] = useState('dashboard')
 
     if (!user || !user.is_staff) {
         return <Navigate to="/" replace />
     }
+
+    useEffect(() => {
+        // Preload Cloudinary config for admin pages using uploads (e.g., MoviesPage)
+        if (typeof loadCloudinaryConfig === 'function') {
+            loadCloudinaryConfig().catch(() => { })
+        }
+    }, [])
 
     return (
         <div className="admin__container">
@@ -50,8 +61,7 @@ const AdminPage = () => {
             {tab === 'filmy' && (
                 <div className="admin__cards">
                     <div className="admin__card">
-                        <h3>Filmy</h3>
-                        <p>Filmy</p>
+                        <MoviesPage />
                     </div>
                 </div>
             )}

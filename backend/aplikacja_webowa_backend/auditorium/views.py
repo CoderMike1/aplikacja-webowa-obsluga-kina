@@ -46,7 +46,7 @@ class AuditoriumDetailAPIView(APIView):
         try:
             auditorium = Auditorium.objects.get(pk=pk)
         except Auditorium.DoesNotExist:
-            return Response({'detail': 'Auditorium not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Sala nie została znaleziona.'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = AuditoriumWriteSerializer(auditorium, data=request.data, partial=partial)
         if not serializer.is_valid():
@@ -59,7 +59,7 @@ class AuditoriumDetailAPIView(APIView):
         try:
             auditorium = Auditorium.objects.get(pk=pk)
         except Auditorium.DoesNotExist:
-            return Response({'detail': 'Auditorium not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Sala nie została znaleziona.'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = AuditoriumReadSerializer(auditorium)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -110,7 +110,7 @@ class SeatDetailAPIView(APIView):
         try:
             seat = Seat.objects.select_related('auditorium').get(pk=pk)
         except Seat.DoesNotExist:
-            return Response({'detail': 'Seat not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Miejsce nie zostało znalezione.'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = SeatWriteSerializer(seat, data=request.data, partial=partial)
         if not serializer.is_valid():
@@ -123,7 +123,7 @@ class SeatDetailAPIView(APIView):
         try:
             seat = Seat.objects.select_related('auditorium').get(pk=pk)
         except Seat.DoesNotExist:
-            return Response({'detail': 'Seat not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Miejsce nie zostało znalezione.'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = SeatReadSerializer(seat)
         return Response(serializer.data, status=status.HTTP_200_OK)

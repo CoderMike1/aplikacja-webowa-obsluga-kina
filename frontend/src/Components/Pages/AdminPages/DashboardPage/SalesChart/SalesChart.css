@@ -1,14 +1,15 @@
 .saleschart__container {
-  height: 360px;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
+  height: 360px;
   background: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: stretch;
   justify-content: center;
   color: #111827;
   font-family: 'Inter', sans-serif, serif;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .saleschart__inner {
@@ -25,6 +26,28 @@
   margin-bottom: 8px;
 }
 
+.saleschart__controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto
+}
+
+.saleschart__btn {
+  height: 28px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 0 8px;
+  color: #111827;
+  font-size: 12px
+}
+
+.saleschart__btn.is-active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff
+}
+
 .saleschart__title {
   margin: 0;
   font-size: 1.1rem;
@@ -38,15 +61,18 @@
   font-size: 0.95rem;
   color: #374151;
 }
-.saleschart__stats strong { color: #111827; }
+
+.saleschart__stats strong {
+  color: #111827;
+}
 
 .saleschart__bars {
   display: grid;
-  grid-template-columns: repeat(30, 1fr);
   gap: 2px;
   align-items: end;
   height: 260px;
   position: relative;
+  padding-bottom: 20px;
   background-image: linear-gradient(to top, transparent 0, transparent 95%, rgba(229, 231, 235, 0.7) 95%, rgba(229, 231, 235, 0.7) 100%);
   background-size: 100% 20%;
   background-repeat: repeat-y;
@@ -57,7 +83,11 @@
   border-radius: 3px;
   transition: filter .12s ease, transform .12s ease;
 }
-.saleschart__bar.is-hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+.saleschart__bar.is-hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
 
 .saleschart__yaxis {
   position: absolute;
@@ -73,16 +103,40 @@
   color: #6b7280;
 }
 
+.saleschart__hoverlayer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  gap: 2px;
+  align-items: stretch;
+}
+
+.saleschart__hoverzone {
+  cursor: default;
+  background: transparent;
+}
+
 .saleschart__axis {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   font-size: 12px;
   color: #6b7280;
   margin-top: 8px;
+  padding: 0 8px;
 }
 
 .saleschart__axis_label {
   white-space: nowrap;
+  transform: rotate(-35deg);
+  transform-origin: left top;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+.saleschart__axis_spacer {
+  visibility: hidden;
 }
 
 .saleschart__tooltip {
@@ -97,8 +151,14 @@
   box-shadow: 0 6px 12px rgba(59, 130, 246, 0.12);
   pointer-events: none;
 }
-.saleschart__tooltip_date { font-weight: 600; }
-.saleschart__tooltip_value { font-size: 0.95rem; }
+
+.saleschart__tooltip_date {
+  font-weight: 600;
+}
+
+.saleschart__tooltip_value {
+  font-size: 0.95rem;
+}
 
 .saleschart__empty {
   display: flex;

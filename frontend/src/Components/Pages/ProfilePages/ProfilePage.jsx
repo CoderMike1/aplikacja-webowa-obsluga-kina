@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import './ProfilePage.css'
 import { useAuthContext } from '../../../context/Auth'
 import { useProfileContext } from '../../../context/ProfileContext'
+import { useCloudinaryContext } from '../../../context/CloudinaryContext.jsx'
 import defaultAvatar from '../../../assets/default-avatar.png'
 import Details from './Details/Details'
 import Tickets from './Tickets/Tickets'
@@ -22,7 +23,8 @@ const ProfilePage = () => {
             <div className="profile_container"><div className="profile_card"><p>Ładowanie profilu…</p></div></div>
         )
     }
-    const { profile, loading: loadingProfile, saving, error, setError, updateProfile, uploadAvatarUnsigned, loadProfile } = profileCtx
+    const { profile, loading: loadingProfile, saving, error, setError, updateProfile, loadProfile } = profileCtx
+    const cloudinary = useCloudinaryContext()
     const fileInputRef = useRef(null)
     const [tab, setTab] = useState('dane')
     const [editingUsername, setEditingUsername] = useState(false)
@@ -105,8 +107,11 @@ const ProfilePage = () => {
 
     const handleAvatarUpload = async (file) => {
         try {
-            await uploadAvatarUnsigned(file)
+            if (!cloudinary) return
+            const url = await cloudinary.uploadImageUnsigned(file)
+            await updateProfile({ avatar: url })
         } catch (e) {
+            // error displayed via contexts
         } finally {
             if (fileInputRef.current) fileInputRef.current.value = ''
         }

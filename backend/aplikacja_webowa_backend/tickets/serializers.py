@@ -29,7 +29,7 @@ class InstantPurchaseSerializer(serializers.Serializer):
         try:
             screening = Screening.objects.get(id=data["screening_id"])
         except Screening.DoesNotExist:
-            raise serializers.ValidationError("Screening not found")
+            raise serializers.ValidationError("Seans nie istnieje")
 
         data["screening"] = screening
 
@@ -37,7 +37,7 @@ class InstantPurchaseSerializer(serializers.Serializer):
             try:
                 ticket_type = TicketType.objects.get(id=item["ticket_type_id"])
             except TicketType.DoesNotExist:
-                raise serializers.ValidationError("TicketType not found")
+                raise serializers.ValidationError("Typ biletu nie istnieje")
 
             item["ticket_type"] = ticket_type
             seat_objs = []
@@ -48,18 +48,18 @@ class InstantPurchaseSerializer(serializers.Serializer):
                     row_number=s["row_number"]
                 )
                 if not row_seats.exists():
-                    raise serializers.ValidationError(f"Row {s['row_number']} does not exist")
+                    raise serializers.ValidationError(f"Rząd {s['row_number']} nie istnieje")
 
                 try:
                     seat = row_seats.get(seat_number=s["seat_number"])
                 except Seat.DoesNotExist:
                     raise serializers.ValidationError(
-                        f"Seat {s['row_number']}-{s['seat_number']} does not exist"
+                        f"Miejsce {s['row_number']}-{s['seat_number']} nie istnieje"
                     )
 
                 if Ticket.objects.filter(screening=screening, seats=seat).exists():
                     raise serializers.ValidationError(
-                        f"Seat {s['row_number']}-{s['seat_number']} is already sold"
+                        f"Miejsce {s['row_number']}-{s['seat_number']} jest już sprzedane."
                     )
 
                 seat_objs.append(seat)

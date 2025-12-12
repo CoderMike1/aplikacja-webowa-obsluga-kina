@@ -1,0 +1,55 @@
+.topmovies__container {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px
+}
+
+.topmovies__header {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px
+}
+
+.topmovies__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.topmovies__item {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.topmovies__rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #3730a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700
+}
+
+.topmovies__meta {
+    display: flex;
+    flex-direction: column
+}
+
+.topmovies__title {
+    font-weight: 600;
+    color: #111827
+}
+
+.topmovies__stats {
+    font-size: 12px;
+    color: #6b7280
+}
+
+.topmovies__empty {
+    color: #6b7280
+}

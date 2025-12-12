@@ -1,0 +1,53 @@
+.dashfilters__container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+    margin-bottom: 12px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px
+}
+
+.dashfilters__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px
+}
+
+.dashfilters__group label {
+    font-size: 12px;
+    color: #6b7280
+}
+
+.dashfilters__group input,
+.dashfilters__group select {
+    height: 32px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0 8px;
+    background: #fff;
+    color: #111827
+}
+
+.dashfilters__actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto
+}
+
+.dashfilters__btn {
+    height: 32px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 0 10px;
+    color: #111827
+}
+
+.dashfilters__btn--primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff
+}

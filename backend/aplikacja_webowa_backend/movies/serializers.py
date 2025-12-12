@@ -23,7 +23,8 @@ class MovieWriteSerializer(serializers.ModelSerializer):
         queryset=Genre.objects.all(), source='genres', many=True, write_only=True
     )
     cinema_release_date = serializers.DateField(required=False)
-    duration_minutes = serializers.IntegerField(min_value=1)
+    duration_minutes = serializers.IntegerField(min_value=1, max_value=500)
+    description = serializers.CharField(max_length=500)
 
     class Meta:
         model = Movie
@@ -44,7 +45,7 @@ class MovieWriteSerializer(serializers.ModelSerializer):
 
         if release_date and cinema_release_date and release_date > cinema_release_date:
             raise serializers.ValidationError({
-                'cinema_release_date': 'cinema_release_date must be greater than or equal to release_date.'
+                'cinema_release_date': 'Premiera kinowa nie może być wcześniejsza niż data wydania filmu.'
             })
 
         return attrs

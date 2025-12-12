@@ -62,7 +62,7 @@ class LoginView(APIView):
         user = authenticate(request, username=username, password=password)
 
         if user is None:
-            return Response({"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Nieprawidłowe dane uwierzytelniające."}, status=status.HTTP_401_UNAUTHORIZED)
 
         update_last_login(None, user)
         refresh = RefreshToken.for_user(user)
@@ -98,21 +98,21 @@ class RefreshTokenView(APIView):
         refresh_token = request.COOKIES.get("refresh_token")
 
         if refresh_token is None:
-            return Response({"detail": "Refresh token not provided."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Token odświeżania nie został dostarczony."}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             refresh = RefreshToken(refresh_token)
             access_token = str(refresh.access_token)
             return Response({"access": access_token}, status=status.HTTP_200_OK)
         except Exception:
-            return Response({"detail": "Invalid or expired refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Nieprawidłowy lub wygasły token odświeżania."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        response = Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+        response = Response({"message": "Wylogowano pomyślnie."}, status=status.HTTP_200_OK)
         response.delete_cookie("refresh_token")
         return response
 
@@ -159,7 +159,7 @@ class ChangePasswordView(APIView):
         user = request.user
         user.set_password(new_password)
         user.save(update_fields=["password"])
-        return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response({"message": "Hasło zostało pomyślnie zmienione."}, status=status.HTTP_200_OK)
 
 
 class MyTicketsView(APIView):

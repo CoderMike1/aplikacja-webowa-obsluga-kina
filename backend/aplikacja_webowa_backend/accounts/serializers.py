@@ -29,12 +29,12 @@ class RegisterSerializer(serializers.Serializer):
         username = attrs.get('username')
         phone = attrs.get('phone')
         if email and User.objects.filter(email=email).exists():
-            raise serializers.ValidationError({'email': 'User with this email already exists.'})
+            raise serializers.ValidationError({'email': 'Użytkownik z tym adresem email już istnieje.'})
         if username and User.objects.filter(username=username).exists():
-            raise serializers.ValidationError({'username': 'User with this username already exists.'})
+            raise serializers.ValidationError({'username': 'Użytkownik z tą nazwą już istnieje.'})
         if phone:
             if User.objects.filter(phone=phone).exists():
-                raise serializers.ValidationError({'phone': 'User with this phone already exists.'})
+                raise serializers.ValidationError({'phone': 'Użytkownik z tym numerem telefonu już istnieje.'})
         return attrs
 
     def create(self, validated_data):
@@ -58,7 +58,7 @@ class LoginSerializer(serializers.Serializer):
         username = attrs.get('username')
         email = attrs.get('email')
         if not username and not email:
-            raise serializers.ValidationError('Provide username or email.')
+            raise serializers.ValidationError('Wproś nazwę użytkownika lub email.')
         if not username and email:
             User = get_user_model()
             try:
@@ -82,11 +82,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(get_user_model().objects.all(), message="User with this email already exists.")],
+        validators=[UniqueValidator(get_user_model().objects.all(), message="Użytkownik z tym adresem email już istnieje.")],
     )
     username = serializers.CharField(
         required=True,
-        validators=[UniqueValidator(get_user_model().objects.all(), message="User with this username already exists.")],
+        validators=[UniqueValidator(get_user_model().objects.all(), message="Użytkownik z tą nazwą już istnieje.")],
     )
 
     class Meta:
@@ -113,7 +113,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if user and user.email == value:
             return value
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("User with this email already exists.")
+            raise serializers.ValidationError("Użytkownik z tym adresem email już istnieje.")
         return value
 
     def validate_username(self, value):
@@ -122,7 +122,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if user and user.username == value:
             return value
         if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("User with this username already exists.")
+            raise serializers.ValidationError("Użytkownik z tą nazwą już istnieje.")
         return value
 
     def validate_avatar(self, value):
@@ -131,14 +131,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         try:
             parsed = urlparse(value)
         except Exception:
-            raise serializers.ValidationError("Invalid avatar URL.")
+            raise serializers.ValidationError("Nieprawidłowy format URL.")
 
         allowed_domain = getattr(settings, "CLOUDINARY_ALLOWED_DOMAIN", "res.cloudinary.com")
         if not parsed.scheme.startswith("http") or not parsed.netloc:
-            raise serializers.ValidationError("Avatar must be a valid http(s) URL.")
+            raise serializers.ValidationError("Avatar musi być prawidłowym adresem URL http(s).")
         hostname = parsed.hostname or ""
         if not (hostname == allowed_domain or hostname.endswith("." + allowed_domain)):
-            raise serializers.ValidationError("Avatar must be hosted on an allowed domain.")
+            raise serializers.ValidationError("Avatar musi być z dozwolonej domeny.")
         return value
 
 
@@ -149,7 +149,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     def validate(self, attrs):
         user = self.context["request"].user
         if not user.check_password(attrs["current_password"]):
-            raise serializers.ValidationError({"current_password": "Current password is incorrect."})
+            raise serializers.ValidationError({"current_password": "Hasło jest niepoprawne."})
         validate_password(attrs["new_password"], user)
         return attrs
 

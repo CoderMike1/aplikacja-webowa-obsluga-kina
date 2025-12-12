@@ -1,0 +1,25 @@
+.summary__container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px
+}
+
+.summary__card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px
+}
+
+.summary__label {
+    font-size: 12px;
+    color: #6b7280
+}
+
+.summary__value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 6px
+}

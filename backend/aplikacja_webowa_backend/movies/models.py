@@ -16,7 +16,6 @@ class Movie(models.Model):
     original_title = models.CharField(max_length=255)
     description = models.TextField(max_length=500)
     release_date = models.DateField()
-    # Ustawiana automatycznie na release_date jeśli brak wartości w momencie zapisu
     cinema_release_date = models.DateField()
     duration_minutes = models.PositiveIntegerField(help_text="Runtime in minutes")
     genres = models.ManyToManyField(Genre, related_name='movies')
@@ -25,19 +24,6 @@ class Movie(models.Model):
     is_special_event = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    @property
-    def category(self):
-        today = timezone.now().date()
-
-        if self.is_special_event:
-            return "special_event"
-        elif self.cinema_release_date > today:
-            return "upcoming"
-        elif self.cinema_release_date <= today <= self.cinema_release_date + timedelta(days=30):
-            return "now_playing"
-        else: 
-            return "archival"
 
     class Meta:
         ordering = ['-cinema_release_date', 'title']

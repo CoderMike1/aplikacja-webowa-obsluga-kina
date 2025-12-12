@@ -221,8 +221,17 @@ const ScreeningsPage = () => {
                     <label>Typ projekcji
                         <input type="text" value={filters.projection_type} onChange={(e) => setFilters(f => ({ ...f, projection_type: e.target.value }))} placeholder="2D" />
                     </label>
-                    <label>Numer sali
-                        <input type="number" value={filters.auditorium_id} onChange={(e) => setFilters(f => ({ ...f, auditorium_id: e.target.value }))} placeholder="3" />
+                    <label>Sala
+                        <select
+                            value={filters.auditorium_id}
+                            onFocus={fetchAuditoriums}
+                            onChange={(e) => setFilters(f => ({ ...f, auditorium_id: e.target.value }))}
+                        >
+                            <option value="">Wszystkie</option>
+                            {auditoriumOptions.map(a => (
+                                <option key={a.id} value={a.id}>{a.name || `Sala ${a.id}`}</option>
+                            ))}
+                        </select>
                     </label>
                 </div>
                 <div className="form_row">

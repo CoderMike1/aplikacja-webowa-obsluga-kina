@@ -50,7 +50,7 @@ class TicketPDFView(APIView):
         try:
             ticket = self.get_ticket_with_retry(order_number)
         except Ticket.DoesNotExist:
-            return HttpResponse(f"Ticket {order_number} not found", status=404)
+            return HttpResponse(f"Bilet o numerze {order_number} nie został znaleziony", status=404)
 
         seats = ticket.seats.all()
         screening = ticket.screening
@@ -162,14 +162,14 @@ class PromotionListView(APIView):
                 screening = Screening.objects.get(id=screening_id)
                 promotions = [p for p in promotions if not p.screening or p.screening == screening]
             except Screening.DoesNotExist:
-                return Response({"error": "Screening not found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Seans nie istnieje"}, status=status.HTTP_404_NOT_FOUND)
 
         if ticket_type_id:
             try:
                 ticket_type = TicketType.objects.get(id=ticket_type_id)
                 promotions = [p for p in promotions if not p.ticket_type or p.ticket_type == ticket_type]
             except TicketType.DoesNotExist:
-                return Response({"error": "TicketType not found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Typ biletu nie istnieje"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = PromotionRuleSerializer(promotions, many=True)
         return Response(serializer.data)
