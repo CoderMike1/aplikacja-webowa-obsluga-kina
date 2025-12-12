@@ -76,7 +76,7 @@ const DashboardPage = () => {
             t.payment_status ?? '',
             t.screening_id ?? ''
         ])
-        const csv = [headers.join(','), ...rows.map(r => r.map((v, i) => i === 1 ? `"${v}"` : v).join(','))].join('\n')
+        const csv = [headers.join(';'), ...rows.map(r => r.map((v, i) => i === 1 ? `"${v}"` : v).join(';'))].join('\n')
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
