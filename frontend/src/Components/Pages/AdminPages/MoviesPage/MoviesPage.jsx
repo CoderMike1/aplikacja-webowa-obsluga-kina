@@ -291,6 +291,12 @@ const MoviesPage = () => {
               <input type="number" min="1" value={addForm.duration_minutes} onChange={(e) => setAddForm(f => ({ ...f, duration_minutes: e.target.value }))} required />
               {Array.isArray(addErrors?.duration_minutes) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.duration_minutes.join(' ')}</div>}
             </label>
+            <label>Specjalny
+              <select value={addForm.is_special_event ? 'true' : 'false'} onChange={(e) => setAddForm(f => ({ ...f, is_special_event: e.target.value === 'true' }))}>
+                <option value="false">Nie</option>
+                <option value="true">Tak</option>
+              </select>
+            </label>
           </div>
           <div className="form_row">
             <label>Data premiery
@@ -302,39 +308,40 @@ const MoviesPage = () => {
               {Array.isArray(addErrors?.cinema_release_date) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.cinema_release_date.join(' ')}</div>}
             </label>
             <div className="form_field">
-              <span>Plakat – kliknij miniaturę aby wgrać</span>
-              <div className="btn_row" style={{ gap: '12px' }} onClick={(ev) => ev.stopPropagation()}>
-                {(addPosterPreview || addForm.poster_path) && (
-                  <img
-                    src={addPosterPreview || addForm.poster_path}
-                    alt="poster preview"
-                    className="movies__poster"
-                    style={{ cursor: 'pointer' }}
-                    onClick={(ev) => { ev.stopPropagation(); addPosterInputRef.current && addPosterInputRef.current.click() }}
-                  />
-                )}
-                {!addPosterPreview && !addForm.poster_path && (
-                  <button type="button" className="btn" onClick={(ev) => { ev.stopPropagation(); addPosterInputRef.current && addPosterInputRef.current.click() }}>Wybierz plik</button>
-                )}
-                <input type="file" accept="image/*" ref={addPosterInputRef} onChange={onAddPosterChange} style={{ display: 'none' }} />
+              <span>Plakat</span>
+              <div className="movies__poster_edit" onClick={(ev) => ev.stopPropagation()}>
+                <div>
+                  {(addPosterPreview || addForm.poster_path) ? (
+                    <img
+                      src={addPosterPreview || addForm.poster_path}
+                      alt="poster preview"
+                      className="movies__poster"
+                      style={{ cursor: 'pointer' }}
+                      onClick={(ev) => { ev.stopPropagation(); addPosterInputRef.current && addPosterInputRef.current.click() }}
+                    />
+                  ) : (
+                    <button type="button" className="btn" onClick={(ev) => { ev.stopPropagation(); addPosterInputRef.current && addPosterInputRef.current.click() }}>Wybierz plik</button>
+                  )}
+                  <input type="file" accept="image/*" ref={addPosterInputRef} onChange={onAddPosterChange} style={{ display: 'none' }} />
+                </div>
+                <div className="movies__poster_tools">
+                  <div className="movies__poster_url">
+                    <label style={{ color: 'var(--text)' }}>Link do plakatu (URL)</label>
+                    <input type="text" value={addForm.poster_path} onChange={(e) => setAddForm(f => ({ ...f, poster_path: e.target.value }))} placeholder="Wklej adres URL plakatu" />
+                    <div className="movies__poster_help">Możesz wgrać plik lub podać bezpośredni link.</div>
+                  </div>
+                  {Array.isArray(addErrors?.poster_path) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.poster_path.join(' ')}</div>}
+                </div>
               </div>
-              <input type="text" value={addForm.poster_path} onChange={(e) => setAddForm(f => ({ ...f, poster_path: e.target.value }))} placeholder="lub wklej URL" />
-              {Array.isArray(addErrors?.poster_path) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.poster_path.join(' ')}</div>}
             </div>
-            <label>Specjalny
-              <select value={addForm.is_special_event ? 'true' : 'false'} onChange={(e) => setAddForm(f => ({ ...f, is_special_event: e.target.value === 'true' }))}>
-                <option value="false">Nie</option>
-                <option value="true">Tak</option>
-              </select>
-            </label>
           </div>
           <div className="form_row">
             <label>Gatunki (ID, po przecinku)
               <input type="text" value={addForm.genre_ids} onChange={(e) => setAddForm(f => ({ ...f, genre_ids: e.target.value }))} placeholder="np. 1,2,3" />
               {Array.isArray(addErrors?.genre_ids) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.genre_ids.join(' ')}</div>}
             </label>
-            <label>Opis
-              <textarea rows="4" value={addForm.description} onChange={(e) => setAddForm(f => ({ ...f, description: e.target.value }))} />
+            <label style={{ gridColumn: '2 / -1' }}>Opis
+              <textarea rows="6" className="movies__description" value={addForm.description} onChange={(e) => setAddForm(f => ({ ...f, description: e.target.value }))} placeholder="Krótki opis filmu, obsada, fabuła…" />
               {Array.isArray(addErrors?.description) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{addErrors.description.join(' ')}</div>}
             </label>
           </div>
@@ -396,6 +403,12 @@ const MoviesPage = () => {
                         <input type="number" min="1" value={editForm.duration_minutes} onChange={(e) => setEditForm(f => ({ ...f, duration_minutes: e.target.value }))} />
                         {Array.isArray(editErrors?.duration_minutes) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.duration_minutes.join(' ')}</div>}
                       </label>
+                      <label>Specjalny
+                        <select value={editForm.is_special_event ? 'true' : 'false'} onChange={(e) => setEditForm(f => ({ ...f, is_special_event: e.target.value === 'true' }))}>
+                          <option value="false">Nie</option>
+                          <option value="true">Tak</option>
+                        </select>
+                      </label>
                     </div>
                     <div className="form_row">
                       <label>Data premiery
@@ -408,45 +421,47 @@ const MoviesPage = () => {
                       </label>
                       <div className="form_field">
                         <span>Plakat</span>
-                        <div className="btn_row" style={{ gap: '12px' }} onClick={(ev) => ev.stopPropagation()}>
-                          {(editForm.poster_path) && (
-                            <img
-                              src={editForm.poster_path}
-                              alt="poster"
-                              className="movies__poster"
-                              style={{ cursor: 'pointer' }}
-                              onClick={(ev) => { ev.stopPropagation(); editPosterInputRef.current && editPosterInputRef.current.click() }}
-                            />
-                          )}
-                          {!editForm.poster_path && (
-                            <button type="button" className="btn" onClick={(ev) => { ev.stopPropagation(); editPosterInputRef.current && editPosterInputRef.current.click() }}>Wybierz plik</button>
-                          )}
-                          <input type="file" accept="image/*" ref={editPosterInputRef} onChange={async (e) => {
-                            const file = e.target.files?.[0]
-                            if (file && uploadImageUnsigned) {
-                              try {
-                                if (typeof loadCloudinaryConfig === 'function') { try { await loadCloudinaryConfig() } catch { } }
-                                const url = await uploadImageUnsigned(file)
-                                setEditForm(f => ({ ...f, poster_path: url }))
-                              } catch (err) {
-                                console.warn('Poster upload failed', err)
+                        <div className="movies__poster_edit" onClick={(ev) => ev.stopPropagation()}>
+                          <div>
+                            {editForm.poster_path ? (
+                              <img
+                                src={editForm.poster_path}
+                                alt="poster"
+                                className="movies__poster"
+                                style={{ cursor: 'pointer' }}
+                                onClick={(ev) => { ev.stopPropagation(); editPosterInputRef.current && editPosterInputRef.current.click() }}
+                              />
+                            ) : (
+                              <button type="button" className="btn" onClick={(ev) => { ev.stopPropagation(); editPosterInputRef.current && editPosterInputRef.current.click() }}>Wybierz plik</button>
+                            )}
+                            <input type="file" accept="image/*" ref={editPosterInputRef} onChange={async (e) => {
+                              const file = e.target.files?.[0]
+                              if (file && uploadImageUnsigned) {
+                                try {
+                                  if (typeof loadCloudinaryConfig === 'function') { try { await loadCloudinaryConfig() } catch { } }
+                                  const url = await uploadImageUnsigned(file)
+                                  setEditForm(f => ({ ...f, poster_path: url }))
+                                } catch (err) {
+                                  console.warn('Poster upload failed', err)
+                                }
                               }
-                            }
-                          }} style={{ display: 'none' }} />
+                            }} style={{ display: 'none' }} />
+                          </div>
+                          <div className="movies__poster_tools">
+                            <div className="movies__poster_url">
+                              <label style={{ color: 'var(--text)' }}>Link do plakatu (URL)</label>
+                              <input type="text" value={editForm.poster_path} onChange={(e) => setEditForm(f => ({ ...f, poster_path: e.target.value }))} placeholder="Wklej adres URL plakatu" />
+                              <div className="movies__poster_help">Możesz wgrać plik lub podać bezpośredni link.</div>
+                            </div>
+                            {Array.isArray(editErrors?.poster_path) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.poster_path.join(' ')}</div>}
+                          </div>
                         </div>
-                        <input type="text" value={editForm.poster_path} onChange={(e) => setEditForm(f => ({ ...f, poster_path: e.target.value }))} placeholder="lub wklej URL" />
                         {Array.isArray(editErrors?.poster_path) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.poster_path.join(' ')}</div>}
                       </div>
-                      <label>Specjalny
-                        <select value={editForm.is_special_event ? 'true' : 'false'} onChange={(e) => setEditForm(f => ({ ...f, is_special_event: e.target.value === 'true' }))}>
-                          <option value="false">Nie</option>
-                          <option value="true">Tak</option>
-                        </select>
-                      </label>
                     </div>
                     <div className="form_row">
                       <label>Opis
-                        <textarea rows="4" value={editForm.description} onChange={(e) => setEditForm(f => ({ ...f, description: e.target.value }))} />
+                        <textarea rows="6" className="movies__description" value={editForm.description} onChange={(e) => setEditForm(f => ({ ...f, description: e.target.value }))} placeholder="Krótki opis filmu, obsada, fabuła…" />
                         {Array.isArray(editErrors?.description) && <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.description.join(' ')}</div>}
                       </label>
                     </div>

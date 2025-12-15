@@ -122,6 +122,47 @@
     padding: 12px;
 }
 
+/* Avatar/poster edit area */
+.movies__poster_edit {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.movies__poster_edit .movies__poster {
+    width: 84px;
+    height: 120px;
+}
+
+.movies__poster_tools {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.movies__poster_url {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.movies__poster_help {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* Description styling */
+.movies__description {
+    min-height: 96px;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+}
+
 @media (max-width: 900px) {
     .movies__filters .form_row {
         grid-template-columns: repeat(2, minmax(0, 1fr));

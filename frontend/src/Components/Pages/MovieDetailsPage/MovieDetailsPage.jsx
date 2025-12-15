@@ -148,7 +148,7 @@ const MovieDetailsPage = () =>{
                                 {currentScreenings.map((s)=>(
                                     <div className="movie_showtime_item" key={s.id}>
                                         <span>{s.hour_start_time}</span>
-                                        <p>DUBBING {s.projection_type}</p>
+                                        <p>{s.projection_type}</p>
                                         <p>Sala {s.auditorium_name}</p>
                                         <button onClick={()=>handleBuyTicketButton(title,posterURL,directors,s.id,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
                                     </div>

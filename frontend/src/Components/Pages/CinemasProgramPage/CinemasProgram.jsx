@@ -26,8 +26,7 @@ const CinemasProgram = () => {
             const resp = await getScreenings();
 
             const data = resp.data
-
-            const results = data.results;
+            const results = Array.isArray(data.results) ? data.results : data;
 
 
 
@@ -35,7 +34,7 @@ const CinemasProgram = () => {
 
             for (const result of results) {
                 const all_screenings = [];
-                const projection_types = result.projection_types
+                const projection_types = result.projection_types || []
                 for (const projection_type of projection_types) {
                     const screenings_for_projection_type = projection_type.screenings;
                     const projection_type_val = projection_type.projection_type;
@@ -43,7 +42,7 @@ const CinemasProgram = () => {
                         const screening_info = {
                             projection_type: projection_type_val,
                             id: screening.id,
-                            auditorium_name: screening.auditorium.id,
+                            auditorium_name: screening.auditorium?.name ?? screening.auditorium,
                             start_time: screening.start_time,
                             hour_start_time: new Date(screening.start_time).toLocaleTimeString("pl-PL", {
                                 hour: "2-digit",
@@ -54,10 +53,10 @@ const CinemasProgram = () => {
                     }
                 }
                 const item = {
-                    id: result.movie.id,
-                    title: result.movie.title,
-                    directors: result.movie.directors,
-                    img: result.movie.poster_path,
+                    id: result.movie?.id ?? result.id,
+                    title: result.movie?.title ?? result.title,
+                    directors: result.movie?.directors ?? result.directors,
+                    img: result.movie?.poster_path ?? result.poster_path,
                     screenings: all_screenings
                 }
                 items.push(item)
@@ -69,7 +68,7 @@ const CinemasProgram = () => {
 
             localStorage.setItem(SCREENINGS_CACHE_KEY, JSON.stringify({
                 timestamp: Date.now(),
-                screenings: data.results
+                screenings: results
             }))
 
         }

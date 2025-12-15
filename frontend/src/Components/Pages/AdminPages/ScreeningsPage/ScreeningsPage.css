@@ -116,7 +116,7 @@
 }
 
 .screenings__type_title {
-    color: var(--muted);
+    color:#374151;
     font-weight: 600;
     margin: 8px 0;
 }
