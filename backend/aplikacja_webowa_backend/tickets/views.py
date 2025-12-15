@@ -19,9 +19,7 @@ from django.conf import settings
 from django.template.loader import get_template
 import time
 from .filters import TicketFilter
-
-
-
+from .templates.tickets.logo_base64 import LOGO_BASE64
 
 logger = logging.getLogger(__name__)
 
@@ -39,49 +37,74 @@ class TicketPDFView(APIView):
     permission_classes = [AllowAny]
 
     def get_ticket_with_retry(self, order_number, retries=5, delay=0.2):
-        for attempt in range(retries):
-            try:
-                return Ticket.objects.get(order_number=order_number)
-            except Ticket.DoesNotExist:
-                time.sleep(delay)
+        for _ in range(retries):
+            tickets = Ticket.objects.filter(order_number=order_number).prefetch_related('seats', 'type')
+            if tickets.exists():
+                return tickets
+            time.sleep(delay)
         raise Ticket.DoesNotExist
 
     def get(self, request, order_number):
         try:
-            ticket = self.get_ticket_with_retry(order_number)
+            tickets = self.get_ticket_with_retry(order_number)
         except Ticket.DoesNotExist:
-            return HttpResponse(f"Bilet o numerze {order_number} nie został znaleziony", status=404)
+            return HttpResponse(
+                f"Bilety o numerze zamówienia {order_number} nie zostały znalezione",
+                status=404
+            )
 
-        seats = ticket.seats.all()
-        screening = ticket.screening
-        # Generate QR payload: use order number (or replace with verification URL)
-        qr_payload = f"{ticket.order_number}"
+        first_ticket = tickets.first()
+        screening = first_ticket.screening
+
+        qr_payload = f"{order_number}"
         qr_data_url = make_qr_data_url(qr_payload)
 
+        tickets_data = []
+        for t in tickets:
+            for seat in t.seats.all():
+                tickets_data.append({
+                    "ticket_id": t.id,
+                    "row_number": seat.row_number,
+                    "seat_number": seat.seat_number,
+                    "ticket_type": t.type.name,
+                    "total_price": t.total_price,
+                })
+
+
         html_string = render_to_string('tickets/ticket_pdf.html', {
-            'ticket': ticket,
-            'seats': seats,
+            'order_number': order_number,
+            'tickets_data': tickets_data,
             'screening': screening,
-            'request': request,
+            'customer': {
+                'first_name': first_ticket.first_name,
+                'last_name': first_ticket.last_name,
+                'email': first_ticket.email,
+                'phone': first_ticket.phone_number,
+            },
             'MEDIA_URL': settings.MEDIA_URL,
+            'logo_base64': LOGO_BASE64,
             'STATIC_URL': settings.STATIC_URL,
             'qr_data_url': qr_data_url,
+            'request': request,
         })
 
         pdf_buffer = BytesIO()
         pisa_status = pisa.CreatePDF(html_string, dest=pdf_buffer)
 
         if pisa_status.err:
-            logger.error(f'Błąd przy generowaniu PDF dla biletu {ticket.order_number}')
+            logger.error(f'Błąd przy generowaniu PDF dla zamówienia {order_number}')
             return HttpResponse('Błąd przy generowaniu PDF', status=500)
 
         response = HttpResponse(
             pdf_buffer.getvalue(),
             content_type='application/pdf'
         )
-        response['Content-Disposition'] = f'attachment; filename="ticket_{ticket.order_number}.pdf"'
+        response['Content-Disposition'] = (
+            f'attachment; filename="tickets_{order_number}.pdf"'
+        )
 
         return response
+
 
 
 class ScreeningSeatsView(APIView):
