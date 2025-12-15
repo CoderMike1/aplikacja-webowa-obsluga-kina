@@ -6,8 +6,6 @@ const AuthModal = () =>{
 
     const {authFormOpen,authFormMode} = useAuthUI()
 
-    console.log(authFormOpen)
-
     if (!authFormOpen) return null
 
     return authFormMode === 'login' ? <LoginForm/> : <RegisterForm/>

@@ -4,6 +4,8 @@ import MoviePanels from "./MoviePanels/MoviePanels.jsx";
 import './MainPage.css'
 import {useEffect, useState} from "react";
 import {getMovies} from "../../../services/movieService.js";
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
+import {useAuthContext} from "../../../context/Auth.jsx";
 const MainPage = () =>{
 
     const [nowPlayingMovies,setNowPlayingMovies] = useState([])
@@ -12,8 +14,12 @@ const MainPage = () =>{
     const [loading,setLoading] = useState(true)
 
     const CACHE_KEY = "moviesCache";
-    // const CACHE_TTL_MS = 30 * 60 * 1000;
     const CACHE_TTL_MS = 30;
+
+    const {loading:authorizing} = useAuthContext()
+
+
+
     useEffect(() => {
         const loadMovies = async () => {
             const cached = localStorage.getItem(CACHE_KEY);
@@ -56,6 +62,8 @@ const MainPage = () =>{
 
     return (
         <div className="main_page">
+            <p>{authorizing}</p>
+            {(authorizing || loading) && <Spinner/>}
             <NewsSlides />
             {loading ?
             <p className="main_page_loading">Ładowanie danych...</p>

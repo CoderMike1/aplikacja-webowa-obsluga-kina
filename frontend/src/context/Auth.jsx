@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState({})
 
     const isLoggedIn = !!accessToken && !!user;
-    console.log(accessToken)
 
 
     const fetchMe = useCallback(
@@ -135,7 +134,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, login, register, logout, isLoggedIn, refreshAccessToken, getUserDetails, userDetails }}>
+        <AuthContext.Provider value={{ user, accessToken, login, register, logout, isLoggedIn, refreshAccessToken, getUserDetails, userDetails,loading }}>
             {children}
         </AuthContext.Provider>
     )
