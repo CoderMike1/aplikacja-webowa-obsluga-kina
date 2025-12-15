@@ -98,8 +98,6 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
     # Jeśli nie podano published_at, ustaw domyślnie teraz; dopuszczamy też None w payloadzie
     # (wtedy validate_published_at zamieni None na teraz)
     published_at = serializers.DateTimeField(required=False, allow_null=True, default=timezone.now)
-    procjection_type_id = serializers.PrimaryKeyRelatedField(
-        queryset=ProjectionType.objects.all(), source='projection_type', write_only=True, required=False, allow_null=False)
 
     class Meta:
         model = Screening

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Bilety {{ order_number }}</title>
     <style>
         @font-face {
             font-family: "DejaVuSans";
-            src: url("{{ dejavu_path }}") format("truetype");
+            src: url("{{ dejavu_sans_abs_url }}") format("truetype");
         }
 
         body {
@@ -15,7 +17,6 @@
         }
 
         .page {
-            border: 2px solid #000;
             padding: 16px;
             margin-bottom: 20px;
         }
@@ -25,7 +26,7 @@
             margin-bottom: 12px;
         }
 
-        .logo img {
+        .page img {
             width: 140px;
             margin-bottom: 6px;
         }
@@ -57,7 +58,8 @@
             margin-top: 8px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #000;
             padding: 6px;
             text-align: center;
@@ -66,7 +68,6 @@
 
         .qr {
             text-align: center;
-            margin-top: 12px;
         }
 
         .qr img {
@@ -76,62 +77,75 @@
 
         .footer {
             text-align: center;
-            margin-top: 12px;
             font-size: 11px;
+            line-height: 1.2;
+        }
+
+        .footer p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .qrfooter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="page">
-
-    <div class="header">
-        <div class="logo">
+    <div class="page">
+        <div class="header">
             <img src="data:image/png;base64,{{ logo_base64 }}" />
+            <h1>Last Kino</h1>
+            <h2>Zamówienie: {{ order_number }}</h2>
         </div>
-        <h1>Last Kino</h1>
-        <h2>Zamówienie: {{ order_number }}</h2>
+
+        <div class="info">
+            <p><strong>Imię i nazwisko:</strong> {{ customer.first_name }} {{ customer.last_name }}</p>
+            <p><strong>Email:</strong> {{ customer.email }}</p>
+            <p><strong>Film:</strong> {{ screening.movie.title }}</p>
+            <p><strong>Start seansu:</strong> {{ screening.start_time|date:"d.m.Y H:i" }}</p>
+            <p><strong>Sala:</strong> {{ screening.auditorium.name }}</p>
+        </div>
+
+        <h3>Twoje miejsca:</h3>
+        <table>
+            <tr>
+                <th>Bilet ID</th>
+                <th>Rząd</th>
+                <th>Miejsce</th>
+                <th>Rodzaj biletu</th>
+                <th>Cena</th>
+            </tr>
+            {% for item in tickets_data %}
+            <tr>
+                <td>{{ item.ticket_id }}</td>
+                <td>{{ item.row_number }}</td>
+                <td>{{ item.seat_number }}</td>
+                <td>{{ item.ticket_type }}</td>
+                <td>{{ item.total_price }} zł</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="qrfooter">
+            <div class="qr">
+                <img src="{{ qr_data_url }}" />
+                <div style="font-size:11px;">Zeskanuj przy wejściu</div>
+            </div>
+
+            <div class="footer">
+                <p>Dziękujemy za zakup w Last Kino 🎬</p>
+                <p>Prosimy o okazanie biletu obsłudze</p>
+            </div>
+        </div>
+
+
     </div>
-
-    <div class="info">
-        <p><strong>Imię i nazwisko:</strong> {{ customer.first_name }} {{ customer.last_name }}</p>
-        <p><strong>Email:</strong> {{ customer.email }}</p>
-        <p><strong>Film:</strong> {{ screening.movie.title }}</p>
-        <p><strong>Start seansu:</strong> {{ screening.start_time|date:"d.m.Y H:i" }}</p>
-        <p><strong>Sala:</strong> {{ screening.auditorium.name }}</p>
-    </div>
-
-    <h3>Twoje miejsca:</h3>
-    <table>
-        <tr>
-            <th>Bilet ID</th>
-            <th>Rząd</th>
-            <th>Miejsce</th>
-            <th>Rodzaj biletu</th>
-            <th>Cena</th>
-        </tr>
-        {% for item in tickets_data %}
-        <tr>
-            <td>{{ item.ticket_id }}</td>
-            <td>{{ item.row_number }}</td>
-            <td>{{ item.seat_number }}</td>
-            <td>{{ item.ticket_type }}</td>
-            <td>{{ item.total_price }} zł</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <div class="qr">
-        <img src="{{ qr_data_url }}" />
-        <div style="font-size:11px;">Zeskanuj przy wejściu</div>
-    </div>
-
-    <div class="footer">
-        <p>Dziękujemy za zakup w Last Kino 🎬</p>
-        <p>Prosimy o okazanie biletu obsłudze</p>
-    </div>
-
-</div>
 
 </body>
+
 </html>

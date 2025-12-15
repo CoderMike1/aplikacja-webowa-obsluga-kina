@@ -45,12 +45,27 @@ const ScreeningsPage = () => {
     const [projectionTypeOptions, setProjectionTypeOptions] = useState([])
     const [editErrors, setEditErrors] = useState({})
 
+    // Track expanded projection type groups (by groupIdx-ptIdx key)
+    const [expandedKeys, setExpandedKeys] = useState(new Set())
+
+    const toggleExpand = (key) => {
+        setExpandedKeys(prev => {
+            const next = new Set(prev)
+            if (next.has(key)) {
+                next.delete(key)
+            } else {
+                next.add(key)
+            }
+            return next
+        })
+    }
+
     const fetchMovies = async () => {
         try {
             const res = await api.get('/movies/', { params: { page_size: 50 } })
             const items = res.data?.results || res.data || []
             const today = dayjs().format('YYYY-MM-DD')
-            const allowed = items.filter(m => m?.cinema_release_date && m.cinema_release_date <= today)
+            const allowed = items.filter(m => m?.cinema_release_date)
             setMovieOptions(allowed)
         } catch (e) {
             console.error(e)
@@ -339,72 +354,85 @@ const ScreeningsPage = () => {
                                 )}
                                 <div className="screenings__movie_meta">
                                     <h3 className="screenings__movie_title">{group.movie?.title}</h3>
-                                    <div className="screenings__movie_sub">{group.movie?.directors || '-'}</div>
+                                    <div className="screenings__movie_sub">{group.movie?.directors || '-'} - {group.movie?.duration_minutes + ' minut' || '-'}</div>
                                 </div>
                             </div>
 
                             <div className="screenings__types">
-                                {(group.projection_types || []).map((pt, i) => (
-                                    <div className="screenings__type" key={i}>
-                                        <div className="screenings__type_title">{pt.projection_type || '-'}</div>
-                                        <div className="screenings__table">
-                                            <div className="screenings__head">
-                                                <div>Seans ID</div>
-                                                <div>Sala</div>
-                                                <div>Start</div>
-                                                <div>Opublikowano</div>
-                                                <div className="screenings__head_actions">Akcje</div>
+                                {(group.projection_types || []).map((pt, i) => {
+                                    const key = `${idx}-${i}`
+                                    const count = Array.isArray(pt.screenings) ? pt.screenings.length : 0
+                                    const isOpen = expandedKeys.has(key)
+                                    return (
+                                        <div className="screenings__type" key={i}>
+                                            <div className="screenings__type_title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <h4>{pt.projection_type || '-'}</h4>
+                                                <span style={{ color: 'var(--muted, #666)' }}>- {count} seansów</span>
+                                                <button type="button" className="btn" onClick={() => toggleExpand(key)}>
+                                                    {isOpen ? 'Zwiń' : 'Rozwiń'}
+                                                </button>
                                             </div>
-
-                                            {(pt.screenings || []).map((s) => (
-                                                <div className="screenings__row" key={s.id}>
-                                                    <div>#{s.id}</div>
-                                                    <div>{s.auditorium ? `${s.auditorium.id ?? '-'}, ${s.auditorium.name ?? '-'}` : '-'}</div>
-                                                    <div>{s.start_time ? dayjs(s.start_time).format('YYYY-MM-DD HH:mm') : '-'}</div>
-                                                    <div>{s.published_at ? dayjs(s.published_at).format('YYYY-MM-DD HH:mm') : '-'}</div>
-                                                    <div className="btn_row">
-                                                        <button type="button" className="btn" onClick={() => startEdit(s)}>Edytuj</button>
-                                                        <button type="button" className="btn danger" onClick={() => deleteScreening(s.id)}>Usuń</button>
+                                            {isOpen && (
+                                                <div className="screenings__table">
+                                                    <div className="screenings__head">
+                                                        <div>Seans ID</div>
+                                                        <div>Sala</div>
+                                                        <div>Start</div>
+                                                        <div>Opublikowano</div>
+                                                        <div className="screenings__head_actions">Akcje</div>
                                                     </div>
 
-                                                    {editingId === s.id && (
-                                                        <form className="screenings__card" onSubmit={submitEdit} aria-label={`Edytuj seans #${s.id}`} style={{ gridColumn: '1 / -1' }}>
-                                                            {Array.isArray(editErrors?.non_field_errors) && editErrors.non_field_errors.length > 0 && (
-                                                                <div style={{ color: 'var(--danger, #c0392b)', marginBottom: '8px' }}>
-                                                                    {editErrors.non_field_errors.join(' ')}
-                                                                </div>
-                                                            )}
-                                                            <div className="form_row">
-                                                                <label>Sala ID
-                                                                    <input type="number" value={editForm.auditorium_id} onChange={(e) => setEditForm(f => ({ ...f, auditorium_id: e.target.value }))} />
-                                                                    {Array.isArray(editErrors?.auditorium_id) && editErrors.auditorium_id.length > 0 && (
-                                                                        <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.auditorium_id.join(' ')}</div>
-                                                                    )}
-                                                                </label>
-                                                                <label>Typ projekcji ID
-                                                                    <input type="number" value={editForm.projection_type_id ?? ''} onChange={(e) => setEditForm(f => ({ ...f, projection_type_id: e.target.value }))} />
-                                                                    {Array.isArray(editErrors?.projection_type_id) && editErrors.projection_type_id.length > 0 && (
-                                                                        <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.projection_type_id.join(' ')}</div>
-                                                                    )}
-                                                                </label>
-                                                                <label>Start seansu
-                                                                    <input type="datetime-local" value={editForm.start_time} onChange={(e) => setEditForm(f => ({ ...f, start_time: e.target.value }))} />
-                                                                    {Array.isArray(editErrors?.start_time) && editErrors.start_time.length > 0 && (
-                                                                        <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.start_time.join(' ')}</div>
-                                                                    )}
-                                                                </label>
-                                                            </div>
+                                                    {(pt.screenings || []).map((s) => (
+                                                        <div className="screenings__row" key={s.id}>
+                                                            <div>#{s.id}</div>
+                                                            <div>{s.auditorium ? `${s.auditorium.id ?? '-'}, ${s.auditorium.name ?? '-'}` : '-'}</div>
+                                                            <div>{s.start_time ? dayjs(s.start_time).format('YYYY-MM-DD HH:mm') : '-'}</div>
+                                                            <div>{s.published_at ? dayjs(s.published_at).format('YYYY-MM-DD HH:mm') : '-'}</div>
                                                             <div className="btn_row">
-                                                                <button type="submit" className="btn primary">Zapisz</button>
-                                                                <button type="button" className="btn" onClick={() => setEditingId(null)}>Anuluj</button>
+                                                                <button type="button" className="btn" onClick={() => startEdit(s)}>Edytuj</button>
+                                                                <button type="button" className="btn danger" onClick={() => deleteScreening(s.id)}>Usuń</button>
                                                             </div>
-                                                        </form>
-                                                    )}
+
+                                                            {editingId === s.id && (
+                                                                <form className="screenings__card" onSubmit={submitEdit} aria-label={`Edytuj seans #${s.id}`} style={{ gridColumn: '1 / -1' }}>
+                                                                    {Array.isArray(editErrors?.non_field_errors) && editErrors.non_field_errors.length > 0 && (
+                                                                        <div style={{ color: 'var(--danger, #c0392b)', marginBottom: '8px' }}>
+                                                                            {editErrors.non_field_errors.join(' ')}
+                                                                        </div>
+                                                                    )}
+                                                                    <div className="form_row">
+                                                                        <label>Sala ID
+                                                                            <input type="number" value={editForm.auditorium_id} onChange={(e) => setEditForm(f => ({ ...f, auditorium_id: e.target.value }))} />
+                                                                            {Array.isArray(editErrors?.auditorium_id) && editErrors.auditorium_id.length > 0 && (
+                                                                                <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.auditorium_id.join(' ')}</div>
+                                                                            )}
+                                                                        </label>
+                                                                        <label>Typ projekcji ID
+                                                                            <input type="number" value={editForm.projection_type_id ?? ''} onChange={(e) => setEditForm(f => ({ ...f, projection_type_id: e.target.value }))} />
+                                                                            {Array.isArray(editErrors?.projection_type_id) && editErrors.projection_type_id.length > 0 && (
+                                                                                <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.projection_type_id.join(' ')}</div>
+                                                                            )}
+                                                                        </label>
+                                                                        <label>Start seansu
+                                                                            <input type="datetime-local" value={editForm.start_time} onChange={(e) => setEditForm(f => ({ ...f, start_time: e.target.value }))} />
+                                                                            {Array.isArray(editErrors?.start_time) && editErrors.start_time.length > 0 && (
+                                                                                <div style={{ color: 'var(--danger, #c0392b)', fontSize: '0.85rem' }}>{editErrors.start_time.join(' ')}</div>
+                                                                            )}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div className="btn_row">
+                                                                        <button type="submit" className="btn primary">Zapisz</button>
+                                                                        <button type="button" className="btn" onClick={() => setEditingId(null)}>Anuluj</button>
+                                                                    </div>
+                                                                </form>
+                                                            )}
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                         </div>
                     ))}

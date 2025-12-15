@@ -25,7 +25,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
             }
         }
         const data = hours.map(h => ({ hour: h.hour, value: counts.get(h.hour) || 0 }))
-        const maxRaw = Math.max(1, ...data.map(d => d.value))
+        const maxRaw = Math.max(...data.map(d => d.value))
         const max = Math.ceil(maxRaw)
         // Determine y-axis step based on magnitude: 1 up to 10, 10 up to 100, 100 up to 1000, etc.
         const magnitude = Math.floor(Math.log10(max))
@@ -102,14 +102,19 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                         {/* single hover point, shown only when hovering a given hour */}
                         {hover && (() => {
                             const d = series.data[hover.idx] || { hour: 0, value: 0 }
-                            const x = (hover.idx / 23) * 240
+                            const x = 1 + (hover.idx / 23) * 240
                             const y = 100 - (series.top > 0 ? (d.value / series.top) * 100 : 0)
                             return <circle cx={x} cy={y} r={3} className="hourly__point" />
                         })()}
                     </svg>
-                    <div className="hourly__xlabels">
+                    {/* Absolutely positioned x-axis labels centered under each SVG point */}
+                    <div
+                        className="hourly__xlabels"
+                        style={{ position: 'relative', width: '100%' }}
+                    >
                         {series.data.map((d, idx) => {
                             const label = `${String(d.hour).padStart(2, '0')}:00`
+                            const leftPct = (idx / 23) * 100
                             return (
                                 <span
                                     key={idx}
@@ -117,6 +122,13 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                                     onMouseEnter={() => setHover({ idx, label, value: d.value })}
                                     onMouseLeave={() => setHover(null)}
                                     title={label}
+                                    style={{
+                                        position: 'absolute',
+                                        left: `${leftPct}%`,
+                                        transform: 'translateX(-50%)',
+                                        textAlign: 'center',
+                                        whiteSpace: 'nowrap',
+                                    }}
                                 >
                                     {d.hour}
                                 </span>

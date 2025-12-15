@@ -35,7 +35,7 @@ class ScreeningView(APIView):
         movie_ids = list(movie_ids_qs)
 
         paginator = PageNumberPagination()
-        paginator.page_size = 200
+        paginator.page_size = 10
 
         page_movie_ids = paginator.paginate_queryset(movie_ids, request, view=self)
 
@@ -56,6 +56,23 @@ class ScreeningView(APIView):
         screening = serializer.save()
         read_serializer = ScreeningReadSerializer(screening, context={'request': request})
         return Response(data=read_serializer.data, status=status.HTTP_201_CREATED)
+    
+class ScreeningListView(APIView):
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return [AllowAny()]
+        return [IsAdminUser()]
+
+    def get(self, request):
+        qs = (
+            Screening.objects.select_related('movie', 'auditorium', 'projection_type')
+            .prefetch_related('movie__genres')
+            .order_by('movie__title', 'start_time')
+            .all()
+        )
+
+        serializer = ScreeningReadSerializer(qs, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     
 class ScreeningDetailView(APIView):
