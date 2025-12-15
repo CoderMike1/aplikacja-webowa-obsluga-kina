@@ -127,7 +127,7 @@ const CinemasProgram = () => {
                                                     key={`${s.id}-${movie.id}`}
                                                 >
                                                     <span>{s.hour_start_time}</span>
-                                                    <p>DUBBING {s.projection_type}</p>
+                                                    <p>{s.projection_type}</p>
                                                     <p>Sala {s.auditorium_name}</p>
                                                     <button onClick={() => handleBuyTicketButton(movie.title, movie.img, movie.directors, s.id, s.hour_start_time, s.start_time, s.projection_type, s.auditorium_name)}>Kup Bilet</button>
                                                 </div>

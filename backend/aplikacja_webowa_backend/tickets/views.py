@@ -19,6 +19,7 @@ from django.conf import settings
 from django.template.loader import get_template
 import time
 from .filters import TicketFilter
+import os
 
 
 
@@ -58,6 +59,15 @@ class TicketPDFView(APIView):
         qr_payload = f"{ticket.order_number}"
         qr_data_url = make_qr_data_url(qr_payload)
 
+        # Absolute font path via .env (DEJAVU_SANS_TTF), fallback to template directory
+        font_env = os.getenv('DEJAVU_SANS_TTF')
+        if not font_env:
+            template_dir = os.path.join(settings.BASE_DIR, 'backend', 'aplikacja_webowa_backend', 'tickets', 'templates', 'tickets')
+            font_env = os.path.join(template_dir, 'DejaVuSans.ttf')
+        # Build file URL for PDF engines
+        dejavu_sans_abs_url = 'file:///' + os.path.abspath(font_env).replace('\\', '/')
+        print(dejavu_sans_abs_url)
+
         html_string = render_to_string('tickets/ticket_pdf.html', {
             'ticket': ticket,
             'seats': seats,
@@ -66,6 +76,7 @@ class TicketPDFView(APIView):
             'MEDIA_URL': settings.MEDIA_URL,
             'STATIC_URL': settings.STATIC_URL,
             'qr_data_url': qr_data_url,
+            'dejavu_sans_abs_url': dejavu_sans_abs_url,
         })
 
         pdf_buffer = BytesIO()
