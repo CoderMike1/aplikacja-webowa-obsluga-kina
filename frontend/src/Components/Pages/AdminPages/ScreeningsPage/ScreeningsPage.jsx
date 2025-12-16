@@ -5,6 +5,7 @@ import { api } from '../../../../api/client.js'
 import { useAuthContext } from '../../../../context/Auth.jsx'
 import '../AdminPage.css'
 import './ScreeningsPage.css'
+import Spinner from "../../../../utils/Spinner/Spinner.jsx";
 
 const ScreeningsPage = () => {
     const [loading, setLoading] = useState(true)
@@ -223,6 +224,7 @@ const ScreeningsPage = () => {
 
     return (
         <div className="screenings__container">
+            {loading && <Spinner/>}
             <p className="screenings__count">Znaleziono {count} filmów z seansami</p>
 
             <form className="screenings__filters" onSubmit={(e) => { e.preventDefault(); fetchPage() }}>

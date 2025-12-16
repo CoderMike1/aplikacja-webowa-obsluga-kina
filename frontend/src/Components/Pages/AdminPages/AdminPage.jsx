@@ -2,7 +2,7 @@ import './AdminPage.css'
 import { useAuthContext } from '../../../context/Auth.jsx'
 import { useEffect } from 'react'
 import { useCloudinaryContext } from '../../../context/CloudinaryContext.jsx'
-import { Navigate } from 'react-router-dom'
+import {Navigate, NavLink} from 'react-router-dom'
 import { useState } from 'react'
 import DashboardPage from './DashboardPage/DashboardPage.jsx'
 import ScreeningsPage from './ScreeningsPage/ScreeningsPage.jsx'
@@ -40,6 +40,14 @@ const AdminPage = () => {
                     className={`admin__tab_btn ${tab === 'filmy' ? 'active' : ''}`}
                     onClick={() => setTab('filmy')}
                 >Filmy</button>
+                <NavLink
+                    to="/profil"
+                    className={({ isActive }) =>
+                        isActive ? "is-active" : ""
+                    }
+                >
+                    <button className={`admin__tab_btn ${tab === 'filmy' ? 'active' : ''}`}>Moje konto</button>
+                </NavLink>
             </div>
 
             {tab === 'dashboard' && (

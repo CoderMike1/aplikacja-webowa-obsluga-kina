@@ -8,6 +8,7 @@ import defaultAvatar from '../../../assets/default-avatar.png'
 import Details from './Details/Details'
 import Tickets from './Tickets/Tickets'
 import Settings from './Settings/Settings'
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
 
 const ProfilePage = () => {
     const [loading, setLoading] = useState(true)
@@ -122,14 +123,10 @@ const ProfilePage = () => {
         if (file) handleAvatarUpload(file)
     }
 
-    if (loading || loadingProfile) {
-        return (
-            <div className="profile_container"><div className="profile_card"><p>Ładowanie profilu…</p></div></div>
-        )
-    }
 
     return (
         <div className="profile_container">
+            {loading && <Spinner/>}
             <div className="profile_card">
                 {error && <div className="profile_error">{error}</div>}
                 <div className="profile_body">
