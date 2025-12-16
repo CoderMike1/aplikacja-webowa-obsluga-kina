@@ -92,24 +92,26 @@ const Summary = () => {
           const data = await resp.data;
 
           const order_confirmation_payload = {
-            total_price: data.total_price,
-            order_number: data.order_number,
-            first_name: data.customer_info.first_name,
-            last_name: data.customer_info.last_name,
-            email: data.customer_info.email,
-            phone_number: data.customer_info.phone,
-            screening_info: {
-              id: data.tickets[0].screening.id,
-              movie_title: data.tickets[0].screening.movie,
-              movie_start_time: data.tickets[0].screening.start_time,
-              auditorium: data.tickets[0].screening.auditorium_id
-            },
-            tickets: data.tickets.map((ticket) => ({
-              ticket_type: ticket.ticketType === 'normalny',
-              seat: { row_number: ticket.seat.row_number, seat_number: ticket.seat.seat_number },
-              price: ticket.price
-            }))
-          };
+  total_price: data.total_price,
+  order_number: data.order_number,
+  first_name: data.customer_info.first_name,
+  last_name: data.customer_info.last_name,
+  email: data.customer_info.email,
+  phone_number: data.customer_info.phone,
+  screening_info: {
+    id: data.tickets[0].screening.id,
+    movie_title: data.tickets[0].screening.movie,
+    movie_start_time: data.tickets[0].screening.start_time,
+    auditorium: data.tickets[0].screening.auditorium_id
+  },
+  tickets: data.tickets.map((ticket) => ({
+    ticket_type: ticket.ticketType === 'normalny',
+    seat: { row_number: ticket.seat.row_number, seat_number: ticket.seat.seat_number },
+    price: ticket.price
+  })),
+  promotion: promotionData?.promotion || null
+};
+
           setOrderConfirmation(order_confirmation_payload);
           navigate('/success');
         }
