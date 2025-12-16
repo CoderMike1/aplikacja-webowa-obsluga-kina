@@ -90,6 +90,22 @@ const CinemasProgram = () => {
 
         filtered = filtered.filter(f => f.screenings.length > 0)
 
+        filtered = filtered.map(movie=>{
+
+            const sortedScreenings = [...movie.screenings].sort((a,b)=>{
+                const timeA = new Date(a.start_time);
+                const timeB = new Date(b.start_time)
+                return timeA-timeB;
+            })
+
+            return {
+                ...movie,
+                screenings:sortedScreenings
+            }
+
+        })
+
+
         setScreenings(filtered);
     };
 
@@ -103,7 +119,7 @@ const CinemasProgram = () => {
         startCheckout({ movie_title, movie_image, movie_directors, screening_id, showtime_hour, showtime_full_date, projection_type, auditorium })
         navigate("/checkout")
     }
-
+    console.log(screenings)
     return (
         <div className="program__container">
             {loading && <Spinner/>}
@@ -114,8 +130,6 @@ const CinemasProgram = () => {
                 loading ?
                     <></>
                     :
-
-
                     screenings.length > 0 ?
                         <div className="program__movies">
                             {screenings.map(movie => (
