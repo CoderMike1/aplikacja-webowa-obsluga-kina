@@ -175,7 +175,7 @@ export const CheckoutProvider = ({children}) =>{
             const data = await resp.data
             return data
         }
-    },[])
+    },[state.screening_id])
 
 
 
