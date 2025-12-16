@@ -73,7 +73,7 @@ const MovieDetailsPage = () => {
                     setAllScreenings(all_screenings)
                     break
                 }
-                
+
 
             }
             setLoading(false)
@@ -95,11 +95,11 @@ const MovieDetailsPage = () => {
         filterScreeningsByDate()
     }, [selectedDate, allScreenings])
 
-    const handleBuyTicketButton = (movie_title, movie_image, movie_directors,screening_id, showtime_hour, showtime_full_date, projection_type, auditorium) => {
+    const handleBuyTicketButton = (movie_title, movie_image, movie_directors, screening_id, showtime_hour, showtime_full_date, projection_type, auditorium) => {
         startCheckout({ movie_title, movie_image, movie_directors, screening_id, showtime_hour, showtime_full_date, projection_type, auditorium })
         navigate("/checkout")
     }
-    
+
 
 
     return (
