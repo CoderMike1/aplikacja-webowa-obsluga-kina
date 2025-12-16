@@ -1,67 +1,66 @@
 import './MovieDetailsPage.css'
 import ShowTimeDateRange from "./ShowTimeDateRange/ShowTimeDateRange.jsx";
-import {useEffect, useState} from "react";
-import {api} from "../../../api/client.js";
-import {useNavigate, useParams} from "react-router-dom";
-import {getScreenings} from "../../../services/movieService.js";
-import {useCheckout} from "../../../context/CheckoutContext.jsx";
+import { useEffect, useState } from "react";
+import { api } from "../../../api/client.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { getScreenings } from "../../../services/movieService.js";
+import { useCheckout } from "../../../context/CheckoutContext.jsx";
 
-const MovieDetailsPage = () =>{
+const MovieDetailsPage = () => {
 
-    const {movieID} = useParams()
+    const { movieID } = useParams()
     const today = new Date()
-    const [selectedDate,setSelectedDate] = useState(today.toISOString().slice(0, 10))
+    const [selectedDate, setSelectedDate] = useState(today.toISOString().slice(0, 10))
 
-    const [posterURL,setPosterURL] = useState("");
-    const [title,setTitle] = useState("");
-    const [originalTitle,setOriginalTitle] = useState("");
-    const [releaseDate,setReleaseDate] = useState("");
-    const [description,setDescription] = useState("");
-    const [directors,setDirectors] = useState("");
-    const [durationTime,setDurationTime] = useState("")
+    const [posterURL, setPosterURL] = useState("");
+    const [title, setTitle] = useState("");
+    const [originalTitle, setOriginalTitle] = useState("");
+    const [releaseDate, setReleaseDate] = useState("");
+    const [description, setDescription] = useState("");
+    const [directors, setDirectors] = useState("");
+    const [durationTime, setDurationTime] = useState("")
 
-    const [loading,setLoading] = useState(true)
-    const [allScreenings,setAllScreenings] = useState([])
-    const [currentScreenings,setCurrentScreenings] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [allScreenings, setAllScreenings] = useState([])
+    const [currentScreenings, setCurrentScreenings] = useState([])
 
     const navigate = useNavigate()
-    const {startCheckout} = useCheckout()
+    const { startCheckout } = useCheckout()
 
     useEffect(() => {
 
-        (async ()=>{
+        (async () => {
             setLoading(true)
-           const resp = await api.get(`/movies/${movieID}`)
+            const resp = await api.get(`/movies/${movieID}`)
 
             const data = resp.data
             setPosterURL(data.poster_path);
-           setTitle(data.title);
-           setOriginalTitle(data.original_title);
-           setReleaseDate(data.release_date);
-           setDescription(data.description);
-           setDirectors(data.directors);
-           setDurationTime(data.duration_minutes)
+            setTitle(data.title);
+            setOriginalTitle(data.original_title);
+            setReleaseDate(data.release_date);
+            setDescription(data.description);
+            setDirectors(data.directors);
+            setDurationTime(data.duration_minutes)
 
             const resp2 = await getScreenings();
 
-            const data2 = resp2.data
+            const results = resp2.data
+            console.log(results)
 
-            const results = data2.results;
-
-            for (const result of results){
-                if (result.movie.id === Number(movieID)){
+            for (const result of results) {
+                if (result.movie.id === Number(movieID)) {
                     const all_screenings = [];
                     const projection_types = result.projection_types
-                    for (const projection_type of projection_types){
+                    for (const projection_type of projection_types) {
                         const screenings_for_projection_type = projection_type.screenings;
                         const projection_type_val = projection_type.projection_type;
-                        for (const screening of screenings_for_projection_type){
+                        for (const screening of screenings_for_projection_type) {
                             const screening_info = {
-                                projection_type:projection_type_val,
-                                id:screening.id,
-                                auditorium_name:screening.auditorium.id,
-                                start_time:screening.start_time,
-                                hour_start_time:new Date(screening.start_time).toLocaleTimeString("pl-PL", {
+                                projection_type: projection_type_val,
+                                id: screening.id,
+                                auditorium_name: screening.auditorium.id,
+                                start_time: screening.start_time,
+                                hour_start_time: new Date(screening.start_time).toLocaleTimeString("pl-PL", {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                 })
@@ -70,9 +69,11 @@ const MovieDetailsPage = () =>{
                             all_screenings.push(screening_info)
                         }
                     }
+                    console.log(all_screenings)
                     setAllScreenings(all_screenings)
                     break
                 }
+                
 
             }
             setLoading(false)
@@ -83,21 +84,22 @@ const MovieDetailsPage = () =>{
 
     const filterScreeningsByDate = () => {
 
-        let filtered = allScreenings.filter((screening) =>{
+        let filtered = allScreenings.filter((screening) => {
             return screening.start_time.slice(0, 10) === selectedDate
         })
 
         setCurrentScreenings(filtered);
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         filterScreeningsByDate()
-    },[selectedDate,allScreenings])
+    }, [selectedDate, allScreenings])
 
-    const handleBuyTicketButton = (movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium) =>{
-        startCheckout({movie_title,movie_image,movie_directors,showtime_hour,showtime_full_date,projection_type,auditorium})
+    const handleBuyTicketButton = (movie_title, movie_image, movie_directors,screening_id, showtime_hour, showtime_full_date, projection_type, auditorium) => {
+        startCheckout({ movie_title, movie_image, movie_directors, screening_id, showtime_hour, showtime_full_date, projection_type, auditorium })
         navigate("/checkout")
     }
+    
 
 
     return (
@@ -108,7 +110,7 @@ const MovieDetailsPage = () =>{
                 <div className="movie_details__inner">
                     <div className="movie_details__left">
                         <div className="movie_inner__image">
-                            <img src={posterURL} alt={title}/>
+                            <img src={posterURL} alt={title} />
                         </div>
                     </div>
                     <div className="movie_details__right">
@@ -141,16 +143,16 @@ const MovieDetailsPage = () =>{
 
                         <div className="movie_details__showtimes">
                             <div className="movie_details__showtimes_panel">
-                                <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                                <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                             </div>
 
                             <div className="movie_showtimes_table">
-                                {currentScreenings.map((s)=>(
+                                {currentScreenings.map((s) => (
                                     <div className="movie_showtime_item" key={s.id}>
                                         <span>{s.hour_start_time}</span>
                                         <p>{s.projection_type}</p>
                                         <p>Sala {s.auditorium_name}</p>
-                                        <button onClick={()=>handleBuyTicketButton(title,posterURL,directors,s.id,s.hour_start_time,s.start_time,s.projection_type,s.auditorium_name)}>Kup Bilet</button>
+                                        <button onClick={() => handleBuyTicketButton(title, posterURL, directors, s.id, s.hour_start_time, s.start_time, s.projection_type, s.auditorium_name)}>Kup Bilet</button>
                                     </div>
                                 ))}
                                 <div>

@@ -42,7 +42,7 @@ const Checkout = () =>{
                         <div className="checkout_inner_screening_info">
                             <h4>{title}</h4>
                             <p>{directors}</p>
-                            <span>DUBBING {projection_type}</span>
+                            <span>{projection_type}</span>
                         </div>
                     </div>
                     <div className="checkout_inner_header_middle">
