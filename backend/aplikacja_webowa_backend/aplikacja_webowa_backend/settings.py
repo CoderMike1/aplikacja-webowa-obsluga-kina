@@ -190,3 +190,19 @@ CLOUDINARY_UPLOAD_PRESET = os.getenv("CLOUDINARY_UPLOAD_PRESET", "")  # for unsi
 CLOUDINARY_ALLOWED_DOMAIN = os.getenv("CLOUDINARY_ALLOWED_DOMAIN", "res.cloudinary.com")
  # Optional: keys for signed uploads (do NOT expose secret to frontend)
 # Signed upload keys removed per decision to use unsigned uploads only.
+
+
+
+# wysylanie emaili
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "poczta.interia.pl"
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL  =  True
+
+EMAIL_HOST_USER = os.getenv("EMAIL_ADDRESS")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
