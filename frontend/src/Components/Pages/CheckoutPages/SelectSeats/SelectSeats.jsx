@@ -1,5 +1,6 @@
 import './SelectSeats.css'
 import {useEffect, useState} from "react";
+import Spinner from "../../../../utils/Spinner/Spinner.jsx";
 //import {seatMap} from "./seatMap.js";
 
 
@@ -12,10 +13,11 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,loadSeatMap}) =>{
             const result = await loadSeatMap();
             setSeatMap(result)
         })()
-    },[])
-    console.log(seatMap)
+    },[loadSeatMap])
+    console.log(seatMap.length)
     return (
         <div className="checkout_auditorium__container">
+            {seatMap.length === 0 && <Spinner/>}
             <h2 className="checkout_auditorium_title">Sala {auditorium}</h2>
             <div className="screen">Ekran</div>
             <div className="checkout_auditorium__list">

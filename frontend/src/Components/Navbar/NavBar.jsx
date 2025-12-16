@@ -1,5 +1,4 @@
 import './NavBar.css'
-import logo from "../../assets/logo.png"
 import { useAuthUI } from "../../context/authUIContext.jsx";
 import { useAuthContext } from "../../context/Auth.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -17,7 +16,7 @@ const NavBar = () => {
         <nav className="navbar">
             <div className="navbar__inner">
                 <div className="navbar__left">
-                    <a className="navbar__left-img" href="/"><img src={logo} alt="" /></a>
+                    <a className="navbar__left-img" href="/"><img src="/logo.png" alt="" /></a>
                     <a className="navbar__brand" href="/">LAST KINO</a>
                 </div>
 
@@ -31,16 +30,7 @@ const NavBar = () => {
                                 Repertuar
                             </NavLink>
                         </li>
-                        {user?.is_staff && (
-                            <li>
-                                <NavLink
-                                    to='/panel-pracownika'
-                                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                                >
-                                    Panel pracownika
-                                </NavLink>
-                            </li>
-                        )}
+
                         <li>
                             <NavLink
                                 to='/nowosci'
@@ -64,14 +54,31 @@ const NavBar = () => {
                     {isLoggedIn ? (
                         <div className="navbar__my_account" style={{ display: 'flex', gap: '0px', alignItems: 'center' }}>
                             <div className="navbar__my_account_button" style={{ display: 'flex', gap: '0px' }}>
-                                <NavLink
-                                    to="/profil"
-                                    className={({ isActive }) =>
-                                        isActive ? "is-active" : ""
-                                    }
-                                >
-                                    <button>Moje konto</button>
-                                </NavLink>
+                                {user?.is_staff ? (
+                                    <li style={{ listStyle:'none' }}>
+                                        <NavLink
+                                            to='/panel-pracownika'
+                                            className={({ isActive }) => (isActive ? "is-active" : "")}
+                                        >
+                                            <button>Panel pracownika</button>
+
+                                        </NavLink>
+                                    </li>
+                                )
+                                :
+                                    <li style={{ listStyle:'none' }}>
+                                        <NavLink
+                                            to="/profil"
+                                            className={({ isActive }) =>
+                                                isActive ? "is-active" : ""
+                                            }
+                                        >
+                                            <button>Moje konto</button>
+                                        </NavLink>
+                                    </li>
+
+                                }
+
                             </div>
 
                             <div className="navbar__logout">

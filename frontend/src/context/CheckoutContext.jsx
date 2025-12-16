@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {getSeatMap} from "../services/movieService.js";
 
 const CheckoutContext = createContext(null)
@@ -166,8 +166,7 @@ export const CheckoutProvider = ({children}) =>{
     //     })()
     // }, [state.auditorium]);
 
-    const loadSeatMap = async ()=>{
-        console.log("laduje sale")
+    const loadSeatMap = useCallback(async ()=>{
         const resp = await getSeatMap(state.screening_id)
         if (resp.status !== 200){
             return null
@@ -176,7 +175,7 @@ export const CheckoutProvider = ({children}) =>{
             const data = await resp.data
             return data
         }
-    }
+    },[state.screening_id])
 
 
 

@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../../context/Auth.jsx'
 import { useCloudinaryContext } from '../../../../context/CloudinaryContext.jsx'
 import '../AdminPage.css'
 import './MoviesPage.css'
+import Spinner from "../../../../utils/Spinner/Spinner.jsx";
 
 const MoviesPage = () => {
   const [loading, setLoading] = useState(true)
@@ -235,6 +236,7 @@ const MoviesPage = () => {
 
   return (
     <div className="movies__container">
+        {loading && <Spinner/>}
       <p className="movies__count">Znaleziono {totalCount} filmów</p>
 
       <form className="movies__filters" onSubmit={(e) => { e.preventDefault(); fetchMovies(); }}>

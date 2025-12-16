@@ -2,9 +2,10 @@ import './NewsPage.css'
 import {useEffect, useState} from "react";
 import {getMovies} from "../../../services/movieService.js";
 import {Link} from "react-router-dom";
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
 
 const NewsPage = () =>{
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(true)
     const [latestMovies,setLatestMovies] = useState([])
     const [upcomingMovies,setUpcomingMovies] = useState([])
 
@@ -54,11 +55,11 @@ const NewsPage = () =>{
         loadMovies();
     }, []);
 
-
+    console.log(loading)
     return (
         <div className="news__container">
             {
-                latestMovies.length > 0 || upcomingMovies.length > 0 ?
+                !loading ?
                     <div className="news__container__inner">
                         {
                             latestMovies.map((m)=>(
@@ -91,7 +92,7 @@ const NewsPage = () =>{
 
                     </div>
                     :
-                    <p className="main_page_loading">Ładowanie danych...</p>
+                   <Spinner/>
             }
 
 

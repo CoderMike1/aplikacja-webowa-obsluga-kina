@@ -8,6 +8,13 @@ const Success = () => {
 
     const {total_price, order_number, first_name, last_name, email, phone_number, screening_info, tickets} = orderConfirmation
 
+    let showtime_full_date = state.showtime_full_date;
+    showtime_full_date = new Date(showtime_full_date).toLocaleDateString("pl-PL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+
     const service_fee = 0;
 
 
@@ -56,7 +63,7 @@ const downloadTicketPDF = async () => {
 
                     <div className="success__movie_info">
                         <h4>{screening_info.movie_title || "Tytuł filmu"}</h4>
-                        <p>state.movie_directors</p>
+                        <p>{state.movie_directors}</p>
                         <p>
                             {state.projection_type && <span>{state.projection_type}</span>}
                             {screening_info.auditorium && (
@@ -66,13 +73,13 @@ const downloadTicketPDF = async () => {
                                 </>
                             )}
                         </p>
-                        {(state.showtime_hour || state.showtime_full_date) && (
+                        {(state.showtime_hour || showtime_full_date) && (
                             <p className="success__date">
                                 {state.showtime_hour && <span>Godzina {state.showtime_hour}</span>}
-                                {state.showtime_full_date && (
+                                {showtime_full_date && (
                                     <>
                                         {" • "}
-                                        <span>{state.showtime_full_date}</span>
+                                        <span>{showtime_full_date}</span>
                                     </>
                                 )}
                             </p>

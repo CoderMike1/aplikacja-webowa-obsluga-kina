@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./PromosPage.css";
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
 
 const weekdayNames = {
   1: "Poniedziałek",
@@ -11,22 +12,12 @@ const weekdayNames = {
   7: "Niedziela",
 };
 
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("pl-PL", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
+const formatDate = (dateStr) =>
+  new Date(dateStr).toLocaleDateString("pl-PL");
 
 const formatDateTime = (dateStr) => {
-  const date = new Date(dateStr);
-  return `${date.toLocaleDateString("pl-PL", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  })} o ${date.toLocaleTimeString("pl-PL", {
+  const d = new Date(dateStr);
+  return `${d.toLocaleDateString("pl-PL")} • ${d.toLocaleTimeString("pl-PL", {
     hour: "2-digit",
     minute: "2-digit",
   })}`;
@@ -34,8 +25,8 @@ const formatDateTime = (dateStr) => {
 
 const formatTime = (timeStr) => {
   if (!timeStr) return "";
-  const [hours, minutes] = timeStr.split(":");
-  return `${hours}:${minutes}`;
+  const [h, m] = timeStr.split(":");
+  return `${h}:${m}`;
 };
 
 const PromosPage = () => {
@@ -46,7 +37,9 @@ const PromosPage = () => {
   useEffect(() => {
     const fetchPromotions = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/tickets/promotions/");
+        const res = await fetch(
+          "http://localhost:8000/api/tickets/promotions/"
+        );
         if (!res.ok) throw new Error("Błąd podczas pobierania promocji");
         const data = await res.json();
         setPromotions(data);
@@ -59,81 +52,57 @@ const PromosPage = () => {
     fetchPromotions();
   }, []);
 
-  if (loading) return <p>Ładowanie promocji...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="program__container">
-      <h1>Promocje</h1>
+    <div className="promos__container">
+      <h1 className="promos__title">Promocje</h1>
 
-      <div className="program__movies">
+      <div className="promos__grid">
         {promotions.map((promo) => (
-          <div key={promo.id} className="movie__item">
-            <div className="movie__info">
-              <h4>{promo.name}</h4>
+          <div key={promo.id} className="promo__card">
+            <div className="promo__badge">
+              -{promo.discount_percent}%
+            </div>
 
-              <div className="movie__program">
-                <div className="program__item">
-                  <span>{promo.discount_percent}%</span>
-                  <p>Zniżka</p>
-                </div>
+            <h3 className="promo__name">{promo.name}</h3>
 
-                <div className="program__item">
-                  <span>{promo.min_tickets}</span>
-                  <p>Min. biletów</p>
-                </div>
-
-                <div className="program__item">
-                  <span>{weekdayNames[promo.weekday]}</span>
-                  <p>Dzień tygodnia</p>
-                </div>
-
-                <div className="program__item">
-                  <span>
-                    {formatTime(promo.time_from)} - {formatTime(promo.time_to)}
-                  </span>
-                  <p>Godziny</p>
-                </div>
-
-                <div className="program__item">
-                  <span>{formatDate(promo.valid_from)}</span>
-                  <p>Od</p>
-                </div>
-
-                <div className="program__item">
-                  <span>{formatDate(promo.valid_to)}</span>
-                  <p>Do</p>
-                </div>
-
-                {promo.screening && (
-                  <>
-                    <div className="program__item">
-                      <a
-                        href={`filmy/${promo.screening.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "#0f172a",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {promo.screening.movie.title}
-                      </a>
-                      <p>Film</p>
-                    </div>
-
-                    <div className="program__item">
-                      <span>{formatDateTime(promo.screening.start_time)}</span>
-                      <p>Seans</p>
-                    </div>
-
-                    <div className="program__item">
-                      <span>{promo.screening.auditorium.name}</span>
-                      <p>Sala</p>
-                    </div>
-                  </>
-                )}
+            <div className="promo__meta">
+              <div>
+                <span>{weekdayNames[promo.weekday]}</span>
+                <p>Dzień</p>
+              </div>
+              <div>
+                <span>
+                  {formatTime(promo.time_from)}–{formatTime(promo.time_to)}
+                </span>
+                <p>Godziny</p>
+              </div>
+              <div>
+                <span>{promo.min_tickets}</span>
+                <p>Min. biletów</p>
               </div>
             </div>
+
+            <div className="promo__valid">
+              Obowiązuje: {formatDate(promo.valid_from)} –{" "}
+              {formatDate(promo.valid_to)}
+            </div>
+
+            {promo.screening && (
+              <div className="promo__screening">
+                <a href={`filmy/${promo.screening.id}`}>
+                  🎬 {promo.screening.movie.title}
+                </a>
+                <span>
+                  🕒 {formatDateTime(promo.screening.start_time)}
+                </span>
+                <span>
+                  🏛 {promo.screening.auditorium.name}
+                </span>
+              </div>
+            )}
           </div>
         ))}
       </div>

@@ -31,8 +31,6 @@ const Checkout = () =>{
     const projection_type = checkout_data.projection_type
 
 
-    console.log(checkout_data)
-
     return (
         <div className="checkout_s1_container">
             <div className="checkout_s1_inner">
@@ -87,15 +85,18 @@ const Checkout = () =>{
                         <p>{showtime_full_date}</p>
                     </div>
                 </div>
-                {
-                    step === 1 ?
-                        <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} setStep={setStep} loadSeatMap={loadSeatMap}/>
-                        :
-                        step === 2?
-                            <SelectTickets checkout_data={checkout_data} setTickets={setTickets} setStep={setStep}/>
-                            :
-                            <Summary/>
-                }
+
+
+                <div style={{ display: step === 1 ? "block" : "none" }}>
+                    <SelectSeats auditorium={auditorium} seats={seats} setSeats={setSeats} setStep={setStep} loadSeatMap={loadSeatMap}/>
+                </div>
+
+                <div style={{ display: step === 2 ? "block" : "none" }}>
+                    <SelectTickets checkout_data={checkout_data} setTickets={setTickets} setStep={setStep}/>
+                </div>
+                <div style={{ display: (step !== 2 && step !== 1) ? "block" : "none" }}>
+                    <Summary/>
+                </div>
 
             </div>
 

@@ -19,7 +19,6 @@ const MainPage = () =>{
     const {loading:authorizing} = useAuthContext()
 
 
-
     useEffect(() => {
         const loadMovies = async () => {
             const cached = localStorage.getItem(CACHE_KEY);
@@ -66,7 +65,7 @@ const MainPage = () =>{
             {(authorizing || loading) && <Spinner/>}
             <NewsSlides />
             {loading ?
-            <p className="main_page_loading">Ładowanie danych...</p>
+           <></>
                 :
                 <MoviePanels soonPlayingMovies={soonPlayingMovies} nowPlayingMovies={nowPlayingMovies} specialEvents={specialEvents}/>
             }

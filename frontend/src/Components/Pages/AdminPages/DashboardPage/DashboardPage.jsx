@@ -9,6 +9,7 @@ import SummaryCards from './SummaryCards/SummaryCards.jsx'
 import TopMovies from './TopMovies/TopMovies.jsx'
 import { api } from '../../../../api/client.js'
 import { useAuthContext } from '../../../../context/Auth.jsx'
+import Spinner from "../../../../utils/Spinner/Spinner.jsx";
 
 dayjs.extend(utc)
 
@@ -90,6 +91,7 @@ const DashboardPage = () => {
 
     return (
         <div className="dashboard__container">
+            {loading && <Spinner/>}
             {error && <div className="admin__error">{error}</div>}
             <DashboardFilters
                 value={filters}

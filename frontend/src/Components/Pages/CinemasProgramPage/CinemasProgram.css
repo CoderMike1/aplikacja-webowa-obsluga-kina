@@ -27,8 +27,7 @@
 .program__movies{
     display: grid;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1330px;
     gap: 40px;
     justify-items: center;
     padding: 0 12px;
@@ -45,7 +44,7 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 
     width: 100%;
-    max-width: 380px;
+    max-width: 600px;
     overflow: hidden;
 }
 
@@ -103,10 +102,11 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     gap: 4px;
 
     max-height: none;
+
 }
 
 .program__item span {
