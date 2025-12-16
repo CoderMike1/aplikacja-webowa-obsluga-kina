@@ -20,6 +20,8 @@ from django.template.loader import get_template
 import time
 from .filters import TicketFilter
 from .templates.tickets.logo_base64 import LOGO_BASE64
+from .services.pricing import calculate_price_with_promotion
+
 
 logger = logging.getLogger(__name__)
 
@@ -203,11 +205,9 @@ class TicketsView(APIView):
 
     def get(self, request):
         qs = Ticket.objects.all().select_related('screening__movie', 'type').prefetch_related('seats')
-        # Apply django-filters FilterSet manually within APIView
         filterset = TicketFilter(request.query_params, queryset=qs)
         qs = filterset.qs
 
-        # Build lightweight payload for dashboard/analytics
         data = []
         for t in qs:
             data.append({
@@ -224,3 +224,28 @@ class TicketsView(APIView):
             })
 
         return Response(data)
+
+class CheckPromotionView(APIView):
+    def post(self, request):
+        try:
+            screening = Screening.objects.get(id=request.data["screening_id"])
+            ticket_type = TicketType.objects.get(id=request.data["ticket_type_id"])
+            seats_data = request.data.get("seat_ids", [])
+            seats = Seat.objects.filter(
+                auditorium=screening.auditorium,
+                row_number__in=[s["row_number"] for s in seats_data],
+                seat_number__in=[s["seat_number"] for s in seats_data]
+            )
+        except Screening.DoesNotExist:
+            return Response({"error": "Seans nie istnieje"}, status=status.HTTP_404_NOT_FOUND)
+        except TicketType.DoesNotExist:
+            return Response({"error": "Typ biletu nie istnieje"}, status=status.HTTP_404_NOT_FOUND)
+
+        data = calculate_price_with_promotion(
+            seats=seats,
+            ticket_type=ticket_type,
+            screening=screening
+        )
+
+        return Response(data, status=status.HTTP_200_OK)
+
