@@ -30,16 +30,7 @@ const NavBar = () => {
                                 Repertuar
                             </NavLink>
                         </li>
-                        {user?.is_staff && (
-                            <li>
-                                <NavLink
-                                    to='/panel-pracownika'
-                                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                                >
-                                    Panel pracownika
-                                </NavLink>
-                            </li>
-                        )}
+
                         <li>
                             <NavLink
                                 to='/nowosci'
@@ -63,14 +54,31 @@ const NavBar = () => {
                     {isLoggedIn ? (
                         <div className="navbar__my_account" style={{ display: 'flex', gap: '0px', alignItems: 'center' }}>
                             <div className="navbar__my_account_button" style={{ display: 'flex', gap: '0px' }}>
-                                <NavLink
-                                    to="/profil"
-                                    className={({ isActive }) =>
-                                        isActive ? "is-active" : ""
-                                    }
-                                >
-                                    <button>Moje konto</button>
-                                </NavLink>
+                                {user?.is_staff ? (
+                                    <li style={{ listStyle:'none' }}>
+                                        <NavLink
+                                            to='/panel-pracownika'
+                                            className={({ isActive }) => (isActive ? "is-active" : "")}
+                                        >
+                                            <button>Panel pracownika</button>
+
+                                        </NavLink>
+                                    </li>
+                                )
+                                :
+                                    <li style={{ listStyle:'none' }}>
+                                        <NavLink
+                                            to="/profil"
+                                            className={({ isActive }) =>
+                                                isActive ? "is-active" : ""
+                                            }
+                                        >
+                                            <button>Moje konto</button>
+                                        </NavLink>
+                                    </li>
+
+                                }
+
                             </div>
 
                             <div className="navbar__logout">
