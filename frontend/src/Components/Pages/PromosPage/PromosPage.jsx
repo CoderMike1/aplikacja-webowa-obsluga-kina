@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./PromosPage.css";
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
 
 const weekdayNames = {
   1: "Poniedziałek",
@@ -59,7 +60,7 @@ const PromosPage = () => {
     fetchPromotions();
   }, []);
 
-  if (loading) return <p>Ładowanie promocji...</p>;
+  if (loading) return <Spinner/>;
   if (error) return <p className="error">{error}</p>;
 
   return (

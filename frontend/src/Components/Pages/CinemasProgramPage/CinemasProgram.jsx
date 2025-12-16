@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getMovies, getScreenings } from "../../../services/movieService.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useCheckout } from "../../../context/CheckoutContext.jsx";
+import Spinner from "../../../utils/Spinner/Spinner.jsx";
 
 const CinemasProgram = () => {
     const today = new Date()
@@ -18,7 +19,11 @@ const CinemasProgram = () => {
 
 
     const SCREENINGS_CACHE_KEY = "screeningsCache"
-    const CACHE_TTL_MS = 30 * 60 * 1000;
+
+
+
+
+
     useEffect(() => {
 
         const loadScreenings = async () => {
@@ -101,12 +106,13 @@ const CinemasProgram = () => {
 
     return (
         <div className="program__container">
+            {loading && <Spinner/>}
             <div className="program__filter">
                 <ShowTimeDateRange selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
             </div>
             {
                 loading ?
-                    <p className="main_page_loading">Ładowanie danych...</p>
+                    <></>
                     :
 
 

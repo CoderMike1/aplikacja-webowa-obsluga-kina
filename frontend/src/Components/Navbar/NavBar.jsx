@@ -1,5 +1,4 @@
 import './NavBar.css'
-import logo from "../../assets/logo.png"
 import { useAuthUI } from "../../context/authUIContext.jsx";
 import { useAuthContext } from "../../context/Auth.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -17,7 +16,7 @@ const NavBar = () => {
         <nav className="navbar">
             <div className="navbar__inner">
                 <div className="navbar__left">
-                    <a className="navbar__left-img" href="/"><img src={logo} alt="" /></a>
+                    <a className="navbar__left-img" href="/"><img src="/logo.png" alt="" /></a>
                     <a className="navbar__brand" href="/">LAST KINO</a>
                 </div>
 
