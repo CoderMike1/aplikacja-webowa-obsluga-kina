@@ -102,7 +102,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                         {/* single hover point, shown only when hovering a given hour */}
                         {hover && (() => {
                             const d = series.data[hover.idx] || { hour: 0, value: 0 }
-                            const x = 1 + (hover.idx / 23) * 240
+                            const x = (hover.idx / 23) * 240
                             const y = 100 - (series.top > 0 ? (d.value / series.top) * 100 : 0)
                             return <circle cx={x} cy={y} r={3} className="hourly__point" />
                         })()}
