@@ -1,12 +1,21 @@
-import {useCheckout} from "../../../../context/CheckoutContext.jsx";
+import { useCheckout } from "../../../../context/CheckoutContext.jsx";
 import './Success.css'
-import {getTicketPDF} from "../../../../services/movieService.js";
-
+import { getTicketPDF } from "../../../../services/movieService.js";
 
 const Success = () => {
-    const {state, orderConfirmation } = useCheckout();
+    const { state, orderConfirmation } = useCheckout();
 
-    const {total_price, order_number, first_name, last_name, email, phone_number, screening_info, tickets} = orderConfirmation
+    const {
+        total_price,
+        order_number,
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        screening_info,
+        tickets,
+        promotion
+    } = orderConfirmation;
 
     let showtime_full_date = state.showtime_full_date;
     showtime_full_date = new Date(showtime_full_date).toLocaleDateString("pl-PL", {
@@ -17,33 +26,29 @@ const Success = () => {
 
     const service_fee = 0;
 
+    const downloadTicketPDF = async () => {
+        try {
+            const response = await getTicketPDF(order_number);
 
-const downloadTicketPDF = async () => {
-  try {
-      const response = await getTicketPDF(order_number);
+            if (response.status !== 200) {
+                throw new Error('Błąd podczas pobierania PDF');
+            }
 
-      if (response.status !== 200) {
-          throw new Error('Błąd podczas pobierania PDF');
-      }
+            const blob = response.data;
+            const url = window.URL.createObjectURL(blob);
 
-      const blob = response.data;
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `ticket_${order_number}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error(error);
-    alert('Nie udało się pobrać biletu PDF');
-  }
-};
-
-
-
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ticket_${order_number}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            alert('Nie udało się pobrać biletu PDF');
+        }
+    };
 
     return (
         <div className="checkout__success__container">
@@ -115,6 +120,15 @@ const downloadTicketPDF = async () => {
                         <span>{service_fee} zł</span>
                     </div>
 
+                    {promotion && (
+                        <div className="success__summary_row success__promotion">
+                            <span>Promocja:</span>
+                            <span>
+                                {promotion.name} (-{promotion.discount_percent}%)
+                            </span>
+                        </div>
+                    )}
+
                     <div className="success__summary_row success__total">
                         <span>Łącznie zapłacono</span>
                         <span>{total_price} zł</span>
@@ -125,12 +139,10 @@ const downloadTicketPDF = async () => {
                             Pobierz bilet PDF
                         </button>
                     </div>
-
                 </div>
             </div>
-
         </div>
-    )
-}
+    );
+};
 
 export default Success;
