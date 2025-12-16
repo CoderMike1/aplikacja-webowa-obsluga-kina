@@ -1,7 +1,7 @@
 import './NewsSlides.css'
 
-import slide1 from "../../../../assets/slide1.webp"
-import slide2 from '../../../../assets/slide2.jpeg'
+import slide1 from "../../../../assets/slide1.png"
+import slide2 from '../../../../assets/slide2.png'
 import slide3 from '../../../../assets/slide3.jpeg'
 import slide4 from '../../../../assets/slide4.webp'
 
