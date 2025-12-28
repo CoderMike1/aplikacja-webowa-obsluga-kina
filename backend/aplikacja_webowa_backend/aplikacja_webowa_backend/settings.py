@@ -197,10 +197,10 @@ CLOUDINARY_ALLOWED_DOMAIN = os.getenv("CLOUDINARY_ALLOWED_DOMAIN", "res.cloudina
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = "poczta.interia.pl"
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL  =  True
+EMAIL_HOST = os.getenv("EMAIL_SERVER_HOST")
+EMAIL_PORT = os.getenv("EMAIL_SERVER_PORT")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL  =  False
 
 EMAIL_HOST_USER = os.getenv("EMAIL_ADDRESS")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
