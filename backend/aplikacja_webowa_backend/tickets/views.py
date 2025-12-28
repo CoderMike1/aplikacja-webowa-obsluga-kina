@@ -43,55 +43,6 @@ class TicketPDFView(APIView):
                 status=404
             )
 
-        # first_ticket = tickets.first()
-        # screening = first_ticket.screening
-        #
-        # qr_payload = f"{order_number}"
-        # qr_data_url = make_qr_data_url(qr_payload)
-        #
-        # tickets_data = []
-        # for t in tickets:
-        #     for seat in t.seats.all():
-        #         tickets_data.append({
-        #             "ticket_id": t.id,
-        #             "row_number": seat.row_number,
-        #             "seat_number": seat.seat_number,
-        #             "ticket_type": t.type.name,
-        #             "total_price": t.total_price,
-        #         })
-        #
-        #
-        # html_string = render_to_string('tickets/ticket_pdf.html', {
-        #     'order_number': order_number,
-        #     'tickets_data': tickets_data,
-        #     'screening': screening,
-        #     'customer': {
-        #         'first_name': first_ticket.first_name,
-        #         'last_name': first_ticket.last_name,
-        #         'email': first_ticket.email,
-        #         'phone': first_ticket.phone_number,
-        #     },
-        #     'MEDIA_URL': settings.MEDIA_URL,
-        #     'logo_base64': LOGO_BASE64,
-        #     'STATIC_URL': settings.STATIC_URL,
-        #     'qr_data_url': qr_data_url,
-        #     'request': request,
-        # })
-        #
-        # pdf_buffer = BytesIO()
-        # pisa_status = pisa.CreatePDF(html_string, dest=pdf_buffer)
-        #
-        # if pisa_status.err:
-        #     logger.error(f'Błąd przy generowaniu PDF dla zamówienia {order_number}')
-        #     return HttpResponse('Błąd przy generowaniu PDF', status=500)
-        #
-        # response = HttpResponse(
-        #     pdf_buffer.getvalue(),
-        #     content_type='application/pdf'
-        # )
-        # response['Content-Disposition'] = (
-        #     f'attachment; filename="tickets_{order_number}.pdf"'
-        # )
         pdf_buffer = generate_pdf_file(tickets,order_number,request)
 
         response = HttpResponse(
