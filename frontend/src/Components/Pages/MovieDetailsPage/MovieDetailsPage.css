@@ -146,7 +146,8 @@
         width: 60vw;
         max-width: 1600px;
         margin: 0 auto;
-        justify-content: space-between;
+        display: flex;
+        justify-content: center;
     }
 
     .movie_inner__image img {

@@ -85,7 +85,6 @@ const NewsPage = () =>{
                                     </div>
                                     <img src={m.poster_path}/>
                                     <span>{m.title}</span>
-                                    <h4>Kup Bilet!</h4>
                                 </div>
                             ))
                         }
