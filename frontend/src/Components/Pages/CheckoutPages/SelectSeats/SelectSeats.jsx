@@ -14,7 +14,6 @@ const SelectSeats = ({auditorium,seats,setSeats,setStep,loadSeatMap}) =>{
             setSeatMap(result)
         })()
     },[loadSeatMap])
-    console.log(seatMap.length)
     return (
         <div className="checkout_auditorium__container">
             {seatMap.length === 0 && <Spinner/>}

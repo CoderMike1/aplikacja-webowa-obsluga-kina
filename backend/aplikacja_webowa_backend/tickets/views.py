@@ -12,8 +12,6 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
-import base64
-import qrcode
 import logging
 from django.conf import settings
 from django.template.loader import get_template
@@ -21,19 +19,9 @@ import time
 from .filters import TicketFilter
 from .templates.tickets.logo_base64 import LOGO_BASE64
 from .services.pricing import calculate_price_with_promotion
-
+from .utils import make_qr_data_url, generate_pdf_file, send_email
 
 logger = logging.getLogger(__name__)
-
-def make_qr_data_url(payload: str) -> str:
-    qr = qrcode.QRCode(version=1, box_size=4, border=2)
-    qr.add_data(payload)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    buf = BytesIO()
-    img.save(buf, format='PNG')
-    b64 = base64.b64encode(buf.getvalue()).decode('ascii')
-    return f"data:image/png;base64,{b64}"
 
 class TicketPDFView(APIView):
     permission_classes = [AllowAny]
@@ -55,47 +43,56 @@ class TicketPDFView(APIView):
                 status=404
             )
 
-        first_ticket = tickets.first()
-        screening = first_ticket.screening
-
-        qr_payload = f"{order_number}"
-        qr_data_url = make_qr_data_url(qr_payload)
-
-        tickets_data = []
-        for t in tickets:
-            for seat in t.seats.all():
-                tickets_data.append({
-                    "ticket_id": t.id,
-                    "row_number": seat.row_number,
-                    "seat_number": seat.seat_number,
-                    "ticket_type": t.type.name,
-                    "total_price": t.total_price,
-                })
-
-
-        html_string = render_to_string('tickets/ticket_pdf.html', {
-            'order_number': order_number,
-            'tickets_data': tickets_data,
-            'screening': screening,
-            'customer': {
-                'first_name': first_ticket.first_name,
-                'last_name': first_ticket.last_name,
-                'email': first_ticket.email,
-                'phone': first_ticket.phone_number,
-            },
-            'MEDIA_URL': settings.MEDIA_URL,
-            'logo_base64': LOGO_BASE64,
-            'STATIC_URL': settings.STATIC_URL,
-            'qr_data_url': qr_data_url,
-            'request': request,
-        })
-
-        pdf_buffer = BytesIO()
-        pisa_status = pisa.CreatePDF(html_string, dest=pdf_buffer)
-
-        if pisa_status.err:
-            logger.error(f'Błąd przy generowaniu PDF dla zamówienia {order_number}')
-            return HttpResponse('Błąd przy generowaniu PDF', status=500)
+        # first_ticket = tickets.first()
+        # screening = first_ticket.screening
+        #
+        # qr_payload = f"{order_number}"
+        # qr_data_url = make_qr_data_url(qr_payload)
+        #
+        # tickets_data = []
+        # for t in tickets:
+        #     for seat in t.seats.all():
+        #         tickets_data.append({
+        #             "ticket_id": t.id,
+        #             "row_number": seat.row_number,
+        #             "seat_number": seat.seat_number,
+        #             "ticket_type": t.type.name,
+        #             "total_price": t.total_price,
+        #         })
+        #
+        #
+        # html_string = render_to_string('tickets/ticket_pdf.html', {
+        #     'order_number': order_number,
+        #     'tickets_data': tickets_data,
+        #     'screening': screening,
+        #     'customer': {
+        #         'first_name': first_ticket.first_name,
+        #         'last_name': first_ticket.last_name,
+        #         'email': first_ticket.email,
+        #         'phone': first_ticket.phone_number,
+        #     },
+        #     'MEDIA_URL': settings.MEDIA_URL,
+        #     'logo_base64': LOGO_BASE64,
+        #     'STATIC_URL': settings.STATIC_URL,
+        #     'qr_data_url': qr_data_url,
+        #     'request': request,
+        # })
+        #
+        # pdf_buffer = BytesIO()
+        # pisa_status = pisa.CreatePDF(html_string, dest=pdf_buffer)
+        #
+        # if pisa_status.err:
+        #     logger.error(f'Błąd przy generowaniu PDF dla zamówienia {order_number}')
+        #     return HttpResponse('Błąd przy generowaniu PDF', status=500)
+        #
+        # response = HttpResponse(
+        #     pdf_buffer.getvalue(),
+        #     content_type='application/pdf'
+        # )
+        # response['Content-Disposition'] = (
+        #     f'attachment; filename="tickets_{order_number}.pdf"'
+        # )
+        pdf_buffer = generate_pdf_file(tickets,order_number,request)
 
         response = HttpResponse(
             pdf_buffer.getvalue(),
@@ -140,6 +137,14 @@ class ScreeningSeatsView(APIView):
 class InstantPurchaseView(APIView):
     permission_classes = [AllowAny]
 
+    def get_ticket_with_retry(self, order_number, retries=5, delay=0.2):
+        for _ in range(retries):
+            tickets = Ticket.objects.filter(order_number=order_number).prefetch_related('seats', 'type')
+            if tickets.exists():
+                return tickets
+            time.sleep(delay)
+        raise Ticket.DoesNotExist
+
     def post(self, request):
         input_serializer = InstantPurchaseSerializer(
             data=request.data,
@@ -168,6 +173,11 @@ class InstantPurchaseView(APIView):
             "tickets": tickets_serializer.data,
             "total_price": total_price
         }
+
+        tickets = self.get_ticket_with_retry(group_order_number)
+
+        send_email(tickets,group_order_number,request)
+
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
