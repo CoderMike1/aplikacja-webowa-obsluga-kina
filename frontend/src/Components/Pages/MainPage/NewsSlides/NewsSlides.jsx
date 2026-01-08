@@ -10,9 +10,7 @@ const NewsSlides = () =>{
 
     const news = [
         {url:slide1,title:"i1"},
-        {url:slide2,title:"i2"},
-        {url:slide3,title:"i3"},
-        {url:slide4,title:"i4"},
+        {url:slide2,title:"i2"}
     ]
 
     return (

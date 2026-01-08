@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
-import './saleschart.css'
+import './SalesChart.css'
 
 // Placeholder chart component. Once ticket sales API is known,
 // fetch aggregated sales per day and render a simple line chart.
