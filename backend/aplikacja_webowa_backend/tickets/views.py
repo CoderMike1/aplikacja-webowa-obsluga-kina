@@ -127,7 +127,7 @@ class InstantPurchaseView(APIView):
 
         tickets = self.get_ticket_with_retry(group_order_number)
 
-        send_email(tickets,group_order_number,request)
+        send_email(tickets,group_order_number,request,total_price)
 
 
         return Response(response_data, status=status.HTTP_201_CREATED)

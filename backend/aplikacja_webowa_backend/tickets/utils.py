@@ -64,7 +64,26 @@ def generate_pdf_file(tickets,order_number,request):
 
     return pdf_buffer
 
-def send_email(tickets,order_number,request):
+def check_if_smtp_env_ready():
+
+    required_env = [
+        "EMAIL_ADDRESS",
+    "EMAIL_PASSWORD",
+    "EMAIL_SERVER_HOST",
+    "EMAIL_SERVER_PORT",
+    "FROM_EMAIL_ADDRESS",
+    ]
+
+    for env in required_env:
+        if not  os.getenv(env) or os.getenv(env) == "":
+            return False
+
+    return True
+
+def send_email(tickets,order_number,request,total_paid):
+
+    if not check_if_smtp_env_ready():
+        return
     pdf_buffer = generate_pdf_file(tickets,order_number,request)
 
     pdf_bytes = pdf_buffer.getvalue()
@@ -94,7 +113,6 @@ def send_email(tickets,order_number,request):
     customer_full_name = f"{first_ticket.first_name} {first_ticket.last_name}"
     customer_email = first_ticket.email
     customer_phone = first_ticket.phone_number
-    total_paid = first_ticket.total_price
 
 
 
