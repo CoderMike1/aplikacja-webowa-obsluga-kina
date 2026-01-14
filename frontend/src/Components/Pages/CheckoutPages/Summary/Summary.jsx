@@ -17,6 +17,7 @@ const Summary = () => {
   const navigate = useNavigate();
 
   const tickets = checkout_data.tickets || [];
+
   const service_fee = 0;
 
  const seatIds = useMemo(
@@ -181,9 +182,13 @@ const Summary = () => {
                   <p>{ticket.ticketType}</p>
                 </div>
                 <span>
-                  {promotionData
-                    ? (promotionData.final_price / tickets.length).toFixed(2) + " zł"
-                    : ticket.price + " zł"}
+                  {
+                    promotionData?.promotion
+                      ? (ticket.price * (1 - promotionData.discount_percent/100)).toFixed(2) + " zł"
+                        :
+                        ticket.price + " zł"
+                  }
+
                 </span>
               </div>
             ))}
@@ -197,13 +202,13 @@ const Summary = () => {
           <div className="summary__row summary__row-total">
             <span>Łącznie do zapłaty</span>
             <span>
-              {promotionData ? promotionData.final_price.toFixed(2) : total_price.toFixed(2)} zł
+              {promotionData?.promotion ? promotionData.final_price.toFixed(2) : total_price.toFixed(2)} zł
             </span>
           </div>
 
           {promotionData?.promotion && (
             <div className="summary__promotion">
-              Promocja: {promotionData.promotion.name} (-{promotionData.promotion.discount_percent}%)
+              Promocja: {promotionData?.promotion.name} (-{promotionData?.promotion.discount_percent}%)
             </div>
           )}
         </div>

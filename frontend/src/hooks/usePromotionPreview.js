@@ -31,9 +31,11 @@ function usePromotionPreview(screeningId, ticketTypeId, seatIds = []) {
         }
 
         const data = await response.json();
+
         setPromotionData({
-          final_price: Number(data.final_price),
-          promotion: data.promotion || null
+          final_price: Number(data?.final_price) ?? null,
+          promotion: data?.promotion ?? null,
+          discount_percent: data?.promotion?.discount_percent ?? null
         });
 
       } catch (err) {

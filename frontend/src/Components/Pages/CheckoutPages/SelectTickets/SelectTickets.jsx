@@ -7,9 +7,7 @@ const PRICES = {
 }
 
 const SelectTickets = ({checkout_data,setTickets,setStep}) =>{
-    //  ustawienie domyślnych wartości dla seats na bilet typu "normalny"
-    // jak chcesz ustawić tak jak było wcześniej usuń
-    // od
+
     useEffect(() => {
         if (!checkout_data?.seats?.length) return;
         const tickets = checkout_data.tickets || [];
@@ -24,8 +22,7 @@ const SelectTickets = ({checkout_data,setTickets,setStep}) =>{
             }
         });
     }, [checkout_data.seats, checkout_data.tickets, setTickets]); 
-    // do
-    // XD
+
     return (
 
        <div className="checkout__tickets_container">
