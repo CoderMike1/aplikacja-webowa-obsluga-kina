@@ -15,9 +15,8 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
         const hours = Array.from({ length: 24 }, (_, h) => ({ hour: h, value: 0 }))
         const counts = new Map(hours.map(h => [h.hour, 0]))
         for (const t of tickets) {
-            // Backend timestamps are UTC; convert to local time for charting
             const ts = dayjs.utc(t.purchased_at).local()
-            // Include boundary tickets: >= start and <= end
+
             if (!ts.isBefore(start) && !ts.isAfter(end)) {
                 const h = ts.hour()
                 const val = (counts.get(h) || 0) + (t.seats_count || 1)
@@ -27,10 +26,10 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
         const data = hours.map(h => ({ hour: h.hour, value: counts.get(h.hour) || 0 }))
         const maxRaw = Math.max(...data.map(d => d.value))
         const max = Math.ceil(maxRaw)
-        // Determine y-axis step based on magnitude: 1 up to 10, 10 up to 100, 100 up to 1000, etc.
+
         const magnitude = Math.floor(Math.log10(max))
         const step = max <= 10 ? 1 : max <= 100 ? 10 : max <= 1000 ? 100 : Math.pow(10, magnitude - 2)
-        // Build tick values from 0 to max rounded to nearest step, plus one extra step for headroom
+
         const top = Math.ceil(max) + step
         const ticks = []
         for (let v = 0; v <= top; v += step) ticks.push(v)
@@ -46,7 +45,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
         const xPx = e.clientX - rect.left
         const width = rect.width
         if (width <= 0) return
-        // Map x to index 0..23, using bisect nearest
+
         const idxFloat = (xPx / width) * 23
         let idx = Math.round(idxFloat)
         if (idx < 0) idx = 0
@@ -75,7 +74,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                 <div className="hourly__loading">Ładowanie…</div>
             ) : (
                 <div className="hourly__linewrap">
-                    {/* SVG line chart over 24 hours */}
+
                     <svg
                         ref={svgRef}
                         className="hourly__svg"
@@ -84,12 +83,12 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                         onMouseMove={handleSvgMouseMove}
                         onMouseLeave={handleSvgMouseLeave}
                     >
-                        {/* dynamic horizontal grid lines based on ticks */}
+
                         {series.ticks.map((tick, i) => {
                             const y = 100 - (series.top > 0 ? (tick / series.top) * 100 : 0)
                             return <line key={i} x1="0" y1={y} x2="240" y2={y} className="hourly__grid" />
                         })}
-                        {/* path */}
+
                         {(() => {
                             const pts = series.data.map((d, idx) => {
                                 const x = (idx / 23) * 240
@@ -99,7 +98,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                             const dAttr = `M ${pts[0]} ` + pts.slice(1).map(p => `L ${p}`).join(' ')
                             return <path d={dAttr} className="hourly__line" />
                         })()}
-                        {/* single hover point, shown only when hovering a given hour */}
+
                         {hover && (() => {
                             const d = series.data[hover.idx] || { hour: 0, value: 0 }
                             const x = (hover.idx / 23) * 240
@@ -107,7 +106,7 @@ const HourlyTicketSalesChart = ({ tickets = [], loading = false }) => {
                             return <circle cx={x} cy={y} r={3} className="hourly__point" />
                         })()}
                     </svg>
-                    {/* Absolutely positioned x-axis labels centered under each SVG point */}
+
                     <div
                         className="hourly__xlabels"
                         style={{ position: 'relative', width: '100%' }}

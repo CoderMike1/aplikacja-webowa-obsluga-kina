@@ -1,3 +1,5 @@
+//komponent stopki strony
+
 import './Footer.css'
 const Footer = () =>{
 

@@ -1,3 +1,5 @@
+//komponent strony z potwierdzeniem zakupu
+
 import { useCheckout } from "../../../../context/CheckoutContext.jsx";
 import './Success.css'
 import { getTicketPDF } from "../../../../services/movieService.js";

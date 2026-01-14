@@ -20,8 +20,8 @@ const MoviesPage = () => {
   const [filters, setFilters] = useState({
     title: '',
     directors: '',
-    is_special_event: '', // '' | 'true' | 'false'
-    cinema_after: '', // YYYY-MM-DD
+    is_special_event: '',
+    cinema_after: '',
     cinema_before: '',
   })
 
@@ -36,7 +36,7 @@ const MoviesPage = () => {
     directors: '',
     poster_path: '',
     is_special_event: false,
-    genre_ids: '', // comma-separated IDs
+    genre_ids: '',
   })
   const [addErrors, setAddErrors] = useState({})
   const [addPosterFile, setAddPosterFile] = useState(null)
@@ -61,8 +61,6 @@ const MoviesPage = () => {
 
   const authHeaders = accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
 
-  const [currentUrl, setCurrentUrl] = useState(null)
-
   const fetchMovies = async (url = null) => {
     setLoading(true)
     setError('')
@@ -71,7 +69,7 @@ const MoviesPage = () => {
       if (url) {
         res = await api.get(url)
       } else {
-        // Build params from filters
+
         const query = {}
         if (filters.title) query.title = filters.title
         if (filters.directors) query.directors = filters.directors
@@ -102,13 +100,12 @@ const MoviesPage = () => {
 
 
 
-  // No client-side filtering, only backend filtering after 'Filtruj'
+
   const filteredMovies = movies
 
-  // Fetch initial page like ScreeningsPage
+
   useEffect(() => {
     fetchMovies()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const startEdit = (movie) => {

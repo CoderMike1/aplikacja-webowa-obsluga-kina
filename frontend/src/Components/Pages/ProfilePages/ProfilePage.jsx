@@ -14,11 +14,9 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true)
     const { isLoggedIn } = useAuthContext()
     const profileCtx = useProfileContext()
-    // Guard: redirect unauthenticated users to main page
     if (!isLoggedIn) {
         return <Navigate to="/" replace />
     }
-    // Jeśli provider jeszcze się nie zmontował (np. HMR / routing), pokaż bezpieczny fallback
     if (!profileCtx) {
         return (
             <div className="profile_container"><div className="profile_card"><p>Ładowanie profilu…</p></div></div>
@@ -102,7 +100,6 @@ const ProfilePage = () => {
                 username: usernameDraft || ''
             })
         } catch (e) {
-            // handled by context
         }
     }
 
@@ -112,7 +109,7 @@ const ProfilePage = () => {
             const url = await cloudinary.uploadImageUnsigned(file)
             await updateProfile({ avatar: url })
         } catch (e) {
-            // error displayed via contexts
+
         } finally {
             if (fileInputRef.current) fileInputRef.current.value = ''
         }

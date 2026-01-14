@@ -1,3 +1,5 @@
+//komponent formularza logowania
+
 import {useState} from "react";
 import {useAuthUI} from "../../../context/authUIContext.jsx";
 

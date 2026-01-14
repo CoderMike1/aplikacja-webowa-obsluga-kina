@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import './Tickets.css'
 import { authApi } from '../../../../api/client.js'
 import { useAuthContext } from '../../../../context/Auth.jsx'
-import { Link } from 'react-router-dom'
 
 const Tickets = () => {
     const [orders, setOrders] = useState([])
@@ -22,13 +21,10 @@ const Tickets = () => {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 })
                 if (mounted) {
-                    // Group tickets by order_number
-                    console.log(resp.data)
                     const ticketsArray = Array.isArray(resp.data) ? resp.data : []
                     const grouped = new Map()
 
                     for (const ticket of ticketsArray) {
-                        console.log(ticket)
                         const orderNum = ticket.order_number || 'unknown'
                         if (!grouped.has(orderNum)) {
                             grouped.set(orderNum, {
@@ -77,9 +73,7 @@ const Tickets = () => {
                         return (
                             <li key={o.order_number || idx} className="ticket_item">
                                 <div className="ticket_header">
-                                    {/*<Link to={`/filmy/${o.screening?.id ?? ''}`} className="ticket_movie" title="Przejdź do szczegółów seansu">*/}
                                         <div className="ticket_header_title">{movieTitle}</div>
-                                    {/*</Link>*/}
                                     <div className="ticket_order">#{o.order_number || '-'}</div>
                                 </div>
 

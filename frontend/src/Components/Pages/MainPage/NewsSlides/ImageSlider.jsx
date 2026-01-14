@@ -1,3 +1,5 @@
+//funckja obslugujaca wyswietlanie banerow na stronie glownej
+
 import {useState} from "react";
 import './ImageSlider.css'
 

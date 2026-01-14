@@ -5,7 +5,7 @@
 
     width: 100%;
     max-width: 100%;
-    overflow: hidden;          /* nic nie wychodzi poza panel */
+    overflow: hidden;
 }
 .day-card {
     min-width: 90px;

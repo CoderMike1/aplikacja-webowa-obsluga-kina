@@ -1,3 +1,5 @@
+//komponent dla strony nowosci
+
 import './NewsPage.css'
 import {useEffect, useState} from "react";
 import {getMovies} from "../../../services/movieService.js";

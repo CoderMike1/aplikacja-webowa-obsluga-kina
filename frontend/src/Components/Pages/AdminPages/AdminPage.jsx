@@ -18,7 +18,6 @@ const AdminPage = () => {
     }
 
     useEffect(() => {
-        // Preload Cloudinary config for admin pages using uploads (e.g., MoviesPage)
         if (typeof loadCloudinaryConfig === 'function') {
             loadCloudinaryConfig().catch(() => { })
         }

@@ -1,3 +1,5 @@
+//context przechowujacy sesje uzytkownika
+
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { authApi } from "../api/client.js";
 
@@ -105,7 +107,6 @@ export const AuthProvider = ({ children }) => {
                 headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
             });
         } catch (err) {
-            // ignore
         } finally {
             setAccessToken(null);
             setUser(null);
@@ -114,7 +115,7 @@ export const AuthProvider = ({ children }) => {
     };
 
 
-    //
+
     const getUserDetails = async () => {
         const token = accessToken;
         if (!token) return;

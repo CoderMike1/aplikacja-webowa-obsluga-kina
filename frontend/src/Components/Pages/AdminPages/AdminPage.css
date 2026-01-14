@@ -35,9 +35,6 @@ input {
     color: var(--muted);
 }
 
-
-/* Removed legacy filters and forms styles no longer used */
-
 .admin__error {
     color: #fecaca;
     background: rgba(239, 68, 68, .12);
@@ -50,8 +47,6 @@ input {
 .admin__loading {
     opacity: .85;
 }
-
-/* Groups removed with screenings preview */
 
 .admin__cards {
     display: grid;
@@ -80,7 +75,6 @@ input {
     color: var(--text);
 }
 
-/* Tabs */
 .admin__tabs {
     display: flex;
     gap: 8px;
@@ -117,9 +111,6 @@ input {
     text-decoration: none;
 }
 
-/* Removed screenings table styles */
-
-/* Pager removed */
 
 @media (max-width: 900px) {
     .admin__cards {

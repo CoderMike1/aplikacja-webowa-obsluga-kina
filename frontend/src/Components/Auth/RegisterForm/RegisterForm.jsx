@@ -1,3 +1,4 @@
+//komponent formularza rejestracka
 import {useState} from "react";
 import '../Forms.css'
 import {useAuthUI} from "../../../context/authUIContext.jsx";

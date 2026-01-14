@@ -37,7 +37,7 @@ const Settings = ({ profile, saving, updateField, onSave, twoFactorEnabledDraft 
             setConfirmPassword('')
         } catch (e) {
             const data = e?.response?.data || {}
-            // Zbierz typowe pola walidacyjne z API DRF
+
             const messages = []
             const pushMessages = (val) => {
                 if (!val) return
@@ -48,7 +48,7 @@ const Settings = ({ profile, saving, updateField, onSave, twoFactorEnabledDraft 
             pushMessages(data.current_password)
             pushMessages(data.new_password)
             pushMessages(data.non_field_errors)
-            // Jeżeli są inne klucze zawierające listy błędów, zbierz je również
+
             Object.keys(data).forEach(k => {
                 if (['detail','current_password','new_password','non_field_errors'].includes(k)) return
                 const v = data[k]
@@ -87,21 +87,6 @@ const Settings = ({ profile, saving, updateField, onSave, twoFactorEnabledDraft 
                     </button>
                 </div>
             </div>
-
-            {/* Inne ustawienia (np. 2FA) */}
-            {/* <div className="form_row">
-                <div className="form_field form_switch">
-                    <label>2FA</label>
-                    <input
-                        type="checkbox"
-                        checked={!!twoFactorEnabledDraft}
-                        onChange={e => updateField('two_factor_enabled', e.target.checked)}
-                    />
-                </div>
-            </div>
-            <div className="form_actions">
-                <button className="btn btn-secondary" onClick={onSave} disabled={saving}>Zapisz ustawienia</button>
-            </div> */}
         </div>
     )
 }

@@ -1,3 +1,5 @@
+//glowny core aplikacji , dodane contexty
+
 import {Outlet} from "react-router-dom"
 import './App.css'
 import NavBar from "./Components/Navbar/NavBar.jsx";

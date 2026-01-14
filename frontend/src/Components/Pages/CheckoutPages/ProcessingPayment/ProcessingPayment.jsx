@@ -1,3 +1,5 @@
+//komponent symulujacy przetwarzanie platnosci
+
 import './ProcessingPayment.css'
 const ProcessingPayment = () =>{
 

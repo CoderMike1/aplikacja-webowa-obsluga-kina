@@ -1,4 +1,4 @@
-
+//komponent wyswietlajacy panel z filmami na stronie glownej
 import './MoviePanels.css'
 import {useRef} from "react";
 import {Link} from "react-router-dom";

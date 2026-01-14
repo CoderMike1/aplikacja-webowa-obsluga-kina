@@ -53,7 +53,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         fetchSales()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [accessToken])
 
     const handleApply = () => {
@@ -67,7 +67,7 @@ const DashboardPage = () => {
         fetchSales(reset)
     }
     const handleExport = () => {
-        // Build CSV from current tickets
+
         const headers = ['purchased_at', 'movie_title', 'seats_count', 'total_price', 'payment_status', 'screening_id']
         const rows = tickets.map(t => [
             t.purchased_at,

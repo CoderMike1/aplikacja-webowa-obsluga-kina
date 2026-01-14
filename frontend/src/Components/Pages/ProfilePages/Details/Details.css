@@ -1,9 +1,7 @@
 .details_form {}
 
-/* Styl DatePicker tak jak zwykły input tekstowy */
 .date_picker .MuiOutlinedInput-root {
     padding: 0;
-    /* usuwamy wewnętrzny padding wrappera */
     border-radius: 8px;
     font-size: .95rem;
 }

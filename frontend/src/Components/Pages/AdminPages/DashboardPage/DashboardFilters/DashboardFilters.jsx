@@ -17,7 +17,6 @@ const DashboardFilters = ({ value, onChange, onApply, onClear, onExport, accessT
                 ])
                 setAuditoriums(Array.isArray(audRes.data) ? audRes.data : [])
             } catch {
-                // silent fail; filters can still work as free-text inputs
             } finally {
                 setLoading(false)
             }
@@ -28,32 +27,32 @@ const DashboardFilters = ({ value, onChange, onApply, onClear, onExport, accessT
     const todayStr = dayjs().format('YYYY-MM-DD')
     const handleChange = (patch) => {
         const next = { ...value, ...patch }
-        // Clamp 'to' to today
+
         if (next.to && dayjs(next.to).isAfter(dayjs(todayStr))) {
             next.to = todayStr
         }
-        // Ensure from <= to
+
         if (next.from && next.to && dayjs(next.from).isAfter(dayjs(next.to))) {
-            // If user just changed 'from', align it to 'to'
+
             if (Object.prototype.hasOwnProperty.call(patch, 'from')) {
                 next.from = next.to
             } else {
                 next.to = next.from
             }
         }
-        // Limit range length to <= 365 days
+
         if (next.from && next.to) {
             const fromD = dayjs(next.from)
             const toD = dayjs(next.to)
             const diff = toD.startOf('day').diff(fromD.startOf('day'), 'day')
             if (diff > 365) {
                 if (Object.prototype.hasOwnProperty.call(patch, 'from')) {
-                    // User moved 'from'; set 'to' to from + 365 (but not beyond today)
+
                     let newTo = fromD.add(365, 'day')
                     if (newTo.isAfter(dayjs(todayStr))) newTo = dayjs(todayStr)
                     next.to = newTo.format('YYYY-MM-DD')
                 } else if (Object.prototype.hasOwnProperty.call(patch, 'to')) {
-                    // User moved 'to'; set 'from' to to - 365
+
                     const newFrom = toD.subtract(365, 'day')
                     next.from = newFrom.format('YYYY-MM-DD')
                 }

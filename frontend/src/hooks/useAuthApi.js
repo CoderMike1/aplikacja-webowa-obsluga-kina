@@ -1,3 +1,5 @@
+//funkcja pozwalajaca na dolaczanie headersow do kazdego requestu tam gdzie to potrzebne
+
 import {  useEffect } from "react";
 import {useAuthContext} from "../context/Auth.jsx";
 import authApi from "../api/client.js";
