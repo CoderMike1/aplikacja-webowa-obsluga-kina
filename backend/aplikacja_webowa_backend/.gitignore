@@ -19,8 +19,6 @@ db.sqlite3
 # Virtual environments (if created inside this folder)
 .venv/
 venv/
-.env/
-.env/
 
 # Environment variables files
 .env
