@@ -27,8 +27,6 @@ const INITIAL_FORM = {
 const STORAGE_KEY = "kino_checkout";
 export const CheckoutProvider = ({children}) =>{
 
-    const [seatMap,setSeatMap] = useState({})
-
     const [orderConfirmation,setOrderConfirmation] = useState({})
 
     const [state, setState] = useState(() => {
@@ -150,21 +148,6 @@ export const CheckoutProvider = ({children}) =>{
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }, [state]);
-
-    // useEffect(() => {
-    //     (async ()=>{
-    //         console.log("laduje sale")
-    //         const resp = await getSeatMap(state.auditorium)
-    //         if (resp.status !== 200){
-    //             throw new Error("Problem z ladowaniem mapy sali.")
-    //         }
-    //         else{
-    //             const data = await resp.data
-    //             setSeatMap(data)
-    //         }
-    //
-    //     })()
-    // }, [state.auditorium]);
 
     const loadSeatMap = useCallback(async ()=>{
         const resp = await getSeatMap(state.screening_id)

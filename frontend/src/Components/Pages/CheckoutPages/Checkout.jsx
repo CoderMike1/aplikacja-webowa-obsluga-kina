@@ -1,4 +1,4 @@
-import './Checkout.css'
+    import './Checkout.css'
 import {useCheckout} from "../../../context/CheckoutContext.jsx";
 import {useEffect, useState} from "react";
 import SelectSeats from "./SelectSeats/SelectSeats.jsx";
