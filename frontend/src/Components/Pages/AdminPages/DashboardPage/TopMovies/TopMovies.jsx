@@ -1,3 +1,4 @@
+// komponent pokazuje listę najbardziej oglądanych filmów
 import { useMemo } from 'react'
 import './TopMovies.css'
 

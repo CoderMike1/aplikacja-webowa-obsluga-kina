@@ -9,15 +9,12 @@ from .models import ProjectionType, Screening
 
 
 class ProjectionTypeSerializer(serializers.ModelSerializer):
-    # Prosty serializer typu projekcji (np. 2D/3D)
     class Meta:
         model = ProjectionType
         fields = ['id', 'name']
 
 
 class ScreeningGroupedListSerializer(serializers.ListSerializer):
-    # ListSerializer grupujący seanse według filmu i typu projekcji
-    # Zwraca strukturę: [{ movie, projection_types: [{ projection_type, screenings: [...] }] }]
     def to_representation(self, data):
         items = list(data)
         groups = {}
@@ -63,11 +60,10 @@ class ScreeningGroupedListSerializer(serializers.ListSerializer):
 
 
 class ScreeningReadSerializer(serializers.ModelSerializer):
-    # Odczyt pojedynczego seansu (używany też przy odpowiedzi po utworzeniu)
-    movie = MovieReadSerializer(read_only=True)  # powiązany film
-    auditorium = AuditoriumReadSerializer(read_only=True)  # powiązana sala
-    genres = GenreSerializer(source='movie.genres', many=True, read_only=True)  # gatunki filmu
-    projection_type = ProjectionTypeSerializer(read_only=True)  # typ projekcji
+    movie = MovieReadSerializer(read_only=True)
+    auditorium = AuditoriumReadSerializer(read_only=True)
+    genres = GenreSerializer(source='movie.genres', many=True, read_only=True)
+    projection_type = ProjectionTypeSerializer(read_only=True)
 
     class Meta:
         model = Screening
@@ -85,7 +81,6 @@ class ScreeningReadSerializer(serializers.ModelSerializer):
         ]
     
 class ScreeningWriteSerializer(serializers.ModelSerializer):
-    # Pola wejściowe do tworzenia seansu (FK po id)
     movie_id = serializers.PrimaryKeyRelatedField(
         queryset=Movie.objects.all(), source='movie', write_only=True, required=True
     )
@@ -95,8 +90,6 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
     projection_type_id = serializers.PrimaryKeyRelatedField(
         queryset=ProjectionType.objects.all(), source='projection_type', write_only=True, required=False, allow_null=True
     )
-    # Jeśli nie podano published_at, ustaw domyślnie teraz; dopuszczamy też None w payloadzie
-    # (wtedy validate_published_at zamieni None na teraz)
     published_at = serializers.DateTimeField(required=False, allow_null=True, default=timezone.now)
 
     class Meta:
@@ -112,10 +105,9 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
     def validate_start_time(self, value):
-        # Walidacja start_time:
-        # 1) dozwolone tylko pełne godziny i/lub minuty co 10 (0,10,20,30,40,50)
-        # 2) sekundy i mikrosekundy muszą być równe 0
-        # 3) czas musi być w przyszłości
+        # dozwolone tylko pelne godziny i minuty co 10
+        # sekundy równe 0
+        # przyszlosc
         now = timezone.now()
         allowed_minutes = {0, 10, 20, 30, 40, 50}
         if value.minute not in allowed_minutes or value.second != 0 or value.microsecond != 0:
@@ -128,32 +120,27 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
     
 
     def validate_published_at(self, value):
-        # Walidacja published_at (opcjonalne):
-        # - jeżeli brak wartości -> ustaw "teraz"
-        # - jeżeli podano przez klienta -> nie może być w przeszłości
+        # jesli brak to czas teraz
+        # przyszlosc
         now = timezone.now()
         if value is None:
-            # Jeśli klient podał null, traktujemy to jako "opublikuj teraz"
             value = now
             return value
-        # Sprawdzaj przeszłość tylko gdy pole rzeczywiście było w payloadzie klienta
+        
         provided_explicitly = isinstance(getattr(self, 'initial_data', None), dict) and 'published_at' in self.initial_data and self.initial_data.get('published_at') is not None
         if provided_explicitly and value < now:
             raise serializers.ValidationError("Publikacja seansu musi być w teraźniejszości lub przyszłości")
         return value
 
     def validate(self, attrs):
-        # Walidacja zależna od wielu pól (spójność harmonogramu):
-        # - brak duplikatu (auditorium + start_time)
-        # - minimum 30 min przerwy po poprzednim seansie
-        # - minimum 30 min przerwy przed kolejnym seansem (brak nachodzenia)
+        # brak duplikatu (auditorium i start_time)
+        # minimum 30 min przerwy miedzy seansami
         instance = getattr(self, 'instance', None)
         auditorium = attrs.get('auditorium', getattr(instance, 'auditorium', None))
         start_time = attrs.get('start_time', getattr(instance, 'start_time', None))
         movie = attrs.get('movie', getattr(instance, 'movie', None))
         published_at = attrs.get('published_at', getattr(instance, 'published_at', None))
 
-        # Nie pozwól na seans przed datą premiery kina (cinema_release_date) filmu
         if movie is not None and start_time is not None:
             movie_premiere = movie.cinema_release_date
             if start_time.date() < movie_premiere:
@@ -161,18 +148,14 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                     'start_time': 'Seans nie może się rozpocząć przed datą premiery kinowej filmu.'
                 })
 
-        # start_time nie może być wcześniejszy niż published_at (logika: nie publikujemy seansu "po fakcie")
         if published_at is not None and start_time is not None:
             if start_time < published_at:
                 raise serializers.ValidationError({
                     'start_time': 'Start seansu nie może być wcześniejszy niż data publikacji.'
                 })
-        # Sprawdzenie tylko gdy mamy komplet kluczowych danych
         if auditorium is not None and start_time is not None:
-            # Przy aktualizacji wyklucz bieżący rekord z zapytań
             self_pk = getattr(self.instance, 'pk', None)
 
-            # Dokładnie ten sam czas w tej samej sali — konflikt (z wykluczeniem siebie)
             dup_qs = Screening.objects.filter(auditorium=auditorium, start_time=start_time)
             if self_pk is not None:
                 dup_qs = dup_qs.exclude(pk=self_pk)
@@ -183,13 +166,10 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                     ]
                 })
 
-            # Jeżeli znamy film, egzekwuj zasady planowania oparte o jego długość
             if movie is not None:
-                # Wylicz planowany koniec seansu i bufor
                 proposed_end = start_time + timedelta(minutes=movie.duration_minutes)
                 buffer = timedelta(minutes=30)
 
-                # Poprzedni seans w tej sali
                 prev_qs = Screening.objects.filter(auditorium=auditorium, start_time__lt=start_time)
                 if self_pk is not None:
                     prev_qs = prev_qs.exclude(pk=self_pk)
@@ -208,7 +188,6 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                             ]
                         })
 
-                # Następny seans w tej sali
                 nxt_qs = Screening.objects.filter(auditorium=auditorium, start_time__gt=start_time)
                 if self_pk is not None:
                     nxt_qs = nxt_qs.exclude(pk=self_pk)
@@ -218,7 +197,6 @@ class ScreeningWriteSerializer(serializers.ModelSerializer):
                     .first()
                 )
                 if nxt is not None:
-                    # Kolejny seans musi zaczynać się minimum 30 min po końcu tworzonego
                     if proposed_end + buffer > nxt.start_time:
                         raise serializers.ValidationError({
                             'non_field_errors': [

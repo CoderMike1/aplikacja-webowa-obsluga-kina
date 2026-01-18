@@ -38,7 +38,6 @@ class Movie(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # Uzupełnij cinema_release_date jeśli brak (domyślnie kopiujemy release_date)
         if not self.cinema_release_date:
             self.cinema_release_date = self.release_date
         super().save(*args, **kwargs)

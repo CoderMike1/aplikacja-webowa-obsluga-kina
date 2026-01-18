@@ -182,14 +182,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
 ]
 
-# Cloudinary (avatars via URL)
-# Provide these in your .env if you want to assist frontend uploads
+# Cloudinary
 CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME", "")
-CLOUDINARY_UPLOAD_PRESET = os.getenv("CLOUDINARY_UPLOAD_PRESET", "")  # for unsigned uploads
-# Whitelisted domain for avatar URLs (basic safety)
+CLOUDINARY_UPLOAD_PRESET = os.getenv("CLOUDINARY_UPLOAD_PRESET", "")
 CLOUDINARY_ALLOWED_DOMAIN = os.getenv("CLOUDINARY_ALLOWED_DOMAIN", "res.cloudinary.com")
- # Optional: keys for signed uploads (do NOT expose secret to frontend)
-# Signed upload keys removed per decision to use unsigned uploads only.
 
 
 

@@ -1,3 +1,4 @@
+// ogólny komponent do obsługi podstron panelu administratora
 import './AdminPage.css'
 import { useAuthContext } from '../../../context/Auth.jsx'
 import { useEffect } from 'react'
@@ -18,7 +19,6 @@ const AdminPage = () => {
     }
 
     useEffect(() => {
-        // Preload Cloudinary config for admin pages using uploads (e.g., MoviesPage)
         if (typeof loadCloudinaryConfig === 'function') {
             loadCloudinaryConfig().catch(() => { })
         }

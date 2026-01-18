@@ -1,3 +1,4 @@
+// ogólny komponent do obsługi panelu użytkownika
 import { useEffect, useState, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import './ProfilePage.css'
@@ -14,11 +15,9 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true)
     const { isLoggedIn } = useAuthContext()
     const profileCtx = useProfileContext()
-    // Guard: redirect unauthenticated users to main page
     if (!isLoggedIn) {
         return <Navigate to="/" replace />
     }
-    // Jeśli provider jeszcze się nie zmontował (np. HMR / routing), pokaż bezpieczny fallback
     if (!profileCtx) {
         return (
             <div className="profile_container"><div className="profile_card"><p>Ładowanie profilu…</p></div></div>
@@ -77,7 +76,6 @@ const ProfilePage = () => {
     }, [editingUsername])
 
     const updateField = (key, value) => {
-        // Stage locally; only save on handleSave
         if (key === 'username') {
             setUsernameDraft(value)
         } else if (['first_name', 'last_name', 'phone', 'date_of_birth', 'bio', 'location_country', 'location_city'].includes(key)) {
@@ -102,7 +100,6 @@ const ProfilePage = () => {
                 username: usernameDraft || ''
             })
         } catch (e) {
-            // handled by context
         }
     }
 
@@ -112,7 +109,6 @@ const ProfilePage = () => {
             const url = await cloudinary.uploadImageUnsigned(file)
             await updateProfile({ avatar: url })
         } catch (e) {
-            // error displayed via contexts
         } finally {
             if (fileInputRef.current) fileInputRef.current.value = ''
         }
@@ -122,7 +118,6 @@ const ProfilePage = () => {
         const file = e.target.files?.[0]
         if (file) handleAvatarUpload(file)
     }
-
 
     return (
         <div className="profile_container">

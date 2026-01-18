@@ -34,11 +34,9 @@ class MovieWriteSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        # Efektywne wartości bazując na nowych danych lub instancji
         release_date = attrs.get('release_date', getattr(self.instance, 'release_date', None))
         cinema_release_date = attrs.get('cinema_release_date', getattr(self.instance, 'cinema_release_date', None))
 
-        # Jeśli klient nie podał cinema_release_date, ale zmienia release_date – wymuś wyrównanie
         if 'cinema_release_date' not in attrs and 'release_date' in attrs and release_date is not None:
             cinema_release_date = release_date
             attrs['cinema_release_date'] = cinema_release_date

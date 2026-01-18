@@ -1,3 +1,4 @@
+// komponent wyświetla podsumowanie sprzedaży na podstawie sprzedaży biletów
 import './SummaryCards.css'
 
 const SummaryCards = ({ tickets = [] }) => {

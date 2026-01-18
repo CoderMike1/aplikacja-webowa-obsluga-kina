@@ -1,3 +1,4 @@
+// komponent wyświetla formularz edycji danych użytkownika
 import React from 'react'
 import './Details.css'
 import dayjs from 'dayjs'

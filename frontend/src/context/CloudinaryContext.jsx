@@ -1,3 +1,4 @@
+// context udostępnia konfigurację Cloudinary i funkcję do uploadu obrazów
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { authApi } from '../api/client'
 import { useAuthContext } from './Auth'

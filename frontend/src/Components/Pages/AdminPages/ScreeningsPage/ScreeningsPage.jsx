@@ -1,3 +1,4 @@
+// komponent pokazuje panel admina do zarządzania seansami
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import dayjs from 'dayjs'
@@ -46,7 +47,6 @@ const ScreeningsPage = () => {
     const [projectionTypeOptions, setProjectionTypeOptions] = useState([])
     const [editErrors, setEditErrors] = useState({})
 
-    // Track expanded projection type groups (by groupIdx-ptIdx key)
     const [expandedKeys, setExpandedKeys] = useState(new Set())
 
     const toggleExpand = (key) => {
@@ -75,7 +75,6 @@ const ScreeningsPage = () => {
 
     const fetchAuditoriums = async () => {
         try {
-            // baseURL already includes "/api"
             const res = await api.get('/auditoriums/')
             setAuditoriumOptions(Array.isArray(res.data) ? res.data : [])
         } catch (e) {
@@ -132,7 +131,6 @@ const ScreeningsPage = () => {
 
     useEffect(() => {
         fetchPage()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const startEdit = (screening) => {
@@ -174,7 +172,6 @@ const ScreeningsPage = () => {
         e.preventDefault()
         setError('')
         try {
-            // Validate movie selection against allowed list (cinema_release_date <= today)
             const chosenId = addForm.movie_id ? Number(addForm.movie_id) : null
             const allowedIds = new Set(movieOptions.map(m => Number(m.id)))
             if (!chosenId || !allowedIds.has(chosenId)) {

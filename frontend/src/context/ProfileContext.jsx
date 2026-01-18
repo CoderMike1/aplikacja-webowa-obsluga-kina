@@ -1,3 +1,4 @@
+// context udostępnia dane profilu zalogowanego użytkownika oraz funkcję do ich odświeżania i zapisywania
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { authApi } from '../api/client'
 import { useAuthContext } from './Auth'
