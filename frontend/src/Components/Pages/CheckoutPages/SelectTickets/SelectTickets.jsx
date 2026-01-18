@@ -1,3 +1,5 @@
+//komponent wybierania rodzaju biletu
+
 import './SelectTickets.css'
 import { useEffect } from 'react'
 

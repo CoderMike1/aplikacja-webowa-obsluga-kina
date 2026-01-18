@@ -1,3 +1,5 @@
+//komponent podsumowania zamowienia
+
 import './Summary.css'
 import { useCheckout } from "../../../../context/CheckoutContext.jsx";
 import { useEffect, useState, useMemo } from "react";

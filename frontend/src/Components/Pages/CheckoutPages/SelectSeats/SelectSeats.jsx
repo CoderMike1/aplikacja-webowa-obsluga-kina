@@ -1,7 +1,8 @@
+//komponent wybierania miejsc w kinie
+
 import './SelectSeats.css'
 import {useEffect, useState} from "react";
 import Spinner from "../../../../utils/Spinner/Spinner.jsx";
-//import {seatMap} from "./seatMap.js";
 
 
 

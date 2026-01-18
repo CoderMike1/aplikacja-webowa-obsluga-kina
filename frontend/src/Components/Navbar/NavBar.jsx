@@ -1,3 +1,5 @@
+//komponent menu bar
+
 import './NavBar.css'
 import { useAuthUI } from "../../context/authUIContext.jsx";
 import { useAuthContext } from "../../context/Auth.jsx";

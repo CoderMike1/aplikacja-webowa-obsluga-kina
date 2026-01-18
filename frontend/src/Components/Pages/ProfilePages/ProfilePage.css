@@ -1,5 +1,4 @@
-/* Moved from ProfilePage/ProfilePage.css */
-/* Kontener strony profilu */
+
 .profile_container {
     display: flex;
     justify-content: center;
@@ -15,7 +14,6 @@
     padding: 20px 24px;
 }
 
-/* Nagłówek w stylu checkout__inner_header */
 .profile_header {
     display: flex;
     justify-content: space-between;
@@ -57,7 +55,6 @@
     color: #111827;
 }
 
-/* Subtle hover border around username, similar to inputs */
 .profile_username {
     display: inline-block;
     padding: 6px 10px;
@@ -93,7 +90,6 @@
     gap: 4px;
 }
 
-/* Form */
 .profile_form {
     margin-top: 8px;
 }
@@ -178,7 +174,6 @@
     justify-content: flex-end;
 }
 
-/* Buttons */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -205,7 +200,7 @@
     cursor: not-allowed;
 }
 
-/* Error box */
+
 .profile_error {
     background: #fee2e2;
     color: #991b1b;
@@ -215,7 +210,7 @@
     margin-bottom: 12px;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     .profile_card {
         width: 95vw;

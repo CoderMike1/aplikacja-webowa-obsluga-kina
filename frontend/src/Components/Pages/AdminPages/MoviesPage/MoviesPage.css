@@ -1,4 +1,4 @@
-/* MoviesPage – aligned with Admin light theme */
+
 
 .movies__container {
     gap: 16px;
@@ -122,7 +122,7 @@
     padding: 12px;
 }
 
-/* Avatar/poster edit area */
+
 .movies__poster_edit {
     display: grid;
     grid-template-columns: 84px 1fr;
@@ -152,7 +152,7 @@
     font-size: 12px;
 }
 
-/* Description styling */
+
 .movies__description {
     min-height: 96px;
     padding: 10px 12px;

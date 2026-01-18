@@ -1,3 +1,5 @@
+//funkcja wyswietlajaca krecace sie koleczko
+
 import "./Spinner.css";
 
 export default function Spinner({ size = 48, label = "Ładowanie..." }) {

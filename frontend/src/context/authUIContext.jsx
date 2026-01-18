@@ -1,3 +1,5 @@
+//kontekst przechowujacy informacje o to jaki formularz ma byc wyswietlany
+
 import {createContext, useContext, useState} from "react";
 
 

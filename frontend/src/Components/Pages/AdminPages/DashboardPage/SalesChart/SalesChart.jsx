@@ -5,12 +5,14 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 import './SalesChart.css'
 
+
 const SalesChart = ({ loading, tickets, rangeStart, rangeEnd }) => {
   const [error] = useState('')
   const [hover, setHover] = useState(null)
   const [mode, setMode] = useState('count')
 
   const series = useMemo(() => {
+
     const counts = new Map()
     for (const t of tickets) {
       const d = dayjs.utc(t.purchased_at).local().format('YYYY-MM-DD')
@@ -21,10 +23,12 @@ const SalesChart = ({ loading, tickets, rangeStart, rangeEnd }) => {
         counts.set(d, (counts.get(d) || 0) + (isNaN(price) ? 0 : price))
       }
     }
+
     const start = rangeStart ? dayjs(rangeStart).startOf('day') : dayjs().subtract(29, 'day').startOf('day')
     const end = rangeEnd ? dayjs(rangeEnd).endOf('day') : dayjs().endOf('day')
     const days = []
     const diffDays = Math.max(0, end.startOf('day').diff(start.startOf('day'), 'day'))
+
     const limit = Math.min(diffDays, 729)
     for (let i = 0; i <= limit; i++) {
       const d = start.add(i, 'day').format('YYYY-MM-DD')
@@ -32,15 +36,19 @@ const SalesChart = ({ loading, tickets, rangeStart, rangeEnd }) => {
     }
     const observedMax = Math.max(0, ...days.map(d => d.value))
     const maxRaw = Math.max(1, observedMax)
+
     const roundBase = maxRaw < 10 ? 5 : maxRaw < 100 ? 10 : maxRaw < 500 ? 25 : 50
     const axisMax = Math.ceil(maxRaw / roundBase) * roundBase
     const total = days.reduce((acc, d) => acc + d.value, 0)
     const avg = total / days.length
+
     const len = days.length
     let labelStrategy = { type: 'step', step: 1 }
     if (len > 365) {
+
       labelStrategy = { type: 'month' }
     } else if (len > 180) {
+
       labelStrategy = { type: 'step', step: 14 }
     } else if (len > 90) {
       labelStrategy = { type: 'step', step: 7 }
@@ -92,11 +100,14 @@ const SalesChart = ({ loading, tickets, rangeStart, rangeEnd }) => {
             )
           })}
 
+
+
           <div className="saleschart__yaxis">
             <span>{series.axisMax}</span>
             <span>{Math.round(series.axisMax / 2)}</span>
             <span>0</span>
           </div>
+
           <div className="saleschart__hoverlayer" style={{ gridTemplateColumns: `repeat(${series.days.length}, 1fr)` }}>
             {series.days.map((d, idx) => (
               <div
@@ -116,6 +127,7 @@ const SalesChart = ({ loading, tickets, rangeStart, rangeEnd }) => {
             let displayLabel = ''
             const dateObj = dayjs(d.date)
             if (series.labelStrategy.type === 'month') {
+
               if (dateObj.date() === 1 || idx === series.days.length - 1) {
                 const isJan = dateObj.month() === 0
                 displayLabel = isJan ? dateObj.format("MMM 'YY") : dateObj.format('MMM')

@@ -28,19 +28,20 @@ const DashboardFilters = ({ value, onChange, onApply, onClear, onExport, accessT
     const todayStr = dayjs().format('YYYY-MM-DD')
     const handleChange = (patch) => {
         const next = { ...value, ...patch }
-        // data "do" nigdy nie może być większa niż dzisiaj
+
         if (next.to && dayjs(next.to).isAfter(dayjs(todayStr))) {
             next.to = todayStr
         }
-        // data "od" nigdy nie może być większa niż wartość "do"
+
         if (next.from && next.to && dayjs(next.from).isAfter(dayjs(next.to))) {
+
             if (Object.prototype.hasOwnProperty.call(patch, 'from')) {
                 next.from = next.to
             } else {
                 next.to = next.from
             }
         }
-        // długość zakresu max 365 dni
+
         if (next.from && next.to) {
             const fromD = dayjs(next.from)
             const toD = dayjs(next.to)

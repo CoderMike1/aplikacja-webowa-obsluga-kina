@@ -62,8 +62,6 @@ const MoviesPage = () => {
 
   const authHeaders = accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
 
-  const [currentUrl, setCurrentUrl] = useState(null)
-
   const fetchMovies = async (url = null) => {
     setLoading(true)
     setError('')
@@ -72,6 +70,7 @@ const MoviesPage = () => {
       if (url) {
         res = await api.get(url)
       } else {
+
         const query = {}
         if (filters.title) query.title = filters.title
         if (filters.directors) query.directors = filters.directors
@@ -102,7 +101,9 @@ const MoviesPage = () => {
 
 
 
+
   const filteredMovies = movies
+
 
   useEffect(() => {
     fetchMovies()

@@ -1,3 +1,5 @@
+//funkcja ktora automatycznie ukazuje strone od samej gory przy zmianie podstrony
+
 import {useLocation} from "react-router-dom";
 import {useEffect} from "react";
 

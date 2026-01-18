@@ -117,7 +117,7 @@
     border: none;
     cursor: pointer;
 
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8); /* niebieski jak góra strony */
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: #ffffff;
 
     font-size: 0.8rem;

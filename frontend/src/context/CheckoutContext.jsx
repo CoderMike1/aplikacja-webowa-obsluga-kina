@@ -1,4 +1,6 @@
-import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
+//context obslugujacy dane podczas procesu zakupu biletow
+
+import {createContext, useCallback, useContext, useEffect, useState} from "react";
 import {getSeatMap} from "../services/movieService.js";
 
 const CheckoutContext = createContext(null)

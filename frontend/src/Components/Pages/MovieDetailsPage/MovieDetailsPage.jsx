@@ -1,3 +1,5 @@
+//komponent wyswietlajacy szczegolowe informacje o filmie wraz z repertuarem dla tego filmu
+
 import './MovieDetailsPage.css'
 import ShowTimeDateRange from "./ShowTimeDateRange/ShowTimeDateRange.jsx";
 import { useEffect, useState } from "react";
@@ -45,7 +47,6 @@ const MovieDetailsPage = () => {
             const resp2 = await getScreenings();
 
             const results = resp2.data
-            console.log(results)
 
             for (const result of results) {
                 if (result.movie.id === Number(movieID)) {
@@ -65,11 +66,9 @@ const MovieDetailsPage = () => {
                                     minute: "2-digit",
                                 })
                             }
-                            console.log(screening_info)
                             all_screenings.push(screening_info)
                         }
                     }
-                    console.log(all_screenings)
                     setAllScreenings(all_screenings)
                     break
                 }

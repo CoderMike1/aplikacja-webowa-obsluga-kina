@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import './Tickets.css'
 import { authApi } from '../../../../api/client.js'
 import { useAuthContext } from '../../../../context/Auth.jsx'
-import { Link } from 'react-router-dom'
 
 const Tickets = () => {
     const [orders, setOrders] = useState([])
@@ -23,12 +22,10 @@ const Tickets = () => {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 })
                 if (mounted) {
-                    console.log(resp.data)
                     const ticketsArray = Array.isArray(resp.data) ? resp.data : []
                     const grouped = new Map()
 
                     for (const ticket of ticketsArray) {
-                        console.log(ticket)
                         const orderNum = ticket.order_number || 'unknown'
                         if (!grouped.has(orderNum)) {
                             grouped.set(orderNum, {

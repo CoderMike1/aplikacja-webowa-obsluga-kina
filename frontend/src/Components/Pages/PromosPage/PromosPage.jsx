@@ -1,3 +1,5 @@
+//komponent dla strony Promocje
+
 import { useEffect, useState } from "react";
 import "./PromosPage.css";
 import Spinner from "../../../utils/Spinner/Spinner.jsx";

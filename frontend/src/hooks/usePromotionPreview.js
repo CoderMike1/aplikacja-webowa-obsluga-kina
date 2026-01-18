@@ -1,3 +1,5 @@
+//funkcja obslugujaca obliczanie promocji na bilety
+
 import { useState, useEffect } from "react";
 
 function usePromotionPreview(screeningId, ticketTypeId, seatIds = []) {

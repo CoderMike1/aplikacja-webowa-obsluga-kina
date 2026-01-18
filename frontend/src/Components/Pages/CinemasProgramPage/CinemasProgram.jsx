@@ -1,7 +1,9 @@
+//komponent repertuaru
+
 import './CinemasProgram.css'
 import ShowTimeDateRange from "../MovieDetailsPage/ShowTimeDateRange/ShowTimeDateRange.jsx";
 import { useEffect, useState } from "react";
-import { getMovies, getScreenings } from "../../../services/movieService.js";
+import {  getScreenings } from "../../../services/movieService.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useCheckout } from "../../../context/CheckoutContext.jsx";
 import Spinner from "../../../utils/Spinner/Spinner.jsx";
@@ -119,7 +121,6 @@ const CinemasProgram = () => {
         startCheckout({ movie_title, movie_image, movie_directors, screening_id, showtime_hour, showtime_full_date, projection_type, auditorium })
         navigate("/checkout")
     }
-    console.log(screenings)
     return (
         <div className="program__container">
             {loading && <Spinner/>}

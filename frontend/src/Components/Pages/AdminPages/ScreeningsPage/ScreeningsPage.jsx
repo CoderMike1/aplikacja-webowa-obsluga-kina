@@ -75,6 +75,7 @@ const ScreeningsPage = () => {
 
     const fetchAuditoriums = async () => {
         try {
+
             const res = await api.get('/auditoriums/')
             setAuditoriumOptions(Array.isArray(res.data) ? res.data : [])
         } catch (e) {
